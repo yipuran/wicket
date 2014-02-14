@@ -664,9 +664,6 @@ public class RequestCycle implements IRequestCycle, IEventSink
 			((Page) page).setStatelessHint(false);
 		}
 
-		// make sure the page will be available on following request
-		Session.get().getPageManager().touchPage(page);
-
 		scheduleRequestHandlerAfterCurrent(new RenderPageRequestHandler(new PageProvider(page),
 			RenderPageRequestHandler.RedirectPolicy.AUTO_REDIRECT));
 	}
