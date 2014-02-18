@@ -14,33 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.wicket.examples.cdi;
 
-/*global module: true, ok: true, asyncTest: true, equal: true, expect: true, $q: true,
- gym: true, start: true */
+import javax.inject.Inject;
 
-$q(document).ready(function() {
-	"use strict";
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.PropertyModel;
 
-	module('Echo');
+public class AutoConversationPage2 extends CdiExamplePage
+{
+	@Inject
+	ConversationCounter counter;
 
-	asyncTest('echo', function () {
-		expect(2);
+	public AutoConversationPage2()
+	{
+		add(new Label("count", new PropertyModel(this, "counter.count")));
 
-		var message = 'Hello Functional QUnit';
-
-		gym.load('/echo').then(function($) {
-
-			var $messageInput = $('input[name=msgInput]');
-			$messageInput.val(message);
-
-			return gym.click($('input[type=submit]'));
-		}).then(function($) {
-
-			var $msg = $('#msg');
-			equal($msg.length, 1, 'The entered message is here');
-			equal($msg.text(), message, 'The entered message is here');
-
-		}).always(start);
-	});
-
-});
+		add(new Link<Void>("refresh")
+		{
+			@Override
+			public void onClick()
+			{
+			}
+		});
+	}
+}

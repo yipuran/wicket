@@ -28,16 +28,20 @@ $q(document).ready(function() {
 	};
 
 	var nextPage = function($) {
-		return gym.click($('a:contains("Continue")'));
+		return gym.click($('a:contains("Continue to next page")'));
+	};
+
+	var refresh = function($) {
+		return gym.click($('a:contains("refresh")'));
 	};
 
 	module('CDI');
 
-	asyncTest('conversation', function () {
+	asyncTest('auto-conversation', function () {
 		expect(4);
 		var initialValue;
 
-		gym.load('/cdi/conversation').then(function($) {
+		gym.load('/cdi/autoConversation').then(function($) {
 
 			initialValue = $(countSelector).text();
 			initialValue = parseInt(initialValue, 10);
@@ -49,26 +53,26 @@ $q(document).ready(function() {
 			var expectedValue = initialValue + 1;
 			equal(counterLabelValue, "" + expectedValue, 'The new value of the counter is +1');
 
-			return nextPage($);
-		}).then(function($) {
-
-			var counterLabelValue = $(countSelector).text();
-			var expectedValue = initialValue + 1;
-			equal(counterLabelValue, "" + expectedValue, 'The value of the counter is the same as in the previous page');
-
 			return increment($);
 		}).then(function($) {
 
 			var counterLabelValue = $(countSelector).text();
 			var expectedValue = initialValue + 2;
-			equal(counterLabelValue, "" + expectedValue, 'The new value of the counter is +2');
+			equal(counterLabelValue, "" + expectedValue, 'The new value of the counter is +1');
 
 			return nextPage($);
 		}).then(function($) {
 
 			var counterLabelValue = $(countSelector).text();
-			equal(counterLabelValue, "0", 'The value of the counter is 0 (no conversation)');
+			var expectedValue = initialValue + 2;
+			equal(counterLabelValue, "" + expectedValue, 'The value of the counter is the same as in the previous page');
 
+			return refresh($);
+		}).then(function($) {
+
+			var counterLabelValue = $(countSelector).text();
+			var expectedValue = 0;
+			equal(counterLabelValue, "" + expectedValue, 'The new value of the counter should be 0');
 		}).always(start);
 	});
 

@@ -3916,11 +3916,20 @@ public abstract class Component
 			tag.putInternal(MARKUP_ID_ATTR_NAME, getMarkupId());
 		}
 
-		if (getApplication().getDebugSettings().isOutputComponentPath())
+		DebugSettings debugSettings = getApplication().getDebugSettings();
+		String componentPathAttributeName = debugSettings.getComponentPathAttributeName();
+		if (Strings.isEmpty(componentPathAttributeName) == false)
 		{
 			String path = getPageRelativePath();
 			path = path.replace("_", "__");
-			path = path.replace(":", "_");
+			path = path.replace(':', '_');
+			tag.put(componentPathAttributeName, path);
+		}
+		else if (debugSettings.isOutputComponentPath())
+		{
+			String path = getPageRelativePath();
+			path = path.replace("_", "__");
+			path = path.replace(':', '_');
 			tag.put("wicketpath", path);
 		}
 
