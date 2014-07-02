@@ -16,10 +16,12 @@
  */
 package org.apache.wicket.settings;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.ajax.WicketAjaxDebugJQueryResourceReference;
 import org.apache.wicket.ajax.WicketAjaxJQueryResourceReference;
 import org.apache.wicket.ajax.WicketEventJQueryResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.resource.JQueryCdnResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.util.lang.Args;
 
@@ -37,7 +39,7 @@ import org.apache.wicket.util.lang.Args;
  */
 public class JavaScriptLibrarySettings
 {
-	private ResourceReference jQueryReference = JQueryResourceReference.get();
+	private ResourceReference jQueryReference;
 
 	private ResourceReference wicketEventReference = WicketEventJQueryResourceReference.get();
 
@@ -51,7 +53,25 @@ public class JavaScriptLibrarySettings
 	 */
 	public ResourceReference getJQueryReference()
 	{
-		return jQueryReference;
+		ResourceReference reference;
+		if (jQueryReference == null)
+		{
+			// if not set explicitly then:
+
+			if (Application.exists() && Application.get().getApplicationSettings().isUseCdnResources())
+			{
+				reference = JQueryCdnResourceReference.get();
+			}
+			else
+			{
+				reference = JQueryResourceReference.get();
+			}
+		}
+		else
+		{
+			reference = jQueryReference;
+		}
+		return reference;
 	}
 
 	/**

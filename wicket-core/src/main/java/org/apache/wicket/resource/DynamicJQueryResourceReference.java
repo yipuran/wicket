@@ -41,7 +41,7 @@ public class DynamicJQueryResourceReference extends JQueryResourceReference
 
 	/**
 	 * The key for the metadata that is used as a cache to calculate the name
-	 * only once
+	 * only once per request cycle
 	 */
 	private static final MetaDataKey<String> KEY = new MetaDataKey<String>()
 	{
@@ -50,7 +50,7 @@ public class DynamicJQueryResourceReference extends JQueryResourceReference
 	/**
 	 * jQuery ver. 2.x - works only on modern browsers
 	 */
-	public static final String VERSION_2 = "jquery/jquery-2.1.1.js";
+	public static final String VERSION_2 = "2.1.1";
 
 	public DynamicJQueryResourceReference()
 	{
@@ -64,7 +64,7 @@ public class DynamicJQueryResourceReference extends JQueryResourceReference
 		if (name == null)
 		{
 			WebClientInfo clientInfo;
-			name = getVersion2();
+			String version = getVersion2();
 			if (Session.exists())
 			{
 				WebSession session = WebSession.get();
@@ -77,9 +77,10 @@ public class DynamicJQueryResourceReference extends JQueryResourceReference
 			ClientProperties clientProperties = clientInfo.getProperties();
 			if (clientProperties.isBrowserInternetExplorer() && clientProperties.getBrowserVersionMajor() < 9)
 			{
-				name = getVersion1();
+				version = getVersion1();
 			}
 
+			name = "jquery/jquery-" + version + ".js";
 			requestCycle.setMetaData(KEY, name);
 		}
 		return name;

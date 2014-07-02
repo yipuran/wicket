@@ -36,22 +36,25 @@ public class UrlResourceReference extends ResourceReference
 	 */
 	private static class CalculatedUrl extends Url implements IUrlRenderer
 	{
+		private final Url original;
+
 		private CalculatedUrl(Url original)
 		{
 			super(original);
+			this.original = original;
 		}
 
 		@Override
 		public String renderFullUrl(Url url, Url baseUrl)
 		{
-			StringMode mode = getStringMode(url);
-			return url.toString(mode);
+			StringMode mode = getStringMode(original);
+			return original.toString(mode);
 		}
 
 		@Override
 		public String renderRelativeUrl(Url url, Url baseUrl)
 		{
-			return url.toString();
+			return original.toString();
 		}
 	}
 
@@ -84,7 +87,7 @@ public class UrlResourceReference extends ResourceReference
 	/**
 	 * @return the url of the external resource
 	 */
-	public final Url getUrl()
+	public Url getUrl()
 	{
 		CalculatedUrl _url;
 

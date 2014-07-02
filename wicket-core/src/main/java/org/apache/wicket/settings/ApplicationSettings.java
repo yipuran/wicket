@@ -62,6 +62,8 @@ public class ApplicationSettings
 
 	private boolean uploadProgressUpdatesEnabled = false;
 
+	private boolean useCdnResources = false;
+
 	private IFeedbackMessageFilter feedbackMessageCleanupFilter = new DefaultCleanupFeedbackMessageFilter();
 
 	/**
@@ -264,5 +266,19 @@ public class ApplicationSettings
 	public IFeedbackMessageFilter getFeedbackMessageCleanupFilter()
 	{
 		return feedbackMessageCleanupFilter;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isUseCdnResources()
+	{
+		return useCdnResources;
+	}
+
+	public ApplicationSettings setUseCdnResources(boolean useCdnResources)
+	{
+		this.useCdnResources = useCdnResources;
+		return this;
 	}
 }
