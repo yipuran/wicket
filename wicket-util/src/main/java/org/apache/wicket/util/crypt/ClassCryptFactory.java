@@ -17,6 +17,7 @@
 package org.apache.wicket.util.crypt;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Constructor;
 
 import org.apache.wicket.util.lang.Args;
 import org.slf4j.Logger;
@@ -33,38 +34,40 @@ public class ClassCryptFactory implements ICryptFactory
 {
 	private static final Logger log = LoggerFactory.getLogger(ClassCryptFactory.class);
 
-	private final WeakReference<Class<?>> cryptClass;
-	private final String encryptionKey;
+	private final WeakReference<Class<? extends ICrypt>> cryptClass;
+	private final Object[] constructorArgs;
 
 	/**
 	 * Construct.
 	 * 
 	 * @param cryptClass
 	 *            class that will be instantiated to represent the ICrypt object
-	 * @param encryptionKey
-	 *            encryption key
+	 * @param constructorArgs
+	 *            the arguments to instantiate the crypt class.
 	 */
-	public ClassCryptFactory(final Class<?> cryptClass, final String encryptionKey)
+	public ClassCryptFactory(final Class<? extends ICrypt> cryptClass, final Object... constructorArgs)
 	{
 		Args.notNull(cryptClass, "cryptClass");
+		Args.notNull(constructorArgs, "constructorArgs");
 
 		if (!ICrypt.class.isAssignableFrom(cryptClass))
 		{
 			throw new IllegalArgumentException("cryptClass must implement ICrypt interface");
 		}
 
-		this.cryptClass = new WeakReference<Class<?>>(cryptClass);
-		this.encryptionKey = encryptionKey;
+		this.cryptClass = new WeakReference<Class<?extends ICrypt>>(cryptClass);
+		this.constructorArgs = constructorArgs;
 	}
-
+	
 	@Override
 	public ICrypt newCrypt()
 	{
 		try
 		{
-			ICrypt crypt = (ICrypt)(cryptClass.get()).newInstance();
-			log.info("using encryption/decryption object {}", crypt);
-			crypt.setKey(encryptionKey);
+			Constructor<? extends ICrypt> constructor =
+				findConstructor(cryptClass.get(), constructorArgs);
+			ICrypt crypt = constructor.newInstance(constructorArgs);
+			log.info("using encryption/decryption object {}", crypt);			
 			return crypt;
 		}
 		catch (Exception e)
@@ -92,5 +95,26 @@ public class ClassCryptFactory implements ICryptFactory
 			// assign the dummy crypt implementation
 			return new NoCrypt();
 		}
+	}
+	
+	private Constructor<? extends ICrypt> findConstructor(final Class<? extends ICrypt> clazz, final Object... constructorArgs) 
+		throws NoSuchMethodException, SecurityException
+	{
+		Class<?>[] argsType = getArrayElementsType(constructorArgs);
+		
+		return clazz.getConstructor(argsType);
+	}
+	
+	private Class<?>[] getArrayElementsType(Object[] array)
+	{
+		Class<?>[] elementsClass = new Class[array.length];
+		
+		for (int i = 0; i< array.length; i++)
+		{
+			Object element = array[i];
+			elementsClass[i] = element.getClass();
+		}
+		
+		return elementsClass;
 	}
 }

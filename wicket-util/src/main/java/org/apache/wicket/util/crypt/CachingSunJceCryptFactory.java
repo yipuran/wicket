@@ -32,6 +32,6 @@ public class CachingSunJceCryptFactory extends CryptFactoryCachingDecorator
 	 */
 	public CachingSunJceCryptFactory(final String encryptionKey)
 	{
-		super(new ClassCryptFactory(SunJceCrypt.class, encryptionKey));
+		super(new ClassCryptFactory(SunJceCrypt.class, SunJceCrypt.DEFAULT_CRYPT_METHOD, encryptionKey));
 	}
 }

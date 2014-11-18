@@ -31,8 +31,7 @@ public class CryptTest extends WicketTestCase
 	@Test
 	public void crypt()
 	{
-		final ICrypt crypt = new SunJceCrypt();
-		crypt.setKey("someStableKey");
+		final ICrypt crypt = new SunJceCrypt(SunJceCrypt.DEFAULT_CRYPT_METHOD, "someStableKey");
 
 		try
 		{

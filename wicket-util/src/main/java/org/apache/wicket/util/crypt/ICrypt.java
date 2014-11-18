@@ -54,13 +54,4 @@ public interface ICrypt
 	 * @since 1.2
 	 */
 	String encryptUrlSafe(final String plainText);
-
-	/**
-	 * Sets private encryption key. It depends on the implementation if a default key is applied or
-	 * an exception is thrown, if no private key has been provided.
-	 * 
-	 * @param key
-	 *            private key
-	 */
-	void setKey(final String key);
 }

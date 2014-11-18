@@ -16,6 +16,7 @@
  */
 package org.apache.wicket.util.crypt;
 
+import java.security.GeneralSecurityException;
 
 /**
  * Due to legal reasons in some countries the JRE is shipped without a security provider. As a
@@ -25,13 +26,11 @@ package org.apache.wicket.util.crypt;
  * 
  * @author Juergen Donnerstag
  */
-public class NoCrypt implements ICrypt
+public class NoCrypt extends AbstractCrypt<String>
 {
-	/**
-	 * Constructor
-	 */
 	public NoCrypt()
 	{
+		super("");
 	}
 
 	/**
@@ -60,14 +59,9 @@ public class NoCrypt implements ICrypt
 		return plainText;
 	}
 
-	/**
-	 * Set encryption private key
-	 * 
-	 * @param key
-	 *            private key to make de-/encryption unique
-	 */
 	@Override
-	public void setKey(final String key)
+	protected byte[] crypt(byte[] input, int mode) throws GeneralSecurityException
 	{
+		return input;
 	}
 }

@@ -46,7 +46,7 @@ public class UnlimitedStrengthJurisdictionPolicyTest extends Assert
 		boolean unlimitedStrengthJurisdictionPolicyInstalled = SunJceCryptTest.isUnlimitedStrengthJurisdictionPolicyInstalled();
 		Assume.assumeThat(unlimitedStrengthJurisdictionPolicyInstalled, is(true));
 
-		AbstractCrypt crypt = new UnlimitedStrenghtJurisdictionPolicyCrypt();
+		AbstractCrypt<String> crypt = new UnlimitedStrenghtJurisdictionPolicyCrypt();
 
 		String input1 = "input1";
 		byte[] encrypted = crypt.crypt(input1.getBytes(), Cipher.ENCRYPT_MODE);
@@ -64,7 +64,7 @@ public class UnlimitedStrengthJurisdictionPolicyTest extends Assert
 	/**
 	 * Based on http://stackoverflow.com/a/992413
 	 */
-	private static class UnlimitedStrenghtJurisdictionPolicyCrypt extends AbstractCrypt
+	private static class UnlimitedStrenghtJurisdictionPolicyCrypt extends SunJceCrypt
 	{
 		private final Cipher crypter;
 		private final Cipher decrypter;

@@ -18,7 +18,6 @@ package org.apache.wicket.core.util.crypt;
 
 import java.util.UUID;
 
-import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
 import org.apache.wicket.util.crypt.ICrypt;
 import org.apache.wicket.util.crypt.ICryptFactory;
@@ -34,15 +33,9 @@ import org.apache.wicket.util.lang.Args;
  *
  * @author igor.vaynberg
  */
-public class KeyInSessionSunJceCryptFactory implements ICryptFactory
-{
-	/** metadata-key used to store crypto-key in session metadata */
-	private static final MetaDataKey<String> KEY = new MetaDataKey<String>()
-	{
-		private static final long serialVersionUID = 1L;
-	};
-
-	private final String cryptMethod;
+public class KeyInSessionSunJceCryptFactory extends AbstractKeyInSessionJceCryptFactory<String> implements ICryptFactory
+{	
+	final String cryptMethod;
 
 	/**
 	 * Constructor using {@link javax.crypto.Cipher} {@value org.apache.wicket.util.crypt.SunJceCrypt#DEFAULT_CRYPT_METHOD}
@@ -62,33 +55,16 @@ public class KeyInSessionSunJceCryptFactory implements ICryptFactory
 	{
 		this.cryptMethod = Args.notNull(cryptMethod, "Crypt method");
 	}
-
+	
 	@Override
-	public ICrypt newCrypt()
+	protected String generateKey(Session session)
 	{
-		Session session = Session.get();
-		session.bind();
-
-		// retrieve or generate encryption key from session
-		String key = session.getMetaData(KEY);
-		if (key == null)
-		{
-			// generate new key
-			key = session.getId() + "." + UUID.randomUUID().toString();
-			session.setMetaData(KEY, key);
-		}
-
-		// build the crypt based on session key
-		ICrypt crypt = createCrypt();
-		crypt.setKey(key);
-		return crypt;
+		return session.getId() + "." + UUID.randomUUID().toString();
 	}
-
-	/**
-	 * @return the {@link org.apache.wicket.util.crypt.ICrypt} to use
-	 */
-	protected ICrypt createCrypt()
+	
+	@Override
+	protected ICrypt createCrypt(String key)
 	{
-		return new SunJceCrypt(cryptMethod);
+		return new SunJceCrypt(cryptMethod, key);
 	}
 }

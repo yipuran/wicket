@@ -23,6 +23,7 @@ import java.security.Security;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -41,7 +42,7 @@ import org.apache.wicket.util.lang.Args;
  * 
  * @author Juergen Donnerstag
  */
-public class SunJceCrypt extends AbstractCrypt
+public class SunJceCrypt extends AbstractCrypt<String>
 {
 	/**
 	 * Iteration count used in combination with the salt to create the encryption key.
@@ -76,8 +77,25 @@ public class SunJceCrypt extends AbstractCrypt
 	 */
 	public SunJceCrypt(String cryptMethod)
 	{
-		this.cryptMethod = Args.notNull(cryptMethod, "Crypt method");
+		this(cryptMethod, generateRandomKey());
+	}
 
+	public SunJceCrypt(String cryptMethod, String key)
+	{
+		super(key);
+		this.cryptMethod = Args.notNull(cryptMethod, "Crypt method");
+		
+		checkChiperIsSupported(cryptMethod);
+	}
+	
+	/**
+	 * Check if the current cipher is supported by the underlying JVM.
+	 * 
+	 * @param cryptMethod
+	 * 				the name of encryption method (the cipher) 
+	 */
+	private void checkChiperIsSupported(String cryptMethod)
+	{
 		if (Security.getProviders("Cipher." + cryptMethod).length > 0)
 		{
 			return; // we are good to go!
@@ -94,7 +112,7 @@ public class SunJceCrypt extends AbstractCrypt
 			throw new RuntimeException("Unable to load SunJCE service provider", ex);
 		}
 	}
-
+	
 	/**
 	 * Crypts the given byte array
 	 * 
@@ -105,7 +123,6 @@ public class SunJceCrypt extends AbstractCrypt
 	 * @return the input crypted. Null in case of an error
 	 * @throws GeneralSecurityException
 	 */
-	@Override
 	protected byte[] crypt(final byte[] input, final int mode)
 		throws GeneralSecurityException
 	{
@@ -168,5 +185,15 @@ public class SunJceCrypt extends AbstractCrypt
 	protected KeySpec createKeySpec()
 	{
 		return new PBEKeySpec(getKey().toCharArray());
+	}
+
+	/**
+	 * Generate a random string key using {@code java.util.UUID.generateRandomKey()}.
+	 * 
+	 * @return the random string key
+	 */
+	protected static String generateRandomKey()
+	{
+		return UUID.randomUUID().toString();
 	}
 }

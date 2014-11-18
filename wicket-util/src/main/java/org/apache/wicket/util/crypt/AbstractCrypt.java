@@ -16,12 +16,13 @@
  */
 package org.apache.wicket.util.crypt;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
-import java.util.UUID;
 
 import javax.crypto.Cipher;
 
+import org.apache.wicket.util.lang.Args;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Juergen Donnerstag
  */
-public abstract class AbstractCrypt implements ICrypt
+public abstract class AbstractCrypt<T extends Serializable> implements ICrypt
 {
 	/** Encoding used to convert java String from and to byte[] */
 	private static final String CHARACTER_ENCODING = "UTF-8";
@@ -40,87 +41,27 @@ public abstract class AbstractCrypt implements ICrypt
 	private static final Logger log = LoggerFactory.getLogger(AbstractCrypt.class);
 
 	/** Key used to de-/encrypt the data */
-	private String encryptionKey;
-
+	private final T encryptionKey;
+	
 	/**
 	 * Constructor
-	 */
-	public AbstractCrypt()
-	{
-		this.encryptionKey = UUID.randomUUID().toString();
-	}
-
-	/**
-	 * Decrypts a string into a string.
 	 * 
-	 * @param text
-	 *            text to decrypt
-	 * @return the decrypted text
+	 * @param encryptionKey
+	 * 				the encryption key to use
 	 */
-	@Override
-	public final String decryptUrlSafe(final String text)
+	public AbstractCrypt(final T encryptionKey)
 	{
-		try
-		{
-			byte[] decoded = new Base64(true).decode(text);
-			return new String(decryptByteArray(decoded), CHARACTER_ENCODING);
-		}
-		catch (Exception ex)
-		{
-			log.debug("Error decoding text: " + text, ex);
-			return null;
-		}
+		this.encryptionKey = Args.notNull(encryptionKey, "encryptionKey");
 	}
-
-	/**
-	 * Encrypt a string into a string using URL safe Base64 encoding.
-	 * 
-	 * @param plainText
-	 *            text to encrypt
-	 * @return encrypted string
-	 */
-	@Override
-	public final String encryptUrlSafe(final String plainText)
-	{
-		try
-		{
-			byte[] encrypted = encryptStringToByteArray(plainText);
-			Base64 base64 = new Base64(-1, null, true);
-			byte[] encoded = base64.encode(encrypted);
-			return new String(encoded, CHARACTER_ENCODING);
-		}
-		catch (GeneralSecurityException e)
-		{
-			log.error("Unable to encrypt text '" + plainText + "'", e);
-			return null;
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			log.error("Unable to encrypt text '" + plainText + "'", e);
-			return null;
-		}
-	}
-
+	
 	/**
 	 * Get encryption private key
 	 * 
 	 * @return encryption private key
 	 */
-	public String getKey()
+	public T getKey()
 	{
 		return encryptionKey;
-	}
-
-	/**
-	 * Set encryption private key
-	 * 
-	 * @param key
-	 *            private key to make de-/encryption unique
-	 */
-	@Override
-	public void setKey(final String key)
-	{
-		encryptionKey = key;
 	}
 
 	/**
@@ -143,7 +84,7 @@ public abstract class AbstractCrypt implements ICrypt
 	 *            byte array to decrypt
 	 * @return the decrypted text
 	 */
-	private byte[] decryptByteArray(final byte[] encrypted)
+	protected final byte[] decryptByteArray(final byte[] encrypted)
 	{
 		try
 		{
@@ -164,7 +105,7 @@ public abstract class AbstractCrypt implements ICrypt
 	 * @return the string encrypted
 	 * @throws GeneralSecurityException
 	 */
-	private byte[] encryptStringToByteArray(final String plainText)
+	protected final byte[] encryptStringToByteArray(final String plainText)
 		throws GeneralSecurityException
 	{
 		try
@@ -174,6 +115,57 @@ public abstract class AbstractCrypt implements ICrypt
 		catch (UnsupportedEncodingException ex)
 		{
 			throw new RuntimeException(ex.getMessage());
+		}
+	}
+	
+	/**
+	 * Decrypts a string into a string.
+	 * 
+	 * @param text
+	 *            text to decrypt
+	 * @return the decrypted text
+	 */
+	@Override
+	public String decryptUrlSafe(final String text)
+	{
+		try
+		{
+			byte[] decoded = new Base64(true).decode(text);
+			return new String(decryptByteArray(decoded), CHARACTER_ENCODING);
+		}
+		catch (Exception ex)
+		{
+			log.debug("Error decoding text: " + text, ex);
+			return null;
+		}
+	}
+
+	/**
+	 * Encrypt a string into a string using URL safe Base64 encoding.
+	 * 
+	 * @param plainText
+	 *            text to encrypt
+	 * @return encrypted string
+	 */
+	@Override
+	public String encryptUrlSafe(final String plainText)
+	{
+		try
+		{
+			byte[] encrypted = encryptStringToByteArray(plainText);
+			Base64 base64 = new Base64(-1, null, true);
+			byte[] encoded = base64.encode(encrypted);
+			return new String(encoded, CHARACTER_ENCODING);
+		}
+		catch (GeneralSecurityException e)
+		{
+			log.error("Unable to encrypt text '" + plainText + "'", e);
+			return null;
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			log.error("Unable to encrypt text '" + plainText + "'", e);
+			return null;
 		}
 	}
 }
