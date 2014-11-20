@@ -28,11 +28,6 @@ import java.security.GeneralSecurityException;
  */
 public class NoCrypt extends AbstractCrypt<String>
 {
-	public NoCrypt()
-	{
-		super("");
-	}
-
 	/**
 	 * Decrypts a string into a string.
 	 * 

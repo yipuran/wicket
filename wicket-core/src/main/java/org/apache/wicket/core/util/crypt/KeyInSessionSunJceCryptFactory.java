@@ -33,7 +33,7 @@ import org.apache.wicket.util.lang.Args;
  *
  * @author igor.vaynberg
  */
-public class KeyInSessionSunJceCryptFactory extends AbstractKeyInSessionJceCryptFactory<String> implements ICryptFactory
+public class KeyInSessionSunJceCryptFactory extends AbstractKeyInSessionCryptFactory<String> implements ICryptFactory
 {	
 	final String cryptMethod;
 

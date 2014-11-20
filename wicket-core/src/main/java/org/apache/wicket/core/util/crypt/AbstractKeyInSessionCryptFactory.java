@@ -32,15 +32,15 @@ import org.apache.wicket.util.crypt.ICrypt;
  * @param <T>
  * 				the type for the secret key.
  */
-public abstract class AbstractKeyInSessionJceCryptFactory<T extends Serializable>
+public abstract class AbstractKeyInSessionCryptFactory<T extends Serializable>
 {
 	/** metadata-key used to store crypto-key in session metadata */
-	static final MetaDataKey<Serializable> KEY = new MetaDataKey<Serializable>()
+	private static final MetaDataKey<Serializable> KEY = new MetaDataKey<Serializable>()
 	{
 		private static final long serialVersionUID = 1L;
 	};
 	
-	public AbstractKeyInSessionJceCryptFactory()
+	public AbstractKeyInSessionCryptFactory()
 	{
 		super();
 	}

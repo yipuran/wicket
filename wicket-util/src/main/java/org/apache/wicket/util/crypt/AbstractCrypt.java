@@ -22,7 +22,6 @@ import java.security.GeneralSecurityException;
 
 import javax.crypto.Cipher;
 
-import org.apache.wicket.util.lang.Args;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,30 +38,6 @@ public abstract class AbstractCrypt<T extends Serializable> implements ICrypt
 
 	/** Log. */
 	private static final Logger log = LoggerFactory.getLogger(AbstractCrypt.class);
-
-	/** Key used to de-/encrypt the data */
-	private final T encryptionKey;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param encryptionKey
-	 * 				the encryption key to use
-	 */
-	public AbstractCrypt(final T encryptionKey)
-	{
-		this.encryptionKey = Args.notNull(encryptionKey, "encryptionKey");
-	}
-	
-	/**
-	 * Get encryption private key
-	 * 
-	 * @return encryption private key
-	 */
-	public T getKey()
-	{
-		return encryptionKey;
-	}
 
 	/**
 	 * Crypts the given byte array

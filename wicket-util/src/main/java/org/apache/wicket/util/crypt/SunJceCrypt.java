@@ -58,6 +58,9 @@ public class SunJceCrypt extends AbstractCrypt<String>
 
 	/** The name of encryption method (cipher) */
 	private final String cryptMethod;
+	
+	/** Key used to de-/encrypt the data */
+	private final String encryptionPassword;	
 
 	/**
 	 * Constructor
@@ -80,12 +83,12 @@ public class SunJceCrypt extends AbstractCrypt<String>
 		this(cryptMethod, generateRandomKey());
 	}
 
-	public SunJceCrypt(String cryptMethod, String key)
+	public SunJceCrypt(String cryptMethod, String encryptionPassword)
 	{
-		super(key);
+		this.encryptionPassword = encryptionPassword;
 		this.cryptMethod = Args.notNull(cryptMethod, "Crypt method");
 		
-		checkChiperIsSupported(cryptMethod);
+		checkCipherIsSupported(cryptMethod);
 	}
 	
 	/**
@@ -94,7 +97,7 @@ public class SunJceCrypt extends AbstractCrypt<String>
 	 * @param cryptMethod
 	 * 				the name of encryption method (the cipher) 
 	 */
-	private void checkChiperIsSupported(String cryptMethod)
+	private void checkCipherIsSupported(String cryptMethod)
 	{
 		if (Security.getProviders("Cipher." + cryptMethod).length > 0)
 		{
@@ -192,8 +195,18 @@ public class SunJceCrypt extends AbstractCrypt<String>
 	 * 
 	 * @return the random string key
 	 */
-	protected static String generateRandomKey()
+	public static String generateRandomKey()
 	{
 		return UUID.randomUUID().toString();
+	}
+	
+	/**
+	 * Returns the secret key used by this Crypt
+	 * 
+	 * @return the secret key
+	 */
+	public String getKey()
+	{
+		return encryptionPassword;
 	}
 }
