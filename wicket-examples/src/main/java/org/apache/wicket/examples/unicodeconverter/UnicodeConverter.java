@@ -65,14 +65,16 @@ public class UnicodeConverter extends WicketExamplePage
 		@Override
 		public String getObject()
 		{
-			String result;
-			if (TO_ESCAPED_UNICODE.equals(translationType))
+			String result = "";
+			if (Strings.isEmpty(source) == false)
 			{
-				result = Strings.toEscapedUnicode(source);
-			}
-			else
-			{
-				result = Strings.fromEscapedUnicode(source);
+				if (TO_ESCAPED_UNICODE.equals(translationType))
+				{
+					result = Strings.toEscapedUnicode(source);
+				} else
+				{
+					result = Strings.fromEscapedUnicode(source);
+				}
 			}
 			return result;
 		}

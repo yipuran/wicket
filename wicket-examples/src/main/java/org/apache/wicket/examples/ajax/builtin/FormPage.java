@@ -23,13 +23,14 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.SimpleFormComponentLabel;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.io.IClusterable;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Page to demonstrate instant ajax validaion feedback. Validation is triggered as the user is
@@ -46,7 +47,7 @@ public class FormPage extends BasePage
 	public FormPage()
 	{
 		// create feedback panel to show errors
-		final FeedbackPanel feedback = new FeedbackPanel("feedback");
+		final NotificationPanel feedback = new NotificationPanel("feedback");
 		feedback.setOutputMarkupId(true);
 		add(feedback);
 

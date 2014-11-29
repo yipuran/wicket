@@ -28,11 +28,12 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Linked select boxes example
@@ -109,7 +110,7 @@ public class ChoicePage extends BasePage
 		form.add(makes);
 		form.add(models);
 
-		final FeedbackPanel feedback = new FeedbackPanel("feedback");
+		final NotificationPanel feedback = new NotificationPanel("feedback");
 		feedback.setOutputMarkupId(true);
 		add(feedback);
 

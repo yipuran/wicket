@@ -6,11 +6,24 @@ Demonstrates Wicket's ability to transparently handle multipart forms via AJAX.<
 
 <div wicket:id="feedback"></div>
 
-<form wicket:id="form">
-	Text field: <input wicket:id="text" type="text"/><br/>
-	File field: <input wicket:id="file" type="file"/> (<span wicket:id="max"></span> max)<br/><br/>
-	<div wicket:id="progress"></div>
-	<input type="submit" value="Regular Submit"/> <input wicket:id="ajaxSubmit" type="button" value="Ajax Submit"/>
+<form wicket:id="form" class="form-horizontal">
+	<div class="form-group">
+		<label class="control-label col-sm-1" wicket:for="text">Text field:</label>
+		<div class="col-sm-3">
+			<input wicket:id="text" type="text" class="form-control"/>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-1" wicket:for="file">File field:</label>
+		<div class="col-sm-3">
+			<input wicket:id="file" type="file"/> (<span wicket:id="max"></span> max)<br/><br/>
+		</div>
+	</div>
+	<div class="col-sm-offset-1">
+		<div wicket:id="progress"></div>
+		<input wicket:id="ajaxSubmit" type="button" class="btn btn-primary" value="Ajax Submit"/> <input type="submit" class="btn btn-default" value="Regular Submit"/>
+	</div>
+
 </form>
 
 </wicket:extend>

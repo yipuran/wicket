@@ -2,11 +2,15 @@
 <html xmlns:wicket="http://wicket.apache.org">
 	<body>
 		<wicket:extend>
-
-		<form wicket:id="form">
-			Field: <input type="text" wicket:id="field" size="50"/><br/>
-			Values:<span wicket:id="selectedValue"></span><br/>
-		</form>
+			<div class="row">
+				<div class="col-sm-4">
+					Start typing the name of some country
+					<form wicket:id="form">
+						<input type="text" wicket:id="field" size="50" class="form-control"/><br/>
+						Countries:<span wicket:id="selectedValue"></span><br/>
+					</form>
+				</div>
+			</div>
 
 		</wicket:extend>
 	</body>

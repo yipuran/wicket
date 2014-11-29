@@ -24,12 +24,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.validation.validator.StringValidator;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 /**
  * Demos ajax handling of a multipart form
@@ -40,7 +41,7 @@ public class FileUploadPage extends BasePage
 {
 	private static final long serialVersionUID = 1L;
 
-	private final FileUploadField file;
+	private final BootstrapFileInputField file;
 	private final TextField<String> text;
 
 	/**
@@ -50,7 +51,7 @@ public class FileUploadPage extends BasePage
 	{
 
 		// create a feedback panel
-		final Component feedback = new FeedbackPanel("feedback").setOutputMarkupId(true);
+		final Component feedback = new NotificationPanel("feedback").setOutputMarkupId(true);
 		add(feedback);
 
 		// create the form
@@ -86,7 +87,7 @@ public class FileUploadPage extends BasePage
 		text.add(StringValidator.minimumLength(2));
 
 		// create the file upload field
-		form.add(file = new FileUploadField("file"));
+		form.add(file = new BootstrapFileInputField("file"));
 
 		form.add(new Label("max", new AbstractReadOnlyModel<String>()
 		{

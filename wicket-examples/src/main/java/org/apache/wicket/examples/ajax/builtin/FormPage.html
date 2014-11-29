@@ -9,13 +9,26 @@
 		<br/>
 		<div wicket:id="feedback">[[ feedback ]]</div>
 
-        <form wicket:id="form">
-            <label wicket:id="name-label">[name label]</label>: <input type="text" wicket:id="name"/>
-            <br/><label wicket:id="email-label">[email label]</label>: <input type="text" wicket:id="email"/>
-            <br/>
-            <br/>
-			<input type="submit" value="submit via ajax" wicket:id="ajax-button"/>
-            <input type="submit" value="submit"/>
-        </form>
+		<form wicket:id="form" class="form-horizontal">
+			<div class="form-group">
+				<label wicket:id="name-label" class="control-label col-sm-1">[name label]</label>
+				<div class="col-sm-3">
+					<input type="text" wicket:id="name" class="form-control"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label wicket:id="email-label" class="control-label col-sm-1">[email label]</label>
+				<div class="col-sm-3">
+					<input type="text" wicket:id="email" class="form-control"/>
+				</div>
+			</div>
+
+			<div class="col-sm-offset-1">
+				<input type="submit" value="submit via ajax" wicket:id="ajax-button" class="btn btn-primary"/>
+				<input type="submit" value="normal submit" class="btn btn-default"/>
+			</div>
+
+		</form>
     </wicket:extend>
 </html>

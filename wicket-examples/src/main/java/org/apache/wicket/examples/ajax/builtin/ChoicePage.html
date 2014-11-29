@@ -7,9 +7,17 @@ Whenever the Make select box value is changed it will submit the new value to se
 
 <br/><br/>
 <form wicket:id="form">
-	<select wicket:id="makes"></select>
-	<select wicket:id="models"></select>
-	<input type="submit" wicket:id="go" value="Submit"/>
+	<div class="form-group">
+		<div class="col-sm-2">
+			<select wicket:id="makes" class="form-control"></select>
+		</div>
+		<div class="col-sm-2">
+			<select wicket:id="models" class="form-control"></select>
+		</div>
+
+		<input type="submit" wicket:id="go" class="btn btn-primary" value="Submit"/>
+	</div>
+
 </form>
 <div wicket:id="feedback"></div>
 </wicket:extend>

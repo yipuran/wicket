@@ -45,6 +45,8 @@ public final class Home extends WicketExamplePage
 	 */
 	public Home(final PageParameters parameters)
 	{
+		super(parameters);
+
 		add(new Image("beer", new PackageResourceReference(Home.class, "Beer.gif")));
 
 		// create a dummy object to serve as our substitution model

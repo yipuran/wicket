@@ -5,7 +5,7 @@
 	</head>
 	<body>
 
-		<span wicket:id="mainNavigation"></span>
+		<wicket:extend>
 
 		<p>
 			This example displays how you can work with 'nice' urls for bookmarkable pages.
@@ -13,33 +13,34 @@
 
 		<p>
 			These links refer to pages that were mounted one by one <br />
-			<a wicket:id="page1Link">
+			<a wicket:id="page1Link" class="btn btn-link">
 				Click this BookmarkablePageLink to go to Page 1
 			</a><br/>
-			<a wicket:id="page2Link">
+			<a wicket:id="page2Link" class="btn btn-link">
 				Click this BookmarkablePageLink to go to Page 2
 			</a>
 			&#160;After Page 2 is displayed click refresh link to see url parameters in action <br />
-            <a wicket:id="page2LinkPp">
+            <a wicket:id="page2LinkPp" class="btn btn-link">
                 Same as page 2, but now the url parameters are encoded with placeholders in the segments
             </a> <br />
-            <a wicket:id="page2LinkUp">
+            <a wicket:id="page2LinkUp" class="btn btn-link">
                 Same as page 2, but now the url parameters are encoded in the segments in Wicket 1.4 style
             </a>
 		</p>
 		<p>
 			These links refere to pages that were mounted as a whole package <br />
-			<a wicket:id="page3Link">
+			<a wicket:id="page3Link" class="btn btn-link">
 				Click this BookmarkablePageLink to go to Page 3
 			</a><br/>
-			<a wicket:id="page4Link">
+			<a wicket:id="page4Link" class="btn btn-link">
 				Click this BookmarkablePageLink to go to Page 4
 			</a><br/>
-			<a wicket:id="page5Link">
+			<a wicket:id="page5Link" class="btn btn-link">
 				Click this BookmarkablePageLink to go to Page 5
 			</a>
 			&#160;After Page 5 is displayed click refresh link to see url parameters in action <br />
 		</p>
 
+		</wicket:extend>
 	</body>
 </html>

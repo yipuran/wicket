@@ -6,27 +6,37 @@
 </head>
 <body>
 <wicket:extend>
-  <form wicket:id = "commentForm" id = "commentForm">
-    Add your comment here:
-    <p/>
-    <textarea wicket:id = "text">This is a comment</textarea>
-    <p/>
-    <input type = "submit" value = "Submit"/>
+  <form wicket:id="commentForm" class="form-horizontal">
+    <label wicket:for="text">Add your comment here:</label>
+    <div class="form-group">
+      <div class="col-sm-3">
+        <textarea wicket:id="text" class="form-control">This is a comment</textarea>
+      </div>
+      <div class="col-sm-1">
+        <input type="submit" value="Submit" class="btn btn-lg btn-primary"/>
+      </div>
+    </div>
+
+
   </form>
-  <div wicket:id="comments">
-  <span wicket:id="comments">
-    <p>
-	    <span wicket:id = "date">1/1/2004</span><br />
-	    <span wicket:id = "text">Comment text goes here.</span>
-	</p>
-  </span>
+
+  <div class="row">
+    <div class="col-sm-3">
+      <div wicket:id="comments" class="list-group">
+        <div wicket:id="comments" class="list-group-item">
+          <span wicket:id="date">1/1/2004</span><br/>
+          <span wicket:id="text">Comment text goes here.</span>
+        </div>
+      </div>
+      <wicket:remove>
+        <p>
+          1/2/2004<br/>
+          More comment text here.
+        </p>
+      </wicket:remove>
+    </div>
   </div>
-  <wicket:remove>
-    <p>
-	    1/2/2004<br/>
-	    More comment text here.
-    </p>
-  </wicket:remove>
+
 </wicket:extend>
 </body>
 </html>

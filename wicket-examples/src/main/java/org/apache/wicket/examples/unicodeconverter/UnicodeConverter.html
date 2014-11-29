@@ -5,31 +5,34 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
 
 	<form wicket:id="form">
 		<table>
-		 <tr>
-		  <td colspan="3">
-		   Paste in some unicode to test. For instance,
-		   <a href="http://babelfish.altavista.com/tr" target="new">translate something to chinese</a>
-		  </td>
-		 </tr>
-		 <tr>
-		  <td> 
-		    <textarea wicket:id="source" rows="10" cols="40">input</textarea>
-		  </td>
-		  <td align="middle">
-		    <select wicket:id="translationType"></select>
-		    <br />
-		    <input type="submit" value="translate" />
-		  </td>
-		  <td valign="top">
-			<textarea wicket:id="target" rows="10" cols="40">input</textarea>
-		  </td>
-		 </tr>
+			<tr>
+				<td colspan="3">
+					Paste in some unicode to test. For instance,
+					<a href="https://translate.google.com/" target="new">translate something to chinese</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<textarea wicket:id="source" rows="10" cols="40" class="form-control">input</textarea>
+				</td>
+				<td>&nbsp;</td>
+				<td align="middle">
+					<select wicket:id="translationType" class="form-control"></select>
+					<br/>
+					<input type="submit" value="translate" class="btn btn-default"/>
+				</td>
+				<td>&nbsp;</td>
+				<td valign="top">
+					<textarea wicket:id="target" rows="10" cols="40" class="form-control">input</textarea>
+				</td>
+			</tr>
 		</table>
 	</form>
 
+</wicket:extend>
 </body>
 </html>

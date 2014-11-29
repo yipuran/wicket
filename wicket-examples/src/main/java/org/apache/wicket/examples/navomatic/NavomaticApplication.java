@@ -27,13 +27,6 @@ import org.apache.wicket.markup.html.link.DisabledLinkBehavior;
  */
 public class NavomaticApplication extends WicketExampleApplication
 {
-	/**
-	 * Constructor.
-	 */
-	public NavomaticApplication()
-	{
-	}
-
 	@Override
 	protected void init()
 	{
@@ -50,6 +43,4 @@ public class NavomaticApplication extends WicketExampleApplication
 	{
 		return Page1.class;
 	}
-
-
 }
