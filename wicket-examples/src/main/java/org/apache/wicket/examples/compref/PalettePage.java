@@ -25,9 +25,10 @@ import org.apache.wicket.extensions.markup.html.form.palette.theme.DefaultTheme;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.model.util.ListModel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 /**
@@ -70,7 +71,7 @@ public class PalettePage extends WicketExamplePage
 		add(form);
 		form.add(palette);
 
-		add(new FeedbackPanel("feedback"));
+		add(new NotificationPanel("feedback"));
 	}
 
 	@Override

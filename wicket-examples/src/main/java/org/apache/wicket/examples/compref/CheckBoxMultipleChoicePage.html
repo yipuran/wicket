@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
 
 	<h1>wicket.markup.html.form.CheckBoxMultipleChoice</h1>
 	<wicket:link><a href="Index.html">[back to the reference]</a></wicket:link>
@@ -13,34 +13,28 @@
 	<p>
 	A CheckBoxMultipleChoice component lets users select multiple values from a group of checkboxes.
 	</p>
-	<p>
-	 <form wicket:id="form">
 
-		<table style="border: 2px dotted #fc0; width: 400px; padding: 5px;">
-		 <tr>
-		  <td valign="top">Select your favorite sites</td>
-		  <td>
-			<span wicket:id="sites">
-			</span>
-		  </td>
-		 </tr>
-		 <tr>
-		  <td valign="top">Select some of these excellent choices</td>
-		  <td>
-		    <span wicket:id="choices">
-		    </span>
-		  </td>
-		 </tr>
-		 <tr>
-		  <td colspan="2" align="center">
-		   <input type="submit" value="submit" />
-		  </td>
-		 </tr>
-		</table>
+	<div class="row">
+		<div class="col-sm-offset-1 col-sm-3">
+			<form wicket:id="form" role="form">
+				<div class="form-group">
+					<label>Select your favorite sites</label>
+					<div wicket:id="sites"></div>
+				</div>
 
-	 </form>
-	 <span wicket:id="feedback">feedbackmessages will be put here</span>
-	</p>
-    <span wicket:id="explainPanel">panel contents come here</span>
+				<div class="form-group">
+					<label>Select some of these excellent choices</label>
+					<div wicket:id="choices"></div>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+
+	<div wicket:id="feedback">feedbackmessages will be put here</div>
+	<span wicket:id="explainPanel">panel contents come here</span>
+
+</wicket:extend>
 </body>
 </html>

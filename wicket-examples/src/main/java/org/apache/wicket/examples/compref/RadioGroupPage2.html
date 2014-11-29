@@ -13,43 +13,38 @@
 	<p>
 	A RadioGroup and Radio components let users select a single value from a group of radio buttons. These components are more flexible then the RadioChoice component in that individual radio choices are full components, unlike with RadioChoice, and thus can be used anywhere in the markup.
 	</p>
-	<p>
-	 <form wicket:id="form">
-		<wicket:container wicket:id="group">
-			<wicket:container wicket:id="group2">
-				<table style="border: 2px dotted #fc0; width: 400px; padding: 5px;">
-				 <tr>
-				  <td valign="top">Select a person</td>
-				  <td>
-					  <table cellspacing="0" cellpadding="2">
-						<tr>
-							<td><b>Select1</b></td>
-							<td><b>Select2</b></td>
-							<td><b>First Name</b></td>
-							<td><b>Last Name</b></td>
-						</tr>
-					  	<tr wicket:id="persons">
-					  		<td><input type="radio" wicket:id="radio"/></td>
-					  		<td><input type="radio" wicket:id="radio2"/></td>
-					  		<td><span wicket:id="name">[this is where name will be]</span></td>
-					  		<td><span wicket:id="lastName">[this is where lastname will be]</span></td>
-					  	</tr>
-					  </table>
-					  <span valign="top">
-					  </span>
-				  </td>
-				 </tr>
-				 <tr>
-				  <td colspan="2" align="center">
-				   <input type="submit" value="submit" />
-				  </td>
-				 </tr>
-				</table>
-			</wicket:container>
-		</wicket:container>
-	 </form>
-	</p>
-	 <span wicket:id="feedback">feedbackmessages will be put here</span>
+
+
+	<div class="row">
+		<div class="col-sm-offset-1 col-sm-6">
+			<form wicket:id="form" role="form">
+				<fieldset wicket:id="group">
+					<wicket:container wicket:id="group2">
+						<legend>Select a person</legend>
+
+						<div class="row">
+							<div class="col-sm-1"><strong>Select</strong></div>
+							<div class="col-sm-1"><strong>Select2</strong></div>
+							<div class="col-sm-3"><strong>First Name</strong></div>
+							<div class="col-sm-3"><strong>Last Name</strong></div>
+						</div>
+
+						<div wicket:id="persons" class="row">
+							<div class="col-sm-1"><input type="radio" wicket:id="radio"/></div>
+							<div class="col-sm-1"><input type="radio" wicket:id="radio2"/></div>
+							<div class="col-sm-3"><span wicket:id="name">[this is where name will be]</span></div>
+							<div class="col-sm-3"><span wicket:id="lastName">[this is where lastname will be]</span></div>
+						</div>
+
+					</wicket:container>
+				</fieldset>
+
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+
+	<div wicket:id="feedback">feedbackmessages will be put here</div>
 
 </wicket:extend>
 </body>

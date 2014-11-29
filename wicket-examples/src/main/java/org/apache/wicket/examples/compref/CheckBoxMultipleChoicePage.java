@@ -22,11 +22,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.examples.WicketExamplePage;
+import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.io.IClusterable;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 /**
@@ -53,7 +55,7 @@ public class CheckBoxMultipleChoicePage extends WicketExamplePage
 		setDefaultModel(new CompoundPropertyModel<>(input));
 
 		// Add a FeedbackPanel for displaying our messages
-		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+		NotificationPanel feedbackPanel = new NotificationPanel("feedback");
 		add(feedbackPanel);
 
 		// Add a form with an onSubmit implementation that sets a message
@@ -69,12 +71,12 @@ public class CheckBoxMultipleChoicePage extends WicketExamplePage
 
 		// add a couple of checkbox multiple choice components, notice the model
 		// used is a compound model set on the page
-		CheckBoxMultipleChoice<String> siteChoice = new CheckBoxMultipleChoice<String>("sites",
-			SITES);
+		CheckBoxMultipleChoice<String> siteChoice = new CheckBoxMultipleChoice<String>("sites", SITES);
+		siteChoice.setLabelPosition(AbstractChoice.LabelPosition.WRAP_AFTER).setSuffix("<br/>");
 		form.add(siteChoice);
 
-		CheckBoxMultipleChoice<String> manyChoice = new CheckBoxMultipleChoice<String>("choices",
-			MANY_CHOICES);
+		CheckBoxMultipleChoice<String> manyChoice = new CheckBoxMultipleChoice<String>("choices", MANY_CHOICES);
+		manyChoice.setLabelPosition(AbstractChoice.LabelPosition.WRAP_AFTER).setSuffix(" ");
 		form.add(manyChoice);
 	}
 

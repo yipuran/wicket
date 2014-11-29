@@ -13,30 +13,45 @@
         <p>
             A CheckBoxSelector selects and deselects all Check components under the same CheckGroup as itself
         </p>
-        <p>
-         <form wicket:id="form">
-             CheckGroup:<br/>
-             <div wicket:id="checkgroup">
-                 <input type="checkbox" wicket:id="check1"/> 1
-                 <input type="checkbox" wicket:id="check2"/> 2
-                 <input type="checkbox" wicket:id="check3"/> 3
-                 <input type="checkbox" wicket:id="check4"/> 4
-                 <input type="checkbox" wicket:id="groupSelector"/> select all
-             </div>
-             <input type="checkbox" wicket:id="groupSelectorOutside"/> select all (outside group)
-             <hr/>
-             CheckboxMultipleChoice:
-             <div wicket:id="choice"/>
-             <input type="checkbox" wicket:id="choiceSelector"/> select all
-             <hr/>
-             Loose Checkboxes:
-             <input type="checkbox" wicket:id="looseCheck1"/> 1
-             <input type="checkbox" wicket:id="looseCheck2"/> 2
-             <input type="checkbox" wicket:id="looseCheck3"/> 3
-             <input type="checkbox" wicket:id="looseCheck4"/> 4
-             <input type="checkbox" wicket:id="looseSelector"/> select all
-         </form>
-       </p>
+
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-3">
+                <form wicket:id="form" role="form">
+
+                    <fieldset>
+                        <legend>CheckGroup:</legend>
+
+                        <div wicket:id="checkgroup" class="form-group">
+                            <input type="checkbox" wicket:id="check1"/> 1
+                            <input type="checkbox" wicket:id="check2"/> 2
+                            <input type="checkbox" wicket:id="check3"/> 3
+                            <input type="checkbox" wicket:id="check4"/> 4
+                            <label><input type="checkbox" wicket:id="groupSelector"/> select all</label>
+                        </div>
+                        <label><input type="checkbox" wicket:id="groupSelectorOutside"/> select all (outside group)</label>
+
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>CheckboxMultipleChoice:</legend>
+
+                        <div wicket:id="choice" class="form-group"></div>
+                        <label><input type="checkbox" wicket:id="choiceSelector"/> select all</label>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Loose Checkboxes:</legend>
+
+                        <input type="checkbox" wicket:id="looseCheck1"/> 1
+                        <input type="checkbox" wicket:id="looseCheck2"/> 2
+                        <input type="checkbox" wicket:id="looseCheck3"/> 3
+                        <input type="checkbox" wicket:id="looseCheck4"/> 4
+                        <label><input type="checkbox" wicket:id="looseSelector"/> select all</label>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
     </wicket:extend>
     </body>
 </html>

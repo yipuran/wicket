@@ -23,9 +23,10 @@ import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 /**
@@ -72,7 +73,7 @@ public class RadioGroupPage extends WicketExamplePage
 
 		group.add(persons);
 
-		add(new FeedbackPanel("feedback"));
+		add(new NotificationPanel("feedback"));
 	}
 
 	@Override

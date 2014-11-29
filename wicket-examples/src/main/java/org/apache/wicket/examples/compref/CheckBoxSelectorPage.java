@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.wicket.examples.WicketExamplePage;
+import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
@@ -86,6 +87,7 @@ public class CheckBoxSelectorPage extends WicketExamplePage
 		});
 		final CheckBoxMultipleChoice<Integer> choice = new CheckBoxMultipleChoice<>(
 			"choice", Model.ofList(new ArrayList<Integer>()), Arrays.asList(1, 2, 3, 4));
+		choice.setLabelPosition(AbstractChoice.LabelPosition.WRAP_AFTER).setSuffix(" ");
 		form.add(choice);
 		form.add(new CheckboxMultipleChoiceSelector("choiceSelector", choice));
 		final CheckBox loose1 = new CheckBox("looseCheck1", Model.of(Boolean.FALSE));

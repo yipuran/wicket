@@ -18,19 +18,22 @@
 	<h1>wicket.extensions.markup.html.form.palette.Palette</h1>
 	<wicket:link><a href="Index.html">[back to the reference]</a></wicket:link>
 
-	<p>
-	The Palette component.
-	</p>
-	<p>
-	 <form wicket:id="form">
-		<span wicket:id="palette">
-		</span>
-		<br/>
-	   <input type="submit" value="submit" />
-	 </form>
-	 <span wicket:id="feedback">feedbackmessages will be put here</span>
-	</p>
-    <span wicket:id="explainPanel">panel contents come here</span>
+	<h2>The Palette component.</h2>
+
+	<div class="row">
+		<div class="col-sm-offset-1 col-sm-6">
+			<form wicket:id="form" role="form">
+				<div class="form-group">
+					<span wicket:id="palette"></span>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+
+	<div wicket:id="feedback">feedbackmessages will be put here</div>
+	<span wicket:id="explainPanel">panel contents come here</span>
 
 </wicket:extend>
 </body>

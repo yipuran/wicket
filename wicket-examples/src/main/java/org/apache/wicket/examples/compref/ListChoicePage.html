@@ -13,30 +13,28 @@
 	<p>
 	A ListChoice component lets users select a single value from a scrollable list.
 	</p>
-	<p>
-	 <form wicket:id="form">
 
-		<table style="border: 2px dotted #fc0; width: 400px; padding: 5px;">
-		 <tr>
-		  <td valign="top">Select your favorite site</td>
-		  <td>
-			<select wicket:id="site">
-				<option>site 1</option>
-				<option>site 2</option>
-			</select>
-		  </td>
-		 </tr>
-		 <tr>
-		  <td colspan="2" align="center">
-		   <input type="submit" value="submit" />
-		  </td>
-		 </tr>
-		</table>
+	<div class="row">
+		<div class="col-sm-offset-1 col-sm-6">
+			<form wicket:id="form" role="form">
 
-	 </form>
-	 <span wicket:id="feedback">feedbackmessages will be put here</span>
-	</p>
-    <span wicket:id="explainPanel">panel contents come here</span>
+				<div class="form-group">
+					<label wicket:for="site" class="control-label col-sm-3">Select your favorite site</label>
+					<div class="col-sm-9">
+						<select wicket:id="site" class="form-control">
+							<option>site 1</option>
+							<option>site 2</option>
+						</select>
+					</div>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+
+	<div wicket:id="feedback">feedbackmessages will be put here</div>
+	<span wicket:id="explainPanel">panel contents come here</span>
 
 </wicket:extend>
 </body>

@@ -19,14 +19,16 @@ package org.apache.wicket.examples.compref;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.util.io.IClusterable;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.examples.WicketExamplePage;
+import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.util.io.IClusterable;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 /**
@@ -48,7 +50,7 @@ public class RadioChoicePage extends WicketExamplePage
 		setDefaultModel(new CompoundPropertyModel<>(input));
 
 		// Add a FeedbackPanel for displaying our messages
-		final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+		final NotificationPanel feedbackPanel = new NotificationPanel("feedback");
 		feedbackPanel.setOutputMarkupId(true);
 		add(feedbackPanel);
 
@@ -68,6 +70,7 @@ public class RadioChoicePage extends WicketExamplePage
 		// current selection, and that uses the SITES list for the available
 		// options.
 		RadioChoice<String> sites = new RadioChoice<>("site", SITES);
+		sites.setLabelPosition(AbstractChoice.LabelPosition.WRAP_AFTER).setSuffix("<br/>");
 		sites.add(new AjaxFormChoiceComponentUpdatingBehavior()
 		{
 			@Override

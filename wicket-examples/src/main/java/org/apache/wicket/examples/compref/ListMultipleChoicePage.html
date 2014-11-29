@@ -13,39 +13,39 @@
 	<p>
 	A ListChoice component lets users select a multiple values from a scrollable list.
 	</p>
-	<p>
-	 <form wicket:id="form">
 
-		<table style="border: 2px dotted #fc0; width: 400px; padding: 5px;">
-		 <tr>
-		  <td valign="top">Select your favorite sites</td>
-		  <td>
-			<select wicket:id="sites">
-				<option>site 1</option>
-				<option>site 2</option>
-			</select>
-		  </td>
-		 </tr>
-		 <tr>
-		  <td valign="top">Select some of these excellent choices (note that choice 2 is disabled intentionally)</td>
-		  <td>
-		    <select wicket:id="choices">
-		        <option>choice 1</option>
-		        <option>choice 2</option>
-		    </select>
-		  </td>
-		 </tr>
-		 <tr>
-		  <td colspan="2" align="center">
-		   <input type="submit" value="submit" />
-		  </td>
-		 </tr>
-		</table>
+	<div class="row">
+		<div class="col-sm-offset-1 col-sm-6">
+			<form wicket:id="form" role="form">
+				<fieldset>
+					<legend>Select your favorite sites</legend>
 
-	 </form>
-	 <span wicket:id="feedback">feedbackmessages will be put here</span>
-	</p>
-    <span wicket:id="explainPanel">panel contents come here</span>
+					<div class="form-group">
+						<select wicket:id="sites" class="form-control">
+							<option>site 1</option>
+							<option>site 2</option>
+						</select>
+					</div>
+				</fieldset>
+
+				<fieldset>
+					<legend>Select some of these excellent choices (note that choice 2 is disabled intentionally)</legend>
+
+					<div class="form-group">
+						<select wicket:id="choices" class="form-control">
+							<option>choice 1</option>
+							<option>choice 2</option>
+						</select>
+					</div>
+				</fieldset>
+
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+
+	<div wicket:id="feedback">feedbackmessages will be put here</div>
+	<span wicket:id="explainPanel">panel contents come here</span>
 
 </wicket:extend>
 </body>
