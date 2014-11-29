@@ -9,38 +9,31 @@
 
 <wicket:border>
 
-	<div id="header" class="borderedBlock">
-	 <table width="100%">
-	  <tr>
-	   <td id="ad">
-		 <span wicket:id="ad">ad comes here</span>
-	   </td>
-	   <td id="changeAddButton">
-		 <input type="button" wicket:id="changeAdLink" value="change ad" />
-	   </td>
-	  </tr>
-	 </table>
+	<div id="header" class="row">
+		<div class="col-sm-2">
+			<span wicket:id="ad">ad comes here</span>
+		</div>
+		<div class="col-sm-10">
+			<input type="button" wicket:id="changeAdLink" value="change ad" class="btn btn-default" />
+		</div>
 	</div>
 
-	<table width="100%">
-
-	  <tr>
-	    <td id="left" class="borderedBlock">
-		 <ul>
-		  <li><a href="#" wicket:id="page1Link">Page 1</a></li>
-		  <li><a href="#" wicket:id="page2Link">Page 2</a></li>
-		 </ul>
-		</td>
-		<td id="content" class="borderedBlock">
-			<wicket:body />
-		</td>
-	  </tr>
-
-	</table>
+	<div class="content row">
+		<div class="col-sm-2">
+			<ul>
+				<li><a href="#" wicket:id="page1Link">Page 1</a></li>
+				<li><a href="#" wicket:id="page2Link">Page 2</a></li>
+			</ul>
+		</div>
+		<div class="col-sm-10">
+			<wicket:body/>
+		</div>
+	</div>
 
 	<div id="footer" class="borderedBlock">
-	 footer
+		footer
 	</div>
+
 
 </wicket:border>
 

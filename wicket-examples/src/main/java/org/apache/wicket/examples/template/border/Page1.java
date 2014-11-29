@@ -17,8 +17,6 @@
 package org.apache.wicket.examples.template.border;
 
 import org.apache.wicket.examples.WicketExamplePage;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
 
 
 /**
@@ -33,7 +31,6 @@ public class Page1 extends WicketExamplePage
 	 */
 	public Page1()
 	{
-		add(new Label("title", new Model<>("Template example, page 1 - border")));
 		add(new TemplateBorder("border"));
 	}
 }

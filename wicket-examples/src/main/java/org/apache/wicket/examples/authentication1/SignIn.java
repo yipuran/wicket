@@ -20,9 +20,10 @@ import org.apache.wicket.examples.WicketExamplePage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.value.ValueMap;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 /**
@@ -40,7 +41,7 @@ public final class SignIn extends WicketExamplePage
 	public SignIn()
 	{
 		// Create feedback panel and add to page
-		add(new FeedbackPanel("feedback"));
+		add(new NotificationPanel("feedback"));
 
 		// Add sign-in form to page
 		add(new SignInForm("signInForm"));

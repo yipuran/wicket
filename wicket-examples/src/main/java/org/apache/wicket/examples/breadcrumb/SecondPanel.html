@@ -1,5 +1,5 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
-  <div style="border: thin solid black; margin 10px;">
+  <div style="border: thin solid black; margin: 10px;">
 Donec consectetuer purus nec risus. Ut lobortis. Quisque ac arcu vel mi aliquam varius. 
 Aliquam erat volutpat. Sed augue. Pellentesque sapien justo, pellentesque at, hendrerit 
 nec, laoreet ac, sapien. Cras at risus. Suspendisse nulla mauris, vehicula nec, luctus non, 
@@ -11,20 +11,27 @@ Nunc accumsan, enim eu rutrum faucibus, massa leo luctus arcu, nonummy viverra e
 pede. Donec vel neque adipiscing nulla ultrices iaculis.
 </div>
   
-  <div style="margin: 10px;">
-    <form wicket:id="form">
-      input <input wicket:id="input" type="text" value="" />&#160;
-      <input wicket:id="normalButton" type="submit" value="update" />
-      <input wicket:id="nextButton" type="submit" value="update and display result panel" />
-    </form>
-  </div>
-  
-  <div style="margin: 10px;">
-   <a href="#" wicket:id="linkToThird">go to the third panel</a>
+  <div style="margin: 10px;" class="row">
+    <div class="col-sm-4">
+      <form wicket:id="form">
+        <div class="form-group">
+          <label wicket:for="input">input</label>
+          <input wicket:id="input" type="text" class="form-control" />
+        </div>
+
+        <input wicket:id="normalButton" type="submit" value="update" class="btn btn-default" />
+        <input wicket:id="nextButton" type="submit" value="update and display result panel" class="btn btn-primary" />
+      </form>
+    </div>
+
   </div>
 
   <div style="margin: 10px;">
-   <a href="#" wicket:id="linkToFourth">go to the fourth panel</a>
+   <a class="btn btn-link" wicket:id="linkToThird">go to the third panel</a>
+  </div>
+
+  <div style="margin: 10px;">
+   <a class="btn btn-link" wicket:id="linkToFourth">go to the fourth panel</a>
   </div>
   
 </wicket:panel>

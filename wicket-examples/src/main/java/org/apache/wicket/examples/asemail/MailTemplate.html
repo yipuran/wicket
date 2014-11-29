@@ -4,14 +4,19 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
-    
-    <div wicket:id="feedback"></div>
-    
-    <form wicket:id="form">
-        <label wicket:for="name"><wicket:label>Enter your name:</wicket:label></label><input wicket:id="name"/>
+<wicket:extend>
+
+    <form wicket:id="form" style="padding-bottom: 100px">
+        <div class="form-group">
+            <div class="col-sm-4">
+                <label wicket:for="name"><wicket:label>Enter your name:</wicket:label></label>
+                <input wicket:id="name" class="form-control"/>
+            </div>
+        </div>
     </form>
-    
+
+    <div class="clearfix"></div>
+
     Using Wicket page as template: <a wicket:id="pageBasedLink">generate</a>.
     <br/>
     Using Wicket panel as template: <a wicket:id="panelBasedLink">generate</a>.
@@ -24,6 +29,6 @@
     <div wicket:id="result" id="result">
     
     </div>
-    
+</wicket:extend>
 </body>
 </html>

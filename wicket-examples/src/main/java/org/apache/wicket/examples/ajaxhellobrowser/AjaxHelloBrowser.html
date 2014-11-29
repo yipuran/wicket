@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
-<head>
-    <title>Wicket Examples - hellobrowser</title>
-    <!--<link rel="stylesheet" type="text/css" href="style.css"/>-->
-</head>
 <body>
-    <div wicket:id="mainNavigation"></div>
+<wicket:extend>
 
 	<p>
 	    This page uses <em>org.apache.wicket.ajax.AjaxClientInfoBehavior</em>
@@ -17,5 +13,6 @@
 		<span wicket:id="clienttime">client time info here</span>
 	</p>
 
+</wicket:extend>
 </body>
 </html>

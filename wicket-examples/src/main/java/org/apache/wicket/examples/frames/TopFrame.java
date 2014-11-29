@@ -25,10 +25,4 @@ import org.apache.wicket.examples.WicketExamplePage;
  */
 public class TopFrame extends WicketExamplePage
 {
-	/**
-	 * Constructor
-	 */
-	public TopFrame()
-	{
-	}
 }

@@ -55,8 +55,8 @@ public final class BookDetails extends AuthenticatedWebPage
 	 */
 	public BookDetails(final Book book)
 	{
-		add(new Label("title", book.getTitle()));
-		add(new Label("author", book.getAuthor()));
+		add(new Label("bookTitle", book.getTitle()));
+		add(new Label("bookAuthor", book.getAuthor()));
 		add(new Label("fiction", Boolean.toString(book.getFiction())));
 		add(BookDetails.link("companion", book.getCompanionBook(),
 			getLocalizer().getString("noBookTitle", this)));

@@ -21,9 +21,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Another page of the stateless example.
@@ -65,7 +66,7 @@ public class StatelessPage1 extends WicketExamplePage
 		};
 		statelessForm.add(field);
 		add(statelessForm);
-		add(new FeedbackPanel("feedback"));
+		add(new NotificationPanel("feedback"));
 	}
 
 }

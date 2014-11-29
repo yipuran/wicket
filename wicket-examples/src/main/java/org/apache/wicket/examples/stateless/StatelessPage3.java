@@ -16,6 +16,7 @@
  */
 package org.apache.wicket.examples.stateless;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import org.apache.wicket.examples.WicketExamplePage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -33,9 +34,6 @@ import org.apache.wicket.validation.validator.RangeValidator;
  */
 public class StatelessPage3 extends WicketExamplePage
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private Integer number;
@@ -84,7 +82,6 @@ public class StatelessPage3 extends WicketExamplePage
 		};
 		statelessForm.add(field);
 		add(statelessForm);
-		add(new FeedbackPanel("feedback"));
+		add(new NotificationPanel("feedback"));
 	}
-
 }

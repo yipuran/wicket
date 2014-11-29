@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
     <ul>
     <wicket:link>
     	<li>
@@ -18,8 +18,9 @@
 		</li>
     </wicket:link>
 		<li>
-	    	<a href="#" wicket:id="customLoadingPageLink">Go to a page that which template is loaded by itself.</a>
+	    	<a  wicket:id="customLoadingPageLink">Go to a page that which template is loaded by itself.</a>
 		</li>
     </ul>
+</wicket:extend>
 </body>
 </html>

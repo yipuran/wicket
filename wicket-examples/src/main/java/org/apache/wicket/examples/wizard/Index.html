@@ -5,21 +5,22 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
     
     <h3>Examples of extension's wizards package</h3>
 
       <ul>
        <li>
-    	<a wicket:id="staticWizardLink" href="#">static wizard using plain text steps</a>
+    	<a wicket:id="staticWizardLink" class="btn btn-link">static wizard using plain text steps</a>
        </li>
        <li>
-    	<a wicket:id="staticWizardWithPanelsLink" href="#">static wizard using panel steps</a>
+    	<a wicket:id="staticWizardWithPanelsLink" class="btn btn-link">static wizard using panel steps</a>
        </li>
        <li>
-    	<a wicket:id="newUserWizardLink" href="#">wizard for creating a new user</a>
+    	<a wicket:id="newUserWizardLink" class="btn btn-link">wizard for creating a new user</a>
        </li>
       </ul>
 
+</wicket:extend>
 </body>
 </html>

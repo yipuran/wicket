@@ -18,12 +18,15 @@ package org.apache.wicket.examples.customresourceloading;
 
 import java.net.URL;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.examples.WicketExamplePage;
+import org.apache.wicket.core.util.resource.UrlResourceStream;
+import org.apache.wicket.examples.WicketExampleHeader;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.resource.IResourceStream;
-import org.apache.wicket.core.util.resource.UrlResourceStream;
+import org.apache.wicket.util.string.Strings;
 
 
 /**
@@ -34,16 +37,17 @@ import org.apache.wicket.core.util.resource.UrlResourceStream;
  * 
  * @author Eelco Hillenius
  */
-public class PageWithCustomLoading extends WicketExamplePage
+public class PageWithCustomLoading extends WebPage
 	implements
 		IMarkupResourceStreamProvider,
 		IMarkupCacheKeyProvider
 {
-	/**
-	 * Constructor
-	 */
 	public PageWithCustomLoading()
 	{
+		final String packageName = getClass().getPackage().getName();
+		add(new WicketExampleHeader("mainNavigation", Strings.afterLast(packageName, '.'), this));
+
+		BootstrapBaseBehavior.addTo(this);
 	}
 
 	/**
@@ -79,7 +83,7 @@ public class PageWithCustomLoading extends WicketExamplePage
 	 * {@link IMarkupCacheKeyProvider} will just have their markup cached - but is useful when
 	 * markup varies. If you don't need such dynamic loading, it is advisible to not implement
 	 * {@link IMarkupCacheKeyProvider}.
-	 * 
+	 *
 	 * @see org.apache.wicket.markup.IMarkupCacheKeyProvider#getCacheKey(org.apache.wicket.MarkupContainer,
 	 *      java.lang.Class)
 	 */

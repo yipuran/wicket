@@ -22,9 +22,10 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Another page of the stateless example.
@@ -78,7 +79,7 @@ public class StatefulPage extends WicketExamplePage
 		};
 		statelessForm.add(field);
 		add(statelessForm);
-		add(new FeedbackPanel("feedback"));
+		add(new NotificationPanel("feedback"));
 	}
 
 	/**

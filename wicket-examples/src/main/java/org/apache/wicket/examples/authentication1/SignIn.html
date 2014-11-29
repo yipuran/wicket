@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
 	
     <span wicket:id = "feedback"/>
     <p>
@@ -12,15 +12,19 @@
     </p>
 
 	<form wicket:id="signInForm">
-		<dl>
-			<dt>Username:</dt>
-			<dd><input wicket:id="username" type="text" size="30"/></dd>
-			<dt>Password:</dt>
-			<dd><input wicket:id="password" type="password" size="30"/></dd>
-			<dd>
-				<input type="submit" name="submit" value="Sign In"/>
-			</dd>
+		<dl class="form-group">
+			<div class="col-sm-3">
+				<dt>Username:</dt>
+				<dd><input wicket:id="username" type="text" size="30" class="form-control"/></dd>
+				<dt>Password:</dt>
+				<dd><input wicket:id="password" type="password" size="30" class="form-control"/></dd>
+				<dd>
+					<button type="submit" name="submit" class="btn btn-primary">Sign In</button>
+				</dd>
+			</div>
 		</dl>
 	</form>
+
+</wicket:extend>
 </body>
 </html>

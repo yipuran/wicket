@@ -5,15 +5,21 @@
 		<link rel="stylesheet" type="text/css" href="style.css" />
 	</head>
 	<body>
-		<span wicket:id="mainNavigation"/>
+	<wicket:extend>
 		<span wicket:id="message" id="message">Message goes here</span>
 		<br />
-		<a wicket:id="indexLink" href="#">go to index</a>
-		
-		<form wicket:id="statelessform">
-		<input type="text" wicket:id="textfield" />
-		<input type="submit" />
-		</form>
+		<a wicket:id="indexLink" class="btn btn-link">go to index</a>
+
+		<div class="row">
+			<div class="col-sm-4">
+				<form wicket:id="statelessform">
+					<div class="form-group">
+						<input type="text" wicket:id="textfield" class="form-control" />
+					</div>
+					<input type="submit" class="btn btn-primary" />
+				</form>
+			</div>
+		</div>
 
 		<p>
 			This page is stateless as it doesn't have any callbacks (like statefull links or forms).
@@ -22,10 +28,9 @@
 			the actual session creation will be deferred. A Wicket session object
 			is available, but is a temporary one.
 		</p>
-		
-		<p>
-			<span wicket:id="feedback" />
-		</p>
 
+		<div wicket:id="feedback"></div>
+
+	</wicket:extend>
 	</body>
 </html>

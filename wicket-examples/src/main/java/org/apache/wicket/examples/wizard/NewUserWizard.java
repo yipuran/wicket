@@ -110,8 +110,7 @@ public class NewUserWizard extends Wizard
 			FormComponent<String> email = new RequiredTextField<String>("user.email").add(EmailAddressValidator.getInstance());
 			add(email);
 
-			TextField<String> emailRepeat = new TextField<>("emailRepeat",
-				new Model<String>());
+			TextField<String> emailRepeat = new TextField<>("emailRepeat", new Model<String>());
 			add(emailRepeat);
 
 			add(new EqualInputValidator(email, emailRepeat));

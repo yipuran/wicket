@@ -28,10 +28,4 @@ import org.apache.wicket.core.util.resource.locator.IResourceStreamLocator;
  */
 public class PageFromWebContext extends WicketExamplePage
 {
-	/**
-	 * Constructor
-	 */
-	public PageFromWebContext()
-	{
-	}
 }

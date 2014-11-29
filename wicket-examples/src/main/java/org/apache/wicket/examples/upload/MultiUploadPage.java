@@ -31,7 +31,6 @@ import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -39,6 +38,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.file.Folder;
 import org.apache.wicket.util.lang.Bytes;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 /**
@@ -173,7 +174,7 @@ public class MultiUploadPage extends WicketExamplePage
 		Folder uploadFolder = getUploadFolder();
 
 		// Create feedback panels
-		final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
+		final NotificationPanel uploadFeedback = new NotificationPanel("uploadFeedback");
 
 		// Add uploadFeedback to the page itself
 		add(uploadFeedback);

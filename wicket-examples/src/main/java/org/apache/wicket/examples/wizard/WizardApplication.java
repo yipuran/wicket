@@ -17,32 +17,18 @@
 package org.apache.wicket.examples.wizard;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.examples.WicketExampleApplication;
 
 /**
  * Application class for the wizard example.
  * 
  * @author Eelco Hillenius
  */
-public class WizardApplication extends WebApplication
+public class WizardApplication extends WicketExampleApplication
 {
-	/**
-	 * @see org.apache.wicket.Application#getHomePage()
-	 */
 	@Override
 	public Class<? extends Page> getHomePage()
 	{
 		return Index.class;
-	}
-
-	/**
-	 * @see org.apache.wicket.protocol.http.WebApplication#init()
-	 */
-	@Override
-	protected void init()
-	{
-		super.init();
-
-		getDebugSettings().setDevelopmentUtilitiesEnabled(true);
 	}
 }

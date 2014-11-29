@@ -1,13 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:wicket="http://wicket.apache.org" xml:lang="en" lang="en">
 	<head>
-		<title>Wicket Examples - Captcha</title>
-		<link rel="stylesheet" type="text/css" href="style.css" />
+		<!--<title>Wicket Examples - Captcha</title>-->
 	</head>
 	<body>
-		<span wicket:id="mainNavigation" />
+	<wicket:extend>
 
 		<h3>Demo of Wicket's default: <em>org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource</em> </h3>
 		<wicket:container wicket:id="wicket"></wicket:container>
@@ -21,6 +19,6 @@
 
 		<h3>Demo using <a href="https://github.com/akiraly/cage">Cage</a> library</h3>
 		<wicket:container wicket:id="cage"></wicket:container>
-
+	</wicket:extend>
 	</body>
 </html>

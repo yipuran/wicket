@@ -30,20 +30,13 @@ public final class SignIn extends WicketExamplePage
 {
 	/**
 	 * Constructor
-	 */
-	public SignIn()
-	{
-		this(null);
-	}
-
-	/**
-	 * Constructor
 	 * 
 	 * @param parameters
 	 *            The page parameters
 	 */
 	public SignIn(final PageParameters parameters)
 	{
+		success(parameters);
 		add(new SignInPanel("signInPanel", false));
 	}
 }

@@ -25,10 +25,4 @@ import org.apache.wicket.examples.WicketExamplePage;
  */
 public class Index extends WicketExamplePage
 {
-	/**
-	 * Constructor
-	 */
-	public Index()
-	{
-	}
 }

@@ -23,9 +23,9 @@ import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authorization.strategies.role.RoleAuthorizationStrategy;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.examples.WicketExampleApplication;
 import org.apache.wicket.examples.authorization.pages.AdminBookmarkablePage;
 import org.apache.wicket.examples.authorization.pages.AdminInternalPage;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 
@@ -35,7 +35,7 @@ import org.apache.wicket.request.Response;
  * 
  * @author Eelco Hillenius
  */
-public class RolesApplication extends WebApplication
+public class RolesApplication extends WicketExampleApplication
 {
 	/**
 	 * User DB.
@@ -51,19 +51,12 @@ public class RolesApplication extends WebApplication
 		super();
 	}
 
-	/**
-	 * @see org.apache.wicket.Application#getHomePage()
-	 */
 	@Override
 	public Class<? extends Page> getHomePage()
 	{
 		return Index.class;
 	}
 
-	/**
-	 * @see org.apache.wicket.protocol.http.WebApplication#newSession(org.apache.wicket.request.Request,
-	 *      org.apache.wicket.request.Response)
-	 */
 	@Override
 	public Session newSession(Request request, Response response)
 	{
@@ -74,8 +67,6 @@ public class RolesApplication extends WebApplication
 	protected void init()
 	{
 		super.init();
-
-		getDebugSettings().setDevelopmentUtilitiesEnabled(true);
 
 		getSecuritySettings().setAuthorizationStrategy(
 			new RoleAuthorizationStrategy(new UserRolesAuthorizer()));

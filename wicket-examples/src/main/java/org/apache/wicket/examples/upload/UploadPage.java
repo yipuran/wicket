@@ -20,13 +20,14 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import org.apache.wicket.Application;
 import org.apache.wicket.examples.WicketExamplePage;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -91,7 +92,7 @@ public class UploadPage extends WicketExamplePage
 	 */
 	private class FileUploadForm extends Form<Void>
 	{
-		FileUploadField fileUploadField;
+		BootstrapFileInputField fileUploadField;
 
 		/**
 		 * Construct.
@@ -107,7 +108,7 @@ public class UploadPage extends WicketExamplePage
 			setMultiPart(true);
 
 			// Add one file input field
-			add(fileUploadField = new FileUploadField("fileInput"));
+			add(fileUploadField = new BootstrapFileInputField("fileInput"));
 
 			// Set maximum size to 100K for demo purposes
 			setMaxSize(Bytes.kilobytes(100));
@@ -163,10 +164,12 @@ public class UploadPage extends WicketExamplePage
 	 */
 	public UploadPage(final PageParameters parameters)
 	{
+		super(parameters);
+
 		Folder uploadFolder = getUploadFolder();
 
 		// Create feedback panels
-		final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
+		final NotificationPanel uploadFeedback = new NotificationPanel("uploadFeedback");
 
 		// Add uploadFeedback to the page itself
 		add(uploadFeedback);

@@ -29,7 +29,6 @@ import org.apache.wicket.examples.WicketExamplePage;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -62,10 +61,6 @@ public class MailTemplate extends WicketExamplePage
 	{
 		super(parameters);
 
-		final FeedbackPanel feedback = new FeedbackPanel("feedback");
-		feedback.setOutputMarkupId(true);
-		add(feedback);
-
 		final Form<Void> form = new Form<>("form");
 		add(form);
 
@@ -91,13 +86,6 @@ public class MailTemplate extends WicketExamplePage
 				CharSequence pageHtml = ComponentRenderer.renderPage(pageProvider);
 
 				updateResult(result, pageHtml, target);
-				target.add(feedback);
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form)
-			{
-				target.add(feedback);
 			}
 		};
 
@@ -112,13 +100,6 @@ public class MailTemplate extends WicketExamplePage
 						new PropertyModel<String>(MailTemplate.this, "name")));
 
 				updateResult(result, panelHtml, target);
-				target.add(feedback);
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form)
-			{
-				target.add(feedback);
 			}
 		};
 
@@ -141,13 +122,6 @@ public class MailTemplate extends WicketExamplePage
 				PackageTextTemplate template = new PackageTextTemplate(MailTemplate.class, "mail-template.tmpl");
 				CharSequence templateHtml = template.asString(variables);
 				updateResult(result, templateHtml, target);
-				target.add(feedback);
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form)
-			{
-				target.add(feedback);
 			}
 		};
 

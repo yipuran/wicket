@@ -47,6 +47,8 @@ public abstract class WicketExampleApplication extends WebApplication
 	@Override
 	protected void init()
 	{
+		super.init();
+
 		// WARNING: DO NOT do this on a real world application unless
 		// you really want your app's passwords all passed around and
 		// stored in unencrypted browser cookies (BAD IDEA!)!!!
@@ -56,16 +58,8 @@ public abstract class WicketExampleApplication extends WebApplication
 		// and we want them to be able to run the examples out of the
 		// box.
 		getSecuritySettings().setCryptFactory(
-			new ClassCryptFactory(NoCrypt.class, SecuritySettings.DEFAULT_ENCRYPTION_KEY));
+				new ClassCryptFactory(NoCrypt.class, SecuritySettings.DEFAULT_ENCRYPTION_KEY));
 
-		getDebugSettings().setDevelopmentUtilitiesEnabled(true);
-
-		if (usesDevelopmentConfig()) {
-			WicketSource.configure(this);
-		}
-
-		BootstrapSettings bootstrapSettings = new BootstrapSettings();
-		bootstrapSettings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Flatly));
-		Bootstrap.install(this, bootstrapSettings);
+		ExampleApplicationConfigurer.configure(this);
 	}
 }

@@ -12,7 +12,7 @@
 	</style>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
 
 	<p>The multi upload field is based on javascript found <a target="_blank" href="http://the-stickman.com/web-development/javascript/upload-multiple-files-with-a-single-file-element/">here</a>.<br /><br />
 	Wicket can also handle file uploads via AJAX, please see AJAX examples section. AJAX Functionality is not included in this example to keep things simple.</p>
@@ -24,28 +24,26 @@
 	 <fieldset>
 	  <legend>Upload form</legend>
     	<p>
-	    <div wicket:id="fileInput" class="mfuex"/>
+	    <div wicket:id="fileInput" class="mfuex"></div>
 	    </p>
-	    <input type="submit" value="Upload!"/>
+	    <input type="submit" value="Upload!" class="btn btn-primary"/>
 	 </fieldset>
     </form>
 
-	 <div>
-		<span wicket:id="uploadFeedback"/>
-	 </div>
+	<div wicket:id="uploadFeedback"></div>
 
-    <div>
-      <h4>Current files in <span wicket:id="dir">(dir)</span>:</h4>
-      <table>
-        <tr wicket:id="fileList">
-            <td width="200"><span wicket:id="file">(file)</span></td>
-            <td><a href="#" wicket:id="delete"><img src="delete.gif" border="0"/></a></td>
-        </tr>
-      </table>
-    </div>
+	<div class="row">
+		<div class="col-sm-4">
+			<h4>Current files in <span wicket:id="dir">(dir)</span>:</h4>
+			<div class="list-group">
+				<div wicket:id="fileList" class="list-group-item">
+					<span wicket:id="file">(file)</span>
+					<a href="#" wicket:id="delete" class="btn btn-sm text-danger"><i class="glyphicon glyphicon-trash"></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
 
-
-
-
+</wicket:extend>
 </body>
 </html>

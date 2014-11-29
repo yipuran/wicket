@@ -5,10 +5,10 @@
 		<link rel="stylesheet" type="text/css" href="style.css" />
 	</head>
 	<body>
-		<span wicket:id="mainNavigation"/>
+	<wicket:extend>
 		<span wicket:id="message" id="message">Message goes here</span>
 		<br />
-		<a wicket:id="indexLink" href="#">go to index</a>
+		<a wicket:id="indexLink" class="btn btn-link">go to index</a>
 
 		<p>
 			This page is stateful as it has a callback (the link that points to
@@ -19,19 +19,21 @@
 		<p>
 			This link is what makes this page stateful:
 			<br />
-			<a wicket:id="actionLink">Link clicked <span
-				wicket:id="linkClickCount">0</span> times</a>
+			<a wicket:id="actionLink">Link clicked <span wicket:id="linkClickCount">0</span> times</a>
 		</p>
 
+		<div class="row">
+			<div class="col-sm-4">
+				<form wicket:id="statelessform">
+					<div class="form-group">
+						<input type="text" wicket:id="textfield" class="form-control" />
+					</div>
+					<input type="submit" class="btn btn-primary" />
+				</form>
+			</div>
+		</div>
 
-		<p>
-		<form wicket:id="statelessform">
-		<input type="text" wicket:id="textfield" />
-		<input type="submit" />
-		</form>
-		</p>
-			<p>
-			<span wicket:id="feedback" />
-		</p>
+		<div wicket:id="feedback" ></div>
+	</wicket:extend>
 	</body>
 </html>
