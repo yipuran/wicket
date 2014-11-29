@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
 
 	<h1>wicket.markup.html.form.CheckBox</h1>
 	<wicket:link><a href="Index.html">[back to the reference]</a></wicket:link>
@@ -14,26 +14,22 @@
 	A Checkbox can be used to work with boolean values. If the checkbox is checked, it
 	means that the model value is true. It is false otherwise.
 	</p>
-	<p>
-	 <form wicket:id="form">
 
-		<table style="border: 2px dotted #fc0; width: 300px; padding: 5px;">
-		 <tr>
-		  <td valign="top">I want it checked!</td>
-		  <td>
-		  <input type="checkbox" wicket:id="bool" />
-		  </td>
-		 </tr>
-		 <tr>
-		  <td colspan="2" align="center">
-		   <input type="submit" value="submit" />
-		  </td>
-		 </tr>
-		</table>
-
-	 </form>
-	 <span wicket:id="feedback">feedbackmessages will be put here</span>
-	</p>
+	<div class="row">
+		<div class="col-sm-offset-1 col-sm-3">
+			<form wicket:id="form" role="form">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" wicket:id="bool"> I want it checked!
+					</label>
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+	 <div wicket:id="feedback">feedbackmessages will be put here</div>
     <span wicket:id="explainPanel">panel contents come here</span>
+
+</wicket:extend>
 </body>
 </html>

@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
 
 	<h1>wicket.markup.html.form.CheckGroup</h1>
 	<wicket:link><a href="Index.html">[back to the reference]</a></wicket:link>
@@ -13,40 +13,40 @@
 	<p>
 	A CheckBoxGroup and CheckBoxComponnet components let users select multiple values from a group of checkboxes. These components are more flexible then the CheckBoxMultipleChoice component in that individual checkboxes are full components, unlike with CheckBoxMultipleChoice, and thus can be used anywhere in the markup.
 	</p>
-	<p>
-	 <form wicket:id="form">
-		<span wicket:id="group">
-			<table style="border: 2px dotted #fc0; width: 400px; padding: 5px;">
-			 <tr>
-			  <td valign="top">Select persons</td>
-			  <td>
-				  <input type="checkbox" wicket:id="groupselector">check/uncheck all</input><br/>
-				  <table cellspacing="0" cellpadding="2">
-					<tr>
-						<td><b>Select</b></td>
-						<td><b>First Name</b></td>
-						<td><b>Last Name</b></td>
-					</tr>
-				  	<tr wicket:id="persons">
-				  		<td><input type="checkbox" wicket:id="checkbox"/></td>
-				  		<td><span wicket:id="name">[this is where name will be]</span></td>
-				  		<td><span wicket:id="lastName">[this is where lastname will be]</span></td>
-				  	</tr>
-				  </table>
-				  <span valign="top">
-				  </span>
-			  </td>
-			 </tr>
-			 <tr>
-			  <td colspan="2" align="center">
-			   <input type="submit" value="submit" />
-			  </td>
-			 </tr>
-			</table>
-		</span>
-	 </form>
-	 <span wicket:id="feedback">feedbackmessages will be put here</span>
-	</p>
+
+	<div class="row">
+		<div class="col-sm-offset-1 col-sm-3">
+			<form wicket:id="form" role="form">
+				<fieldset wicket:id="group">
+					<legend>Select persons</legend>
+
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" wicket:id="groupselector"/> check/uncheck all
+						</label>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-4"><strong>Select</strong></div>
+						<div class="col-sm-4"><strong>First Name</strong></div>
+						<div class="col-sm-4"><strong>Last Name</strong></div>
+					</div>
+
+					<div wicket:id="persons" class="row">
+						<div class="col-sm-4"><input type="checkbox" wicket:id="checkbox"/></div>
+						<div class="col-sm-4"><span wicket:id="name">[this is where name will be]</span></div>
+						<div class="col-sm-4"><span wicket:id="lastName">[this is where lastname will be]</span></div>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<div wicket:id="feedback">feedbackmessages will be put here</div>
     <span wicket:id="explainPanel">panel contents come here</span>
+
+</wicket:extend>
 </body>
 </html>

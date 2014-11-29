@@ -65,7 +65,7 @@ public class FragmentPage extends WicketExamplePage
 	{
 		String html = "<wicket:fragment wicket:id=\"fragmentid\">...</wicket:fragment>";
 		String code = "private class MyFragment extends Fragment {\n ...\n"
-			+ "add(new MyFragment(\"fragment\", \"fragmentid\"));";
+			+ "add(new MyFragment(\"fragment\", \"fragmentid\", this));";
 		add(new ExplainPanel(html, code));
 	}
 }

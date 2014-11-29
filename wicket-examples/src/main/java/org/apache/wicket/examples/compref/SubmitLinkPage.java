@@ -19,7 +19,8 @@ package org.apache.wicket.examples.compref;
 import org.apache.wicket.examples.WicketExamplePage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 /**
@@ -35,7 +36,7 @@ public class SubmitLinkPage extends WicketExamplePage
 	public SubmitLinkPage()
 	{
 		// Add a FeedbackPanel for displaying our messages
-		FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+		NotificationPanel feedbackPanel = new NotificationPanel("feedback");
 		add(feedbackPanel);
 
 		// Add a form with 2 SubmitLinks that can be called

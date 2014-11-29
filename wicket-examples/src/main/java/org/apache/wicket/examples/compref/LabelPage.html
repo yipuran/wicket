@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
 
 	<h1>wicket.markup.html.basic.Label</h1>
 	<wicket:link><a href="Index.html">[back to the reference]</a></wicket:link>
@@ -17,14 +17,14 @@
 	<p>
 	A static label just prints out the text you fed it:<br />
 
-	<span wicket:id="staticLabel" class="mark">this text will be replaced</span>
+	<div wicket:id="staticLabel" style="text-decoration: underline">this text will be replaced</div>
 	</p>
 
 	<p>
 	Actually, each label has an instance of IModel backing it. This means
 	we can create dynamic labels, like this label that prints out the current date/time.<br />
 
-	<span wicket:id="dynamicLabel" class="mark">this text will be replaced</span>
+	<div wicket:id="dynamicLabel" style="text-decoration: underline">this text will be replaced</div>
 
 	<br />One of the first things you probably noticed, is that the date is nicely formatted,
 	hopefully even in your locale's format. This is because Wicket works with converters.
@@ -37,7 +37,7 @@
 	A lot of times, you want to get the actual text from some other location, like a
 	resource bundle:<br />
 
-	<span wicket:id="resourceLabel" class="mark">this text will be replaced</span>
+	<div wicket:id="resourceLabel" style="text-decoration: underline">this text will be replaced</div>
 
 	<br />In this case, the actual display text will be loaded from resource bundle
 	'LabelPage.properties', and {0} will be replaced with the locale argument we fed it.
@@ -48,10 +48,11 @@
 	troubles/ mess up attempts. However in this example, we actually want any markup to be
 	interpreted by the browser<br />
 
-	<span wicket:id="markupLabel" class="mark">this text will be replaced</span>
+	<div wicket:id="markupLabel" style="text-decoration: underline">this text will be replaced</div>
 	</p>
 
-	<span wicket:id="explainPanel">panel contents come here</span>
+	<div wicket:id="explainPanel">panel contents come here</div>
 
+</wicket:extend>
 </body>
 </html>

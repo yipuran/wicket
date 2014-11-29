@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
-<head>
-    <title>Wicket Examples - component reference</title>
-    <link rel="stylesheet" type="text/css" href="style.css"/>
-</head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
 
 	<h1>wicket.markup.html.border.Border</h1>
 	<wicket:link><a href="Index.html">[back to the reference]</a></wicket:link>
@@ -25,10 +21,11 @@
 	</p>
 	<p>
 
-	<span wicket:id="border" class="mark">
-		<span wicket:id="label" class="mark">label contents here</span>
+	<span wicket:id="border">
+		<span wicket:id="label" style="line-height: 2em" style="text-decoration: underline">label contents here</span>
 	</span>
 	</p>
     <span wicket:id="explainPanel">panel contents come here</span>
+</wicket:extend>
 </body>
 </html>

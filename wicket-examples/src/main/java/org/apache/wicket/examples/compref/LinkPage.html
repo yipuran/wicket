@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
 
 	<h1>wicket.markup.html.link.Link</h1>
 	<wicket:link><a href="Index.html">[back to the reference]</a></wicket:link>
@@ -17,24 +17,26 @@
 
 	<p>
 	Here is a normal link, attached to an anchor:<br />
-	<a href="#" wicket:id="link1">this link is clicked <span wicket:id="label1">n</span> times</a>
+	<a class="btn btn-link" wicket:id="link1">this link is clicked <span wicket:id="label1">n</span> times</a>
 	</p>
 
 	<p>
 	Same as above, but this time a link that records a state change.<br />
-	<a href="#" wicket:id="linkWithStateChange">this link is clicked <span wicket:id="label">n</span> times</a>
+	<a class="btn btn-link" wicket:id="linkWithStateChange">this link is clicked <span wicket:id="label">n</span> times</a>
 	</p>
 
 	<p>
 	And here is a link attached to a button element, with a nested label:<br />
-	<button wicket:id="link2">this button is clicked <span wicket:id="label2">n</span> times</button>
+	<button type="button" class="btn btn-default" wicket:id="link2">this button is clicked <span wicket:id="label2">n</span> times</button>
 	</p>
 
 	<p>
 	But you could also attach a link to an input/button element, and attach an AttributeModifier
 	to it to display the number of clicks:<br />
-	<input type="button" wicket:id="link3" value="this button is clicked n times" />
+	<input type="button" class="btn btn-default" wicket:id="link3" value="this button is clicked n times" />
 	</p>
     <span wicket:id="explainPanel">panel contents come here</span>
+
+</wicket:extend>
 </body>
 </html>

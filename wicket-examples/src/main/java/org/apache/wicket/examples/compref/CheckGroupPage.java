@@ -18,6 +18,7 @@ package org.apache.wicket.examples.compref;
 
 import java.util.ArrayList;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import org.apache.wicket.examples.WicketExamplePage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
@@ -76,7 +77,7 @@ public class CheckGroupPage extends WicketExamplePage
 		persons.setReuseItems(true);
 		group.add(persons);
 
-		add(new FeedbackPanel("feedback"));
+		add(new NotificationPanel("feedback"));
 	}
 
 	/**

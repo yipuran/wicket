@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
 
 	<h1>wicket.markup.html.form.TextField</h1>
 	<wicket:link><a href="Index.html">[back to the reference]</a></wicket:link>
@@ -15,28 +15,26 @@
 	update their models as well as they read them it, and you can attach validations
 	(instances of IValidator) to them.
 	</p>
-	<p>
-	 <form wicket:id="form">
+	<div class="row">
+		<div class="col-sm-offset-1 col-sm-3">
+			<form wicket:id="form" class="form-horizontala" role="form">
+				<div class="form-group">
+					<label wicket:for="text">some plain text</label>
+					<input type="text" class="form-control" wicket:id="text"/>
+				</div>
+				<div class="form-group">
+					<label wicket:for="integer">an integer value</label>
+					<input type="text" class="form-control" wicket:id="integer" />
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-default">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div wicket:id="feedback">feedbackmessages will be put here</div>
+	<span wicket:id="explainPanel">panel contents come here</span>
 
-		<table style="border: 2px dotted #fc0; width: 300px; padding: 5px;">
-		 <tr>
-		  <td>some plain text</td>
-		  <td><input type="text" wicket:id="text" /></td>
-		 </tr>
-		 <tr>
-		  <td>an integer value</td>
-		  <td><input type="text" wicket:id="integer" /></td>
-		 </tr>
-		 <tr>
-		  <td colspan="2" align="center">
-		   <input type="submit" value="submit" />
-		  </td>
-		 </tr>
-		</table>
-
-	 </form>
-	 <span wicket:id="feedback">feedbackmessages will be put here</span>
-	</p>
-    <span wicket:id="explainPanel">panel contents come here</span>
+</wicket:extend>
 </body>
 </html>

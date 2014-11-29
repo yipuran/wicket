@@ -33,7 +33,7 @@ public class ExternalLinkPage extends WicketExamplePage
 	public ExternalLinkPage()
 	{
 		// add a link that goes to javalobby
-		add(new ExternalLink("externalLink1", "http://www.javalobby.org", "To JavaLobby"));
+		add(new ExternalLink("externalLink1", "http://java.dzone.com/", "To Java DZone"));
 		// add a link that goes to the server side
 		add(new ExternalLink("externalLink2", "http://www.theserverside.com", "To The Server Side"));
 	}
@@ -44,8 +44,8 @@ public class ExternalLinkPage extends WicketExamplePage
 	@Override
 	protected void explain()
 	{
-		String html = "<a href=\"#\" target=\"_new\" wicket:id=\"externalLink1\">this body will be replaced</a>";
-		String code = "&nbsp;&nbsp;&nbsp;&nbsp;add(new ExternalLink(\"externalLink1\", \"http://www.javalobby.org\", \"To JavaLobby\"));";
+		String html = "<a target=\"_blank\" wicket:id=\"externalLink1\">this body will be replaced</a>";
+		String code = "&nbsp;&nbsp;&nbsp;&nbsp;add(new ExternalLink(\"externalLink1\", \"http://java.dzone.com/\", \"To Java DZone\"));";
 		add(new ExplainPanel(html, code));
 	}
 }
