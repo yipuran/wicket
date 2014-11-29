@@ -662,9 +662,10 @@ public abstract class Page extends MarkupContainer
 				// if still > 0
 				if (unrenderedComponents.size() > 0)
 				{
+					String pageInfo = "Page: " + Classes.name(getClass());
 					// Throw exception
 					throw new WicketRuntimeException(
-						"The component(s) below failed to render. Possible reasons could be that: 1) you have added a component in code but forgot to reference it in the markup (thus the component will never be rendered), 2) if your components were added in a parent container then make sure the markup for the child container includes them in <wicket:extend>.\n\n" +
+						"The component(s) below failed to render. Possible reasons could be that:\n 1) you have added a component in code but forgot to reference it in the markup (thus the component will never be rendered),\n 2) if your components were added in a parent container then make sure the markup for the child container includes them in <wicket:extend>.\n"+pageInfo+"\n\n" +
 							buffer.toString());
 				}
 			}
