@@ -73,6 +73,21 @@
     </dependencyManagement>
 	<dependencies>
 		<dependency>
+			<groupId>de.agilecoders.wicket</groupId>
+			<artifactId>wicket-bootstrap-core</artifactId>
+			<version>0.10.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>de.agilecoders.wicket</groupId>
+			<artifactId>wicket-bootstrap-themes</artifactId>
+			<version>0.10.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>net.ftlines.wicket-source</groupId>
+			<artifactId>wicket-source</artifactId>
+			<version>7.0.0</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.el</groupId>
 			<artifactId>javax.el-api</artifactId>
 		</dependency>

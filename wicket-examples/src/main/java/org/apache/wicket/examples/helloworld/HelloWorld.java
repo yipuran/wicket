@@ -18,7 +18,8 @@ package org.apache.wicket.examples.helloworld;
 
 import org.apache.wicket.examples.WicketExamplePage;
 import org.apache.wicket.markup.html.basic.Label;
-
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * Everybody's favorite example!
@@ -33,5 +34,11 @@ public class HelloWorld extends WicketExamplePage
 	public HelloWorld()
 	{
 		add(new Label("message", "Hello World!"));
+	}
+
+	@Override
+	protected IModel<String> getPageTitle()
+	{
+		return Model.of("Hello World");
 	}
 }

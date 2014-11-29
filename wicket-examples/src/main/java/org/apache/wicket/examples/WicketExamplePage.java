@@ -16,8 +16,16 @@
  */
 package org.apache.wicket.examples;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.IeEdgeMetaTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.MetaTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.OptimizedMobileViewportMetaTag;
+import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
@@ -28,9 +36,6 @@ import org.apache.wicket.util.string.Strings;
  */
 public class WicketExamplePage extends WebPage
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -44,26 +49,48 @@ public class WicketExamplePage extends WebPage
 	/**
 	 * Constructor
 	 * 
-	 * @param pageParameters
+	 * @param pageParameters The request parameters
 	 */
 	public WicketExamplePage(final PageParameters pageParameters)
 	{
 		super(pageParameters);
 
+		add(new OptimizedMobileViewportMetaTag("viewport"));
+		add(new IeEdgeMetaTag("ie-edge"));
+		add(new MetaTag("description", Model.of("description"), Model.of("Apache Wicket examples")));
+		add(new MetaTag("author", Model.of("author"), Model.of("Wicket Dev team <dev@wicket.apache.org>")));
+
+
 		final String packageName = getClass().getPackage().getName();
 		add(new WicketExampleHeader("mainNavigation", Strings.afterLast(packageName, '.'), this));
-		explain();
+
+		BootstrapBaseBehavior.addTo(this);
 	}
 
-
-	/**
-	 * Construct.
-	 * 
-	 * @param model
-	 */
-	public WicketExamplePage(IModel<?> model)
+	@Override
+	protected void onInitialize()
 	{
-		super(model);
+		super.onInitialize();
+
+		explain();
+
+		add(new Label("title", getPageTitle()));
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response)
+	{
+		super.renderHead(response);
+
+		if (getApplication().usesDevelopmentConfig()) {
+			response.render(BootlintHeaderItem.INSTANCE);
+		}
+	}
+
+	// TODO make abstract
+	protected IModel<String> getPageTitle()
+	{
+		return Model.of("Default Title");
 	}
 
 	/**

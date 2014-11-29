@@ -16,6 +16,11 @@
  */
 package org.apache.wicket.examples;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
+import net.ftlines.wicketsource.WicketSource;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.SecuritySettings;
 import org.apache.wicket.util.crypt.ClassCryptFactory;
@@ -39,17 +44,6 @@ public abstract class WicketExampleApplication extends WebApplication
 		System.setProperty("java.awt.headless", "true");
 	}
 
-
-	/**
-	 * Constructor.
-	 */
-	public WicketExampleApplication()
-	{
-	}
-
-	/**
-	 * @see org.apache.wicket.protocol.http.WebApplication#init()
-	 */
 	@Override
 	protected void init()
 	{
@@ -65,5 +59,13 @@ public abstract class WicketExampleApplication extends WebApplication
 			new ClassCryptFactory(NoCrypt.class, SecuritySettings.DEFAULT_ENCRYPTION_KEY));
 
 		getDebugSettings().setDevelopmentUtilitiesEnabled(true);
+
+		if (usesDevelopmentConfig()) {
+			WicketSource.configure(this);
+		}
+
+		BootstrapSettings bootstrapSettings = new BootstrapSettings();
+		bootstrapSettings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Flatly));
+		Bootstrap.install(this, bootstrapSettings);
 	}
 }

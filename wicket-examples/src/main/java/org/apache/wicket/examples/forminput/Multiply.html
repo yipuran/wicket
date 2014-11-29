@@ -1,3 +1,12 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
-<input type="text" wicket:id="left" size="2" />&#160;*&#160;<input type="text" wicket:id="right" size="2" />
+    <div class="row">
+        <div class="col-sm-5">
+            <input type="text" class="form-control" wicket:id="left" size="2" />
+        </div>
+        <div class="col-sm-1" style="padding-top: 10px; padding-right: 30px"><i class="glyphicon glyphicon-asterisk"></i></div>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" wicket:id="right" size="2" />
+        </div>
+    </div>
+
 </wicket:panel>

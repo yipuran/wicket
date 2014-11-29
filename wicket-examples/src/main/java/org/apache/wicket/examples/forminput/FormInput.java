@@ -22,8 +22,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import org.apache.wicket.examples.WicketExamplePage;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -40,14 +44,16 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.MaskConverter;
+import org.apache.wicket.util.value.IValueMap;
+import org.apache.wicket.util.value.ValueMap;
 import org.apache.wicket.validation.validator.RangeValidator;
 
 
@@ -108,7 +114,17 @@ public class FormInput extends WicketExamplePage
 			// just for fun, add a border so that our result will be displayed as '[ x ]'
 			multiplyLabel.add(new BeforeAndAfterBorder());
 			add(multiplyLabel);
-			RadioChoice<String> rc = new RadioChoice<>("numberRadioChoice", NUMBERS).setSuffix("");
+			RadioChoice<String> rc = new RadioChoice<String>("numberRadioChoice", NUMBERS)
+			{
+				@Override
+				protected IValueMap getAdditionalAttributesForLabel(int index, String choice)
+				{
+					IValueMap additionalAttributesForLabel = new ValueMap();
+					additionalAttributesForLabel.put("class", "radio-inline");
+					return additionalAttributesForLabel;
+				}
+			};
+			rc.setSuffix("").setLabelPosition(AbstractChoice.LabelPosition.WRAP_AFTER);
 			rc.setLabel(new Model<>("number"));
 			rc.setRequired(true);
 			add(rc);
@@ -122,8 +138,11 @@ public class FormInput extends WicketExamplePage
 				{
 					Radio<String> radio = new Radio<>("radio", item.getModel());
 					radio.setLabel(item.getModel());
-					item.add(radio);
-					item.add(new SimpleFormComponentLabel("number", radio));
+					WebMarkupContainer label = new WebMarkupContainer("number");
+					label.add(new CssClassNameAppender("radio-inline"));
+					Label radioValue = new Label("radioValue", item.getModel());
+					label.add(radio, radioValue);
+					item.add(label);
 				}
 			}.setReuseItems(true);
 			group.add(persons);
@@ -137,8 +156,11 @@ public class FormInput extends WicketExamplePage
 				{
 					Check<String> check = new Check<>("check", item.getModel());
 					check.setLabel(item.getModel());
-					item.add(check);
-					item.add(new SimpleFormComponentLabel("number", check));
+					WebMarkupContainer label = new WebMarkupContainer("number");
+					label.add(new CssClassNameAppender("checkbox-inline"));
+					Label radioValue = new Label("checkboxValue", item.getModel());
+					label.add(check, radioValue);
+					item.add(label);
 				}
 			}.setReuseItems(true);
 			checks.add(checksList);
@@ -207,6 +229,12 @@ public class FormInput extends WicketExamplePage
 			// Form validation successful. Display message showing edited model.
 			info("Saved model " + getDefaultModelObject());
 		}
+	}
+
+	@Override
+	protected IModel<String> getPageTitle()
+	{
+		return Model.of("Form Input");
 	}
 
 	/** list view to be nested in the form. */
@@ -318,7 +346,7 @@ public class FormInput extends WicketExamplePage
 	public FormInput()
 	{
 		// Construct form and feedback panel and hook them up
-		final FeedbackPanel feedback = new FeedbackPanel("feedback");
+		final NotificationPanel feedback = new NotificationPanel("feedback");
 		add(feedback);
 		add(new InputForm("inputForm"));
 	}

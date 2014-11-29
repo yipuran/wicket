@@ -16,6 +16,9 @@
  */
 package org.apache.wicket.examples.template.pageinheritance;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+
 /**
  * Concrete page. Note that it extends {@link TemplatePage} and the markup uses
  * &lt;wicket:extend&gt; tags to define the region that is to be expanded into the parent's
@@ -25,11 +28,9 @@ package org.apache.wicket.examples.template.pageinheritance;
  */
 public class Page2 extends TemplatePage
 {
-	/**
-	 * Constructor
-	 */
-	public Page2()
+	@Override
+	protected IModel<String> getPageTitle()
 	{
-		setPageTitle("Template example, page 2");
+		return Model.of("Template example, page 2");
 	}
 }

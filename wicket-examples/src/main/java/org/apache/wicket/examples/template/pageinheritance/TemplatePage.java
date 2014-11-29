@@ -33,9 +33,6 @@ import org.apache.wicket.model.PropertyModel;
  */
 public abstract class TemplatePage extends WicketExamplePage
 {
-	/** title of the current page. */
-	private String pageTitle = "(no title)";
-
 	/** the current banner. */
 	private Banner currentBanner;
 
@@ -66,26 +63,5 @@ public abstract class TemplatePage extends WicketExamplePage
 		});
 		add(new BookmarkablePageLink<>("page1Link", Page1.class));
 		add(new BookmarkablePageLink<>("page2Link", Page2.class));
-	}
-
-	/**
-	 * Gets the title.
-	 * 
-	 * @return title
-	 */
-	public final String getPageTitle()
-	{
-		return pageTitle;
-	}
-
-	/**
-	 * Sets the title.
-	 * 
-	 * @param title
-	 *            title
-	 */
-	public final void setPageTitle(String title)
-	{
-		pageTitle = title;
 	}
 }
