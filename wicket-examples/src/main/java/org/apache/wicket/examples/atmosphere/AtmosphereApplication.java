@@ -21,18 +21,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import de.agilecoders.wicket.webjars.WicketWebjars;
 import org.apache.wicket.Application;
 import org.apache.wicket.atmosphere.EventBus;
 import org.apache.wicket.atmosphere.config.AtmosphereLogLevel;
 import org.apache.wicket.atmosphere.config.AtmosphereTransport;
-import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.examples.WicketExampleApplication;
 
 /**
  * Application object for your web application. If you want to run this application without
  * deploying, run the Start class.
  */
-public class AtmosphereApplication extends WebApplication
+public class AtmosphereApplication extends WicketExampleApplication
 {
 	private EventBus eventBus;
 

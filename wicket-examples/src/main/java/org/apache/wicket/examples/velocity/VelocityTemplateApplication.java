@@ -22,16 +22,16 @@ import java.util.List;
 import org.apache.velocity.app.Velocity;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.examples.WicketExampleApplication;
 import org.apache.wicket.markup.html.IPackageResourceGuard;
 import org.apache.wicket.markup.html.SecurePackageResourceGuard;
-import org.apache.wicket.protocol.http.WebApplication;
 
 /**
  * Application class for velocity template example.
  * 
  * @author Eelco Hillenius
  */
-public class VelocityTemplateApplication extends WebApplication
+public class VelocityTemplateApplication extends WicketExampleApplication
 {
 	private static List<Field> fields = new ArrayList<>();
 
@@ -72,13 +72,6 @@ public class VelocityTemplateApplication extends WebApplication
 	}
 
 	/**
-	 * Constructor.
-	 */
-	public VelocityTemplateApplication()
-	{
-	}
-
-	/**
 	 * @return class
 	 */
 	@Override
@@ -87,13 +80,11 @@ public class VelocityTemplateApplication extends WebApplication
 		return Home.class;
 	}
 
-	/**
-	 * @see org.apache.wicket.protocol.http.WebApplication#init()
-	 */
 	@Override
 	protected void init()
 	{
-		getDebugSettings().setDevelopmentUtilitiesEnabled(true);
+		super.init();;
+
 		IPackageResourceGuard packageResourceGuard = getResourceSettings().getPackageResourceGuard();
 		if (packageResourceGuard instanceof SecurePackageResourceGuard)
 		{

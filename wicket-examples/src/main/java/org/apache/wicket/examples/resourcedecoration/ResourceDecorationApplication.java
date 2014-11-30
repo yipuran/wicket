@@ -17,6 +17,7 @@
 package org.apache.wicket.examples.resourcedecoration;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.examples.WicketExampleApplication;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderResponseDecorator;
@@ -33,9 +34,8 @@ import org.apache.wicket.request.resource.CssResourceReference;
  * 
  * @author jthomerson
  */
-public class ResourceDecorationApplication extends WebApplication
+public class ResourceDecorationApplication extends WicketExampleApplication
 {
-
 	@Override
 	protected void init()
 	{

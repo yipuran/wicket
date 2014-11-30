@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-    <span wicket:id="mainNavigation"/>
+<wicket:extend>
     <p>
     This page uses <a href="http://code.google.com/p/google-guice/">Google Guice</a>.
     There is a service interface called <code>IMyService</code>, with an implementation POJO called <code>MyService</code>.
@@ -26,6 +26,6 @@
     The wicket-guice project will take care of proxying the injected beans so that your pages can be serialized safely.
     To configure your application for Guice injection, see the javadoc for <code>GuiceComponentInjector</code>.
     </p>
-    
+</wicket:extend>
 </body>
 </html>

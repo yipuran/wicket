@@ -20,7 +20,7 @@ import java.util.Date;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.atmosphere.AtmosphereInternalEvent;
 import org.apache.wicket.atmosphere.EventBus;
 import org.apache.wicket.atmosphere.Subscribe;
@@ -51,7 +51,7 @@ public class HomePage extends WicketExamplePage
 		add(form);
 		form.add(receiver = new TextField<>("receiver", Model.of("")));
 		form.add(input = new TextField<>("input", Model.of("")));
-		form.add(new AjaxSubmitLink("send", form)
+		form.add(new AjaxButton("send", form)
 		{
 			private static final long serialVersionUID = 1L;
 

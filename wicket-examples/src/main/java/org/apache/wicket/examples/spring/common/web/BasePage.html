@@ -21,12 +21,16 @@
 	</head>
 	
 	<body>
-		<span wicket:id="mainNavigation"/>
-		<a href="#" wicket:id="home-link">Home Page</a>
+	<wicket:extend>
+		<a wicket:id="home-link">Home Page</a>
 		<hr/>
 		<wicket:child/>
 		<br/><br/>
-		All this is discussed in more detail here:<br/>
-		<a href="http://cwiki.apache.org/WICKET/spring.html" target="_blank">Wicket Wiki Spring Page</a>
+		More details could be found here at
+		<ul>
+			<li>the <a href="http://wicket.apache.org/guide/guide/jee.html#jee_2" target="_blank">reference guide</a></li>
+			<li>the <a href="https://cwiki.apache.org/confluence/display/WICKET/Spring" target="_blank">Wiki</a></li>
+		</ul>
+	</wicket:extend>
 	</body>
 </html>

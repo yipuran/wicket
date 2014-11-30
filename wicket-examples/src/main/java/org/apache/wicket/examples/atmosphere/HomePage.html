@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<head>
-<title>Wicket Examples - atmosphere</title>
-<link rel="stylesheet" type="text/css" href="style.css" />
-</head>
 <body>
-	<span wicket:id="mainNavigation"></span>
+<wicket:extend>
 	<p>
 		The current time is (updated every 2 seconds from the server using push): <span wicket:id="time"></span>
 	</p>
@@ -13,13 +9,39 @@
 	second input field and send it to everyone. To send a private message, paste
 	the session id (you can find this in the session cookie) of the receiver in
 	the first input field and send a message.</p>
-	<p>
-		Message received: <span wicket:id="message"></span>
-	</p>
-	<form wicket:id="form">
-		<div>Session id of receiver: <input wicket:id="receiver" /></div>
-		Message: <input wicket:id="input" /> <a href="#" wicket:id="send">Send
-			message</a>
-	</form>
+
+	<div class="row">
+		<div class="col-sm-6">
+
+			<form wicket:id="form" class="form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-sm-3" wicket:for="receiver" style="text-align: start">Session id of receiver:</label>
+					<div class="col-sm-4">
+						<input wicket:id="receiver" class="form-control" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-3" wicket:for="receiver" style="text-align: start">Message:</label>
+					<div class="col-sm-4">
+						<input wicket:id="input" class="form-control" />
+					</div>
+					<div class="col-sm-1">
+						<button type="button" class="btn btn-primary btn-sm" wicket:id="send">Send message</button>
+					</div>
+				</div>
+			</form>
+
+			<div class="row">
+				<label class="col-sm-3" wicket:for="receiver">Message received:</label>
+				<div class="col-sm-4">
+					<span wicket:id="message" style="padding-left: 18px"></span>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+</wicket:extend>
 </body>
 </html>

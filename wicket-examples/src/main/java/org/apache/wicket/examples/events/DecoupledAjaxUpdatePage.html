@@ -1,10 +1,22 @@
 <wicket:extend xmlns:wicket="http://wicket.apache.org">
-Counter Label 1: <span wicket:id="label1">1</span>
 
+	<div class="row">
+		<label class="col-sm-1">Counter Label 1:</label>
+		<div class="col-sm-3"><span wicket:id="label1" style="padding-left: 18px">1</span></div>
+	</div>
 
-<div wicket:id="container">Counter Label 2: <span wicket:id="label2">1</span></div>
+	<div class="row" wicket:id="container">
+		<label class="col-sm-1">Counter Label 2:</label>
+		<div class="col-sm-3"><span wicket:id="label2" style="padding-left: 18px">1</span></div>
+	</div>
 
-<form wicket:id="form">
-	Counter Value: <input wicket:id="counter" type="text"/> <input wicket:id="submit" type="submit" value="Update"/>
-</form>
+	<form wicket:id="form" class="form-horizontal">
+		<div class="form-group">
+			<label wicket:for="counter" class="control-label col-sm-1" style="text-align: start">Counter Value:</label>
+			<div class="col-sm-3">
+				<input wicket:id="counter" type="text" class="form-control"/>
+			</div>
+		</div>
+		<input wicket:id="submit" type="submit" value="Update" class="btn btn-primary btn-sm"/>
+	</form>
 </wicket:extend>

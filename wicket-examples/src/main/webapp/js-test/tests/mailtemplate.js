@@ -45,7 +45,7 @@ $q(document).ready(function() {
 			var $resultText = $('#result').text();
 			ok($resultText, 'The page is rendered');
 			ok($resultText.indexOf("<!DOCTYPE html>") > -1, 'The HTML5 doctype is here');
-			ok($resultText.indexOf("Hello, <span wicket:id=\"name\">"+text+"</span>") > -1,
+			ok($resultText.indexOf(text+"</span>") > -1,
 				'The entered text is here');
 
 		}).always(start);
@@ -53,7 +53,7 @@ $q(document).ready(function() {
 
 
 	asyncTest('Panel', function () {
-		expect(3);
+		expect(2);
 
 		gym.load('/mailtemplate').then(function($) {
 			return generate($, 1);
@@ -61,9 +61,7 @@ $q(document).ready(function() {
 
 			var $resultText = $('#result').text();
 			ok($resultText, 'The panel is rendered');
-			ok($resultText.indexOf("<wicket:panel>") > -1, 'The panel markup is here');
-			ok($resultText.indexOf("Hello, <span wicket:id=\"name\">"+text+"</span>") > -1,
-				'The entered text is here');
+			ok($resultText.indexOf(text+"</span>") > -1, 'The entered text is here');
 
 		}).always(start);
 	});

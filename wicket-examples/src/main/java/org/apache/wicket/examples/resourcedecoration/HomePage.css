@@ -16,9 +16,9 @@
  */
 
 .borderedThing {
-	border: 1px solid red;	
+	border: 1px solid red;
 }
 
 .pending {
-	border: 1px solid yellow;
+	border: 2px solid yellow;
 }

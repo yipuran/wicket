@@ -24,8 +24,8 @@ $q(document).ready(function() {
 	var selectors = {
 
 		passwordInput: "input[name=password]",
-		passwordMissingDigitsErrorFeedback: "li.feedbackPanelERROR > span:contains(\"You need to have at least 2 digits in your password.\")",
-		passwordInvalidContentErrorFeedback: "li.feedbackPanelERROR > span:contains(\"Password value can contain only characters and digits.\")"
+		passwordMissingDigitsErrorFeedback: "div.alert-danger:contains(\"You need to have at least 2 digits in your password.\")",
+		passwordInvalidContentErrorFeedback: "div.alert-danger:contains(\"Password value can contain only characters and digits.\")"
 
 	};
 

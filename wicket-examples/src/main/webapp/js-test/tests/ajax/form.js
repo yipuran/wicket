@@ -37,9 +37,9 @@ $q(document).ready(function() {
 		}).then(function($) {
 
 			// an error feedback message that email is mandatory is expected
-			var $feedback = $('li.feedbackPanelERROR > span');
+			var $feedback = $('div.alert-danger');
 			equal($feedback.length, 1, 'The error feedback message that email is missing is here');
-			equal($feedback.text(), 'Email is required', 'The error feedback matches');
+			ok($feedback.text().indexOf('Email is required') > 0, 'The error feedback matches');
 
 			// enter the email field too
 			var $emailInput = $('input[name=email]');
@@ -50,7 +50,7 @@ $q(document).ready(function() {
 		}).then(function($) {
 
 			// the feedback panel must be empty now
-			var $feedback = $('li.feedbackPanelERROR > span');
+			var $feedback = $('div.alert-danger');
 			equal($feedback.length, 0, 'The error feedback message should be gone');
 
 		}).always(start);

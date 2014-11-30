@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -132,11 +133,11 @@ public final class EditBook extends AuthenticatedWebPage
 
 			// Add radio choice test
 			final RadioChoice<Book> relatedBook = new RadioChoice<>("relatedBook", books);
+			relatedBook.setLabelPosition(AbstractChoice.LabelPosition.WRAP_AFTER).setSuffix("<br/>");
 			add(relatedBook);
 
 			// Multi-select among writing styles
-			add(new ListMultipleChoice<EnumeratedType>("writingStyles",
-				EnumeratedType.getValues(Book.WritingStyle.class)));
+			add(new ListMultipleChoice<>("writingStyles", EnumeratedType.getValues(Book.WritingStyle.class)));
 		}
 
 		/**

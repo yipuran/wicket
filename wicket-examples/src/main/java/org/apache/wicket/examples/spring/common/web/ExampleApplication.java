@@ -16,8 +16,8 @@
  */
 package org.apache.wicket.examples.spring.common.web;
 
+import org.apache.wicket.examples.WicketExampleApplication;
 import org.apache.wicket.examples.spring.common.ContactDao;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 /**
@@ -26,7 +26,7 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
  * @author Igor Vaynberg (ivaynberg)
  * 
  */
-public class ExampleApplication extends WebApplication
+public class ExampleApplication extends WicketExampleApplication
 {
 
 	/**
@@ -44,7 +44,7 @@ public class ExampleApplication extends WebApplication
 	@Override
 	protected void init()
 	{
-		getDebugSettings().setDevelopmentUtilitiesEnabled(true);
+		super.init();
 
 		// THIS LINE IS IMPORTANT - IT INSTALLS THE COMPONENT INJECTOR THAT WILL
 		// INJECT NEWLY CREATED COMPONENTS WITH THEIR SPRING DEPENDENCIES
@@ -52,9 +52,8 @@ public class ExampleApplication extends WebApplication
 	}
 
 	@Override
-	public Class getHomePage()
+	public Class<HomePage> getHomePage()
 	{
 		return HomePage.class;
 	}
-
 }

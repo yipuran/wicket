@@ -21,3 +21,9 @@
 .bodyContent.error {
 	border: 3px solid red;
 }
+
+.completed {
+	border: 3px solid green;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}

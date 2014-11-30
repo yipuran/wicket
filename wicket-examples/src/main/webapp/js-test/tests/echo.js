@@ -33,10 +33,10 @@ $q(document).ready(function() {
 			var $messageInput = $('input[name=msgInput]');
 			$messageInput.val(message);
 
-			return gym.click($('input[type=submit]'));
+			return gym.click($('button[type=submit]'));
 		}).then(function($) {
 
-			var $msg = $('#msg');
+			var $msg = $('#gym-msg');
 			equal($msg.length, 1, 'The entered message is here');
 			equal($msg.text(), message, 'The entered message is here');
 

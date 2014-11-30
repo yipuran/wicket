@@ -37,9 +37,9 @@ $q(document).ready(function() {
 			return gym.click($('input[value=save]'));
 		}).then(function($) {
 
-			var $feedback = $('li.feedbackPanelINFO > span');
+			var $feedback = $('div.alert-info');
 			equal($feedback.length, 1, 'The feedback is here');
-			equal($feedback.text().indexOf("stringProperty = '"+text+"'"), 29, 'The entered text is here');
+			equal($feedback.text().indexOf("stringProperty = '"+text+"'"), 82, 'The entered text is here');
 
 		}).always(start);
 	});
@@ -57,7 +57,7 @@ $q(document).ready(function() {
 			return gym.click($('input[value=save]'));
 		}).then(function($) {
 
-			var $integerInRangeProperty = $('label[for=integerInRangeProperty]');
+			var $integerInRangeProperty = $('label[for=gym-integerInRangeProperty]');
 			equal($integerInRangeProperty.length, 1, 'The label for integerInRangeProperty is here');
 			equal($integerInRangeProperty.text(), 'Nur Werte zwischen 0 und 100 sind erlaubt', 'The german version is correct');
 

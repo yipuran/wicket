@@ -24,8 +24,8 @@ $q(document).ready(function() {
 	var selectors = {
 
 		emailInput: "input[name=email]",
-		emailNullErrorFeedback: "li.feedbackPanelERROR > span:contains(\"'Email' is required\")",
-		emailInvalidErrorFeedback: "li.feedbackPanelERROR > span:contains(\"'Email' is not a well-formed email address\")"
+		emailNullErrorFeedback: "div.alert-danger:contains(\"'Email' is required\")",
+		emailInvalidErrorFeedback: "div.alert-danger:contains(\"'Email' is not a well-formed email address\")"
 
 	};
 

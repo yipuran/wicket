@@ -1,54 +1,70 @@
 <html xmlns:wicket="http://wicket.apache.org">
-<head>
-<title>Wicket Examples - Bean Validation</title>
-<link rel="stylesheet" type="text/css" href="style.css" />
+<wicket:head>
 <style>
 	.note { font-size:.8em; }
 	.required {font-weight: bold;}
 </style>
-</head>
+</wicket:head>
 <body>
-	<span wicket:id="mainNavigation" />
+<wicket:extend>
 
 	<div wicket:id="feedback"></div>
 	
-	<form wicket:id="form" novalidate="novalidate">
-		<table cellspacing="0" cellpadding="4">
-			<tr>
-				<td><label wicket:for="name"><wicket:label>Name</wicket:label></label></td>
-				<td><input wicket:id="name" type="text" size="30"/></td>
-				<td><pre class="note">@NotNull @Size(min = 2, max = 30)</pre></td>
-			</tr>
-			<tr>
-				<td><label wicket:for="email"><wicket:label>Email</wicket:label></label></td>
-				<td><input wicket:id="email" type="text" size="30"/></td>
-				<td><pre class="note">@NotNull @Email</pre></td>
-			</tr>
-			<tr>
-				<td><label wicket:for="phone"><wicket:label>Phone</wicket:label></label></td>
-				<td><input wicket:id="phone" type="text" size="20"/></td>
-				<td><pre class="note">@Pattern(regexp = "[0-9]{3}-[0-9]{4}")</pre></td>
-			</tr>
-			<tr>
-				<td><label wicket:for="birthdate"><wicket:label>Birthdate</wicket:label></label></td>
-				<td><input wicket:id="birthdate" type="text" size="10"/></td>
-				<td><pre class="note">m/d/yyyy field with @Past</pre></td>
-			</tr>
-			<tr>
-                <td><label wicket:for="password"><wicket:label>Password</wicket:label></label></td>
-                <td><input wicket:id="password" type="text" size="10"/></td>
-                <td><pre class="note">Custom constraint @ValidPassword with custom message bundles.<br/>A valid password must contain only alphanumeric chars and at least two digits.</pre>
-                </td>
-            </tr>
-			<tr>
-				<td></td>
-				<td>
-					<input type="submit" value="Submit"/>
-				</td>
-				<td><span class="note">press to submit the form and run the validation</span></td>
-			</tr>
-		</table>
-	</form>
+	<form wicket:id="form" class="form-horizontal" novalidate="novalidate">
+		<div class="form-group">
+			<label wicket:for="name" class="control-label col-sm-1"><wicket:label>Name</wicket:label></label>
+			<div class="col-sm-2">
+				<input wicket:id="name" type="text" size="30" class="form-control"/>
+			</div>
+			<div class="col-sm-2">
+				<pre class="note">@NotNull @Size(min = 2, max = 30)</pre>
+			</div>
+		</div>
 
+		<div class="form-group">
+			<label wicket:for="email" class="control-label col-sm-1"><wicket:label>Email</wicket:label></label>
+			<div class="col-sm-2">
+				<input wicket:id="email" type="text" size="30" class="form-control"/>
+			</div>
+			<div class="col-sm-2">
+				<pre class="note">@NotNull @Email</pre>
+			</div>
+		</div>
+
+
+		<div class="form-group">
+			<label wicket:for="phone" class="control-label col-sm-1"><wicket:label>Phone</wicket:label></label>
+			<div class="col-sm-2">
+				<input wicket:id="phone" type="text" size="20" class="form-control"/>
+			</div>
+			<div class="col-sm-3">
+				<pre class="note">@Pattern(regexp = "[0-9]{3}-[0-9]{4}")</pre>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label wicket:for="birthdate" class="control-label col-sm-1"><wicket:label>Birthdate</wicket:label></label>
+			<div class="col-sm-2">
+				<input wicket:id="birthdate" type="text" size="10" class="form-control"/>
+			</div>
+			<div class="col-sm-2">
+				<pre class="note">m/d/yyyy field with @Past</pre>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label wicket:for="password" class="control-label col-sm-1"><wicket:label>Password</wicket:label></label>
+			<div class="col-sm-2">
+				<input wicket:id="password" type="text" size="10" class="form-control"/>
+			</div>
+			<div class="col-sm-7">
+				<pre><code class="note">Custom constraint @ValidPassword with custom message bundles.A valid password must contain only alphanumeric chars and at least two digits.</code></pre>
+			</div>
+		</div>
+
+		<input type="submit" value="Submit" class="btn btn-primary"/>
+
+	</form>
+</wicket:extend>
 </body>
 </html>

@@ -24,8 +24,9 @@ import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.examples.WicketExamplePage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public class BeanValidationPage extends WicketExamplePage
 {
@@ -34,17 +35,17 @@ public class BeanValidationPage extends WicketExamplePage
 
 	public BeanValidationPage()
 	{
-		add(new FeedbackPanel("feedback"));
+		add(new NotificationPanel("feedback"));
 
 		Form<?> form = new Form<>("form");
 		add(form);
 
-		form.add(new TextField<String>("name", new PropertyModel<String>(this, "person.name")).add(new PropertyValidator<>()));
-		form.add(new TextField<String>("phone", new PropertyModel<String>(this, "person.phone")).add(new PropertyValidator<>()));
-		form.add(new TextField<String>("email", new PropertyModel<String>(this, "person.email")).add(new PropertyValidator<>()));
+		form.add(new TextField<>("name", new PropertyModel<String>(this, "person.name")).add(new PropertyValidator<>()));
+		form.add(new TextField<>("phone", new PropertyModel<String>(this, "person.phone")).add(new PropertyValidator<>()));
+		form.add(new TextField<>("email", new PropertyModel<String>(this, "person.email")).add(new PropertyValidator<>()));
 		form.add(new DateTextField("birthdate", new PropertyModel<Date>(this, "person.birthdate"),
 			new StyleDateConverter("S-", true)).add(new PropertyValidator<>()));
-		form.add(new TextField<String>("password", new PropertyModel<String>(this, "person.password")).add(new PropertyValidator<>()));
+		form.add(new TextField<>("password", new PropertyModel<String>(this, "person.password")).add(new PropertyValidator<>()));
 
 	}
 }

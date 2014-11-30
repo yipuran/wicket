@@ -23,8 +23,8 @@ $q(document).ready(function() {
 
 	var selectors = {
 		nameInput: "input[name='p::name']",
-		nameNullErrorFeedback: "li.feedbackPanelERROR > span:contains(\"'Name' is required\")",
-		nameRangeErrorFeedback: "li.feedbackPanelERROR > span:contains(\"'Name' length must be between 2 and 30\")"
+		nameNullErrorFeedback: "div.alert-danger:contains(\"'Name' is required\")",
+		nameRangeErrorFeedback: "div.alert-danger:contains(\"'Name' length must be between 2 and 30\")"
 
 	};
 

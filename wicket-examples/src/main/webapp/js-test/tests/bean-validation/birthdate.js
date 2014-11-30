@@ -24,8 +24,8 @@ $q(document).ready(function() {
 	var selectors = {
 
 		birthdateInput: "input[name=birthdate]",
-		birthdateInvalidDateErrorFeedback: "li.feedbackPanelERROR > span:contains(\"The value of 'Birthdate' is not a valid Date.\")",
-		birthdateNotInPastErrorFeedback: "li.feedbackPanelERROR > span:contains(\"'Birthdate' must be in the past\")"
+		birthdateInvalidDateErrorFeedback: "div.alert-danger:contains(\"The value of 'Birthdate' is not a valid Date.\")",
+		birthdateNotInPastErrorFeedback: "div.alert-danger:contains(\"'Birthdate' must be in the past\")"
 
 	};
 

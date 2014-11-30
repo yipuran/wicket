@@ -4,44 +4,38 @@
 	<link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
+<wicket:extend>
 
- <span wicket:id="mainNavigation"/>
-
-<table cellpadding="5px">
+<table class="table table-bordered">
  <tr>
-  <td valign="top" height="100%">
-  
- <div id="templateInputBox">
-    <form wicket:id="templateForm">
-      <fieldset>
-        <legend><a target="#" href="http://jakarta.apache.org/velocity/">velocity</a> template input</legend>
+  <td width="35%">
+    <div id="templateInputBox">
+        <form wicket:id="templateForm">
+            <fieldset>
+                <legend><a target="_blank" href="http://velocity.apache.org/">Apache Velocity</a> template</legend>
+                <div class="form-group">
+                    <textarea wicket:id="templateInput" rows="16" cols="36" class="form-control" style="resize: none">Template input comes here</textarea>
+                </div>
 
-        <textarea wicket:id="templateInput" rows="16" cols="36">Template input comes here</textarea>
-
-		<div id="templateUpdateButton">
-        <input type="submit" value="update"/>
-        </div>
-      </fieldset>
-     </form>   
- </div>
+                <input type="submit" value="update" class="btn btn-primary"/>
+            </fieldset>
+        </form>
+    </div>
  
   </td>
-  <td valign="top" height="100%">
-
- <div id="templateOutputBox">
-  <fieldset>
-    <legend>output</legend>
-	<span wicket:id="templatePanel">Template output will be put here</span>
-  </fieldset>
- </div>
- 
+  <td>
+    <div id="templateOutputBox">
+        <fieldset>
+            <legend>output</legend>
+	            <span wicket:id="templatePanel">Template output will be put here</span>
+            </fieldset>
+    </div>
   </td>
  </tr>
 </table>
 
- <div>
-	<span wicket:id="feedback"/>
- </div>
+ <div wicket:id="feedback"></div>
 
+</wicket:extend>
 </body>
 </html>

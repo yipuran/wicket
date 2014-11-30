@@ -20,10 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.core.util.resource.PackageResourceStream;
 import org.apache.wicket.examples.WicketExamplePage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -31,9 +31,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.ResourceUtil;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.IStringResourceStream;
-import org.apache.wicket.core.util.resource.PackageResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.velocity.markup.html.VelocityPanel;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Template example page.
@@ -99,7 +100,7 @@ public class TemplatePage extends WicketExamplePage
 				return template;
 			}
 		});
-		add(new FeedbackPanel("feedback"));
+		add(new NotificationPanel("feedback"));
 	}
 
 	/**

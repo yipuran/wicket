@@ -24,7 +24,7 @@ $q(document).ready(function() {
 	var selectors = {
 
 		phoneInput: "input[name=phone]",
-		phoneInvalidErrorFeedback: "li.feedbackPanelERROR > span:contains(Phone)"
+		phoneInvalidErrorFeedback: "div.alert-danger:contains(Phone)"
 	};
 
 	var submit = function($) {
@@ -50,7 +50,7 @@ $q(document).ready(function() {
 
 				var $phoneErrorSpan = $(selectors.phoneInvalidErrorFeedback);
 				equal($phoneErrorSpan.length, 1, 'The feedback message for invalid phone is there');
-				equal($phoneErrorSpan.text(), "'Phone' must match \"[0-9]{3}-[0-9]{4}\"", 'The feedback error message for invalid phone is correct');
+				ok($phoneErrorSpan.text().indexOf("'Phone' must match \"[0-9]{3}-[0-9]{4}\"") > 0, 'The feedback error message for invalid phone is correct');
 
 				// enter valid phone
 				var $input = $(selectors.phoneInput);

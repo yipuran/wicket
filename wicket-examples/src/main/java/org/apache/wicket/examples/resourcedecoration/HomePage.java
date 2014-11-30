@@ -32,7 +32,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.apache.wicket.util.time.Duration;
 
@@ -64,13 +63,13 @@ public class HomePage extends WicketExamplePage
 			{
 				response.render(OnDomReadyHeaderItem.forScript("$('#" +
 					jsPlaceholder.getMarkupId() +
-					"').html('the ondomready script ran').css('border-color', 'green');"));
+					"').html('the ondomready script ran').removeClass('borderedThing').addClass('completed');"));
 			}
 		});
 		add(jsPlaceholder);
 
 		add(new AjaxProofContainer("ajaxProofPlaceholder"));
-		add(new AbstractAjaxTimerBehavior(Duration.seconds(4))
+		add(new AbstractAjaxTimerBehavior(Duration.seconds(5))
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -131,11 +130,7 @@ public class HomePage extends WicketExamplePage
 		{
 			if (getRequestCycle().find(AjaxRequestTarget.class) != null)
 			{
-				response.render(CssHeaderItem.forReference(new PackageResourceReference(
-					HomePage.class, "ajax.css")));
-				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(
-					HomePage.class, "ajax.js")));
-				response.render(OnDomReadyHeaderItem.forScript("updatePending();"));
+				response.render(OnDomReadyHeaderItem.forScript("$('.pending').removeClass('pending').addClass('completed');"));
 			}
 		}
 	}
