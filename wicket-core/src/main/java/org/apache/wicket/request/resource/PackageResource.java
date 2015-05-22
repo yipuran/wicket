@@ -416,7 +416,9 @@ public class PackageResource extends AbstractResource implements IStaticCacheabl
 	 */
 	public IResourceStream getResourceStream()
 	{
-		return internalGetResourceStream(style, locale);
+		String _style = style != null ? style : getCurrentStyle();
+		Locale _locale = locale != null ? locale : getCurrentLocale();
+		return internalGetResourceStream(_style, _locale);
 	}
 
 	/**

@@ -111,6 +111,6 @@ public class CssPackageResourceTest extends WicketTestCase
 
 		tester.getApplication().getResourceSettings().setCssCompressor(null);
 		tester.startResource(resource);
-		assertEquals("TEST", tester.getLastResponseAsString());
+		assertEquals("TEST EN", tester.getLastResponseAsString());
 	}
 }
