@@ -26,7 +26,6 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.resource.ResourceUtil;
 import org.apache.wicket.util.lang.Generics;
-import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.lang.Packages;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceUtils;
@@ -130,21 +129,18 @@ public class PackageResourceReference extends ResourceReference
 
 		if (CSS_EXTENSION.equals(extension))
 		{
-			resource = new CssPackageResource(getScope(), getName(), Objects.defaultIfNull(getLocale(), urlAttributes.getLocale()), 
-				Objects.defaultIfNull(getStyle(), urlAttributes.getStyle()),
-				Objects.defaultIfNull(getVariation(), urlAttributes.getVariation())).readBuffered(readBuffered);
+			resource = new CssPackageResource(getScope(), getName(), getCurrentLocale(urlAttributes), 
+				getCurrentStyle(urlAttributes), getCurrentVariation(urlAttributes)).readBuffered(readBuffered);
 		}
 		else if (JAVASCRIPT_EXTENSION.equals(extension))
 		{
-			resource = new JavaScriptPackageResource(getScope(), getName(), Objects.defaultIfNull(getLocale(), urlAttributes.getLocale()), 
-				Objects.defaultIfNull(getStyle(), urlAttributes.getStyle()),
-				Objects.defaultIfNull(getVariation(), urlAttributes.getVariation())).readBuffered(readBuffered);
+			resource = new JavaScriptPackageResource(getScope(), getName(), getCurrentLocale(urlAttributes), 
+				getCurrentStyle(urlAttributes), getCurrentVariation(urlAttributes)).readBuffered(readBuffered);
 		}
 		else
 		{
-			resource = new PackageResource(getScope(), getName(), Objects.defaultIfNull(getLocale(), urlAttributes.getLocale()), 
-				Objects.defaultIfNull(getStyle(), urlAttributes.getStyle()),
-				Objects.defaultIfNull(getVariation(), urlAttributes.getVariation())).readBuffered(readBuffered);
+			resource = new PackageResource(getScope(), getName(), getCurrentLocale(urlAttributes), 
+				getCurrentStyle(urlAttributes), getCurrentVariation(urlAttributes)).readBuffered(readBuffered);
 		}
 
 		removeCompressFlagIfUnnecessary(resource);
@@ -190,14 +186,59 @@ public class PackageResourceReference extends ResourceReference
 			stream.getVariation());
 	}
 
+	private Locale getCurrentLocale(UrlAttributes attributes)
+	{
+		Locale currentLocale = getCurrentLocale();
+		
+		return currentLocale != null ? currentLocale : attributes.getLocale();
+	}
+	
 	private Locale getCurrentLocale()
 	{
-		return getLocale() != null ? getLocale() : Session.get().getLocale();
+		final Locale locale = getLocale();
+		
+		if (locale != null)
+		{
+			return locale;
+		}
+		
+		if (Session.exists())
+		{
+			return Session.get().getLocale();
+		}
+		
+		return locale;
 	}
 
+	private String getCurrentStyle(UrlAttributes attributes)
+	{
+		String currentStyle = getCurrentStyle();
+		
+		return currentStyle != null ? currentStyle : attributes.getStyle();
+	}
+	
 	private String getCurrentStyle()
 	{
-		return getStyle() != null ? getStyle() : Session.get().getStyle();
+		final String style = getStyle();
+		
+		if (style != null)
+		{
+			return style;
+		}
+		
+		if (Session.exists())
+		{
+			return Session.get().getStyle();
+		}
+		
+		return style;
+	}
+	
+	private String getCurrentVariation(UrlAttributes attributes)
+	{
+		final String variation = getVariation();
+		
+		return variation != null ? variation : attributes.getVariation();
 	}
 
 	/**
