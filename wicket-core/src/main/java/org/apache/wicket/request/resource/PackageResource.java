@@ -443,6 +443,17 @@ public class PackageResource extends AbstractResource implements IStaticCacheabl
 	{
 		return internalGetResourceStream(getCurrentStyle(), getCurrentLocale());
 	}
+	
+	/**
+	 * locate resource stream for current resource
+	 * 
+	 * @return resource stream or <code>null</code> if not found
+	 * @deprecated use {@link #getCacheableResourceStream} instead.
+	 */
+	public IResourceStream getResourceStream()
+	{
+		return getCacheableResourceStream();
+ 	}
 
 	/**
 	 * @return whether {@link org.apache.wicket.resource.ITextResourceCompressor} can be used to
