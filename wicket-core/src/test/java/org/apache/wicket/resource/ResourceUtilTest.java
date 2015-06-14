@@ -19,9 +19,11 @@ package org.apache.wicket.resource;
 import java.util.Locale;
 
 import org.apache.wicket.request.Url;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.ResourceReference.UrlAttributes;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 
 public class ResourceUtilTest extends Assert
@@ -92,5 +94,43 @@ public class ResourceUtilTest extends Assert
 		attributes = new UrlAttributes(null, null, "variation");
 		
 		assertEquals("--variation", ResourceUtil.encodeResourceReferenceAttributes(attributes));
+	}
+	
+	@Test
+	public void encodeResourceReferenceAttributesWithResource() throws Exception
+	{
+		ResourceReference resourceReference = Mockito.mock(ResourceReference.class);
+		UrlAttributes attributes = new UrlAttributes(null, null, null);
+		
+		String urlString = "www.funny.url";
+		Url url = Url.parse(urlString);
+		
+		Mockito.when(resourceReference.getUrlAttributes()).thenReturn(attributes);
+		ResourceUtil.encodeResourceReferenceAttributes(url, resourceReference);
+		
+		//test with all null attributes
+		assertEquals(urlString, url.toString());
+		
+		Mockito.reset(resourceReference);
+		
+		//test with locale, style and variation
+		attributes = new UrlAttributes(Locale.CANADA_FRENCH, "style", "variation");
+		
+		Mockito.when(resourceReference.getUrlAttributes()).thenReturn(attributes);
+		ResourceUtil.encodeResourceReferenceAttributes(url, resourceReference);
+		
+		assertEquals(urlString + "?fr_CA-style-variation", url.toString());
+		
+		Mockito.reset(resourceReference);
+		
+		//test with just variation
+		attributes = new UrlAttributes(null, null, "variation");
+		url = Url.parse(urlString);
+		
+		Mockito.when(resourceReference.getUrlAttributes()).thenReturn(attributes);
+		ResourceUtil.encodeResourceReferenceAttributes(url, resourceReference);
+		
+		assertEquals(urlString + "?--variation", url.toString());
+		
 	}
 }
