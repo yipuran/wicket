@@ -100,6 +100,8 @@ public class ResourceUtilTest extends Assert
 	public void encodeResourceReferenceAttributesWithResource() throws Exception
 	{
 		ResourceReference resourceReference = Mockito.mock(ResourceReference.class);
+		
+		//test with all null attributes
 		UrlAttributes attributes = new UrlAttributes(null, null, null);
 		
 		String urlString = "www.funny.url";
@@ -108,7 +110,6 @@ public class ResourceUtilTest extends Assert
 		Mockito.when(resourceReference.getUrlAttributes()).thenReturn(attributes);
 		ResourceUtil.encodeResourceReferenceAttributes(url, resourceReference);
 		
-		//test with all null attributes
 		assertEquals(urlString, url.toString());
 		
 		Mockito.reset(resourceReference);

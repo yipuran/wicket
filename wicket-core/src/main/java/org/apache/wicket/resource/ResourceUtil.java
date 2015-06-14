@@ -150,6 +150,9 @@ public class ResourceUtil
 	 */
 	public static void encodeResourceReferenceAttributes(Url url, ResourceReference reference)
 	{
+		Args.notNull(url, "url");
+		Args.notNull(reference, "reference");
+		
 		String encoded = encodeResourceReferenceAttributes(reference.getUrlAttributes());
 		if (!Strings.isEmpty(encoded))
 		{
