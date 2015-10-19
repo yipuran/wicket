@@ -37,6 +37,6 @@ git push
 
 echo "Remove the previous version of Wicket using this command:
 
-  svn rm https://dist.apache.org/repos/dist/release/wicket/7.0.0 -m "Remove previous version from mirrors"
+  svn rm https://dist.apache.org/repos/dist/release/wicket/7.0.0 -m \"Remove previous version from mirrors\"
 
 "
