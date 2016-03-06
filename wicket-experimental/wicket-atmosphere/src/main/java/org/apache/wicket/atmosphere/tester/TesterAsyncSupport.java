@@ -16,15 +16,17 @@
  */
 package org.apache.wicket.atmosphere.tester;
 
-import org.atmosphere.cpr.*;
+import java.io.IOException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import java.io.IOException;
 
-/**
- *
- */
+import org.atmosphere.cpr.Action;
+import org.atmosphere.cpr.AsyncSupport;
+import org.atmosphere.cpr.AtmosphereRequest;
+import org.atmosphere.cpr.AtmosphereResource;
+import org.atmosphere.cpr.AtmosphereResponse;
+
 class TesterAsyncSupport<E extends AtmosphereResource> implements AsyncSupport<E>
 {
 	@Override

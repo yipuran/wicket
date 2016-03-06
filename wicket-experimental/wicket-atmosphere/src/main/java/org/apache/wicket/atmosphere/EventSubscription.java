@@ -16,14 +16,15 @@
  */
 package org.apache.wicket.atmosphere;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
+import java.lang.reflect.Method;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.behavior.Behavior;
 
-import java.lang.reflect.Method;
+import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 
 /**
  * The subscription of a method on a component to certain events. This is used by {@link EventBus}

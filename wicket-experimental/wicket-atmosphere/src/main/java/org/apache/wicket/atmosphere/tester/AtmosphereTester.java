@@ -16,16 +16,21 @@
  */
 package org.apache.wicket.atmosphere.tester;
 
+import java.util.List;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.atmosphere.AtmosphereBehavior;
 import org.apache.wicket.atmosphere.EventBus;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.mock.MockHttpServletResponse;
 import org.apache.wicket.util.tester.WicketTester;
-import org.atmosphere.cpr.*;
-import org.atmosphere.util.SimpleBroadcaster;
-
-import java.util.List;
+import org.atmosphere.cpr.AtmosphereConfig;
+import org.atmosphere.cpr.AtmosphereFramework;
+import org.atmosphere.cpr.AtmosphereResource;
+import org.atmosphere.cpr.Broadcaster;
+import org.atmosphere.cpr.BroadcasterConfig;
+import org.atmosphere.cpr.HeaderConfig;
+import org.atmosphere.util.DefaultUUIDProvider;
 
 /**
  * A helper for testing Atmosphere enabled pages
@@ -62,10 +67,9 @@ public class AtmosphereTester
 
 		WebApplication application = wicketTester.getApplication();
 
-        Broadcaster broadcaster = createBroadcaster();
+		Broadcaster broadcaster = createBroadcaster();
 
-
-        if (EventBus.isInstalled(application))
+		if (EventBus.isInstalled(application))
 		{
 			this.eventBus = EventBus.get(application);
 			this.eventBus.setBroadcaster(broadcaster);
@@ -101,16 +105,13 @@ public class AtmosphereTester
 
 	private Broadcaster createBroadcaster()
 	{
-        AtmosphereFramework framework = new AtmosphereFramework();
-        framework.init();
+		AtmosphereFramework framework = new AtmosphereFramework();
+		framework.uuidProvider(new DefaultUUIDProvider());
+		framework.init();
 
-        BroadcasterFactory factory = new DefaultBroadcasterFactory();
-
-        factory.configure(
-                SimpleBroadcaster.class,
-                BroadcasterLifeCyclePolicy.ATMOSPHERE_RESOURCE_POLICY.NEVER.name(),
-                framework.getAtmosphereConfig()
-        );
+		AtmosphereConfig atmosphereConfig = framework.getAtmosphereConfig();
+		TesterBroadcaster broadcaster = new TesterBroadcaster(atmosphereConfig);
+		TesterBroadcasterFactory factory = new TesterBroadcasterFactory(atmosphereConfig, broadcaster);
 
 		return factory.get();
 	}

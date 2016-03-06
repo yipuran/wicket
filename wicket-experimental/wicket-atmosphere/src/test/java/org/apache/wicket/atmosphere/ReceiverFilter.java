@@ -16,8 +16,9 @@
  */
 package org.apache.wicket.atmosphere;
 
-import com.google.common.base.Predicate;
 import org.apache.wicket.Session;
+
+import com.google.common.base.Predicate;
 
 public class ReceiverFilter implements Predicate<AtmosphereEvent>
 {

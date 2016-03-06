@@ -16,6 +16,13 @@
  */
 package org.apache.wicket.atmosphere;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.atmosphere.tester.AtmosphereTester;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -24,14 +31,7 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.hamcrest.CoreMatchers.*;
-
-/**
- *
- */
 public class AtmosphereTesterTest extends Assert
 {
 	final AtomicBoolean updateTimeCalled = new AtomicBoolean(false);

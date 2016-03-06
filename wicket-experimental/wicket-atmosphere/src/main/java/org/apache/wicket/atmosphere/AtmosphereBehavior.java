@@ -34,7 +34,20 @@ import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.resource.CoreLibrariesContributor;
 import org.apache.wicket.util.string.Strings;
-import org.atmosphere.cpr.*;
+import org.atmosphere.cpr.Action;
+import org.atmosphere.cpr.AsyncSupport;
+import org.atmosphere.cpr.AtmosphereRequest;
+import org.atmosphere.cpr.AtmosphereRequestImpl;
+import org.atmosphere.cpr.AtmosphereResource;
+import org.atmosphere.cpr.AtmosphereResourceEvent;
+import org.atmosphere.cpr.AtmosphereResourceEventListener;
+import org.atmosphere.cpr.AtmosphereResourceImpl;
+import org.atmosphere.cpr.AtmosphereResponse;
+import org.atmosphere.cpr.AtmosphereResponseImpl;
+import org.atmosphere.cpr.Broadcaster;
+import org.atmosphere.cpr.FrameworkConfig;
+import org.atmosphere.cpr.HeaderConfig;
+import org.atmosphere.cpr.Meteor;
 import org.atmosphere.handler.AtmosphereHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +67,7 @@ import java.io.IOException;
  */
 public class AtmosphereBehavior extends AbstractAjaxBehavior
         implements
-        AtmosphereResourceEventListener
+		AtmosphereResourceEventListener
 {
     private static final Logger log = LoggerFactory.getLogger(AtmosphereBehavior.class);
 
@@ -107,20 +120,21 @@ public class AtmosphereBehavior extends AbstractAjaxBehavior
         RequestCycle requestCycle = RequestCycle.get();
         ServletWebRequest request = (ServletWebRequest)requestCycle.getRequest();
         WebResponse response = (WebResponse)requestCycle.getResponse();
-        AtmosphereRequest aRequest = AtmosphereRequestImpl.newInstance();
-        aRequest.setRequest(request.getContainerRequest());
-        AtmosphereResponse aResponse = AtmosphereResponseImpl.newInstance();
-        aResponse.setResponse((ServletResponse)response.getContainerResponse());
+        AtmosphereRequest atmosphereRequest = AtmosphereRequestImpl.newInstance();
+        atmosphereRequest.setRequest(request.getContainerRequest());
+        AtmosphereResponse atmosphereResponse = AtmosphereResponseImpl.newInstance();
+        atmosphereResponse.setResponse((ServletResponse)response.getContainerResponse());
 
         Broadcaster broadcaster = EventBus.get().getBroadcaster();
 
         AtmosphereResource atmosphereResource = new AtmosphereResourceImpl();
+	    // TODO This is bad! Atmosphere should detect/provide the impl. We should not hardcode !
         TesterAsyncSupport asyncSupport = new TesterAsyncSupport();
         atmosphereResource.initialize(
                 broadcaster.getBroadcasterConfig().getAtmosphereConfig(),
                 broadcaster,
-                aRequest,
-                aResponse,
+                atmosphereRequest,
+                atmosphereResponse,
                 asyncSupport,
                 new AtmosphereHandlerAdapter()
         );
@@ -289,18 +303,7 @@ public class AtmosphereBehavior extends AbstractAjaxBehavior
         return page.getMetaData(ATMOSPHERE_UUID);
     }
 
-    /**
-     * @param resource
-     * @return the unique id for the given suspended connection
-     * @deprecated use {@link AtmosphereResource#uuid()}
-     */
-    @Deprecated
-    public static String getUUID(AtmosphereResource resource)
-    {
-        return resource.uuid();
-    }
-
-    class TesterAsyncSupport<E extends AtmosphereResource> implements AsyncSupport<E>
+    private static class TesterAsyncSupport<E extends AtmosphereResource> implements AsyncSupport<E>
     {
         @Override
         public String getContainerName()

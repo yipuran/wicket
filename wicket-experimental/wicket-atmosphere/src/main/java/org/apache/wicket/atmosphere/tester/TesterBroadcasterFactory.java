@@ -20,20 +20,16 @@ import org.atmosphere.cpr.AtmosphereConfig;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterLifeCyclePolicy;
 import org.atmosphere.cpr.DefaultBroadcasterFactory;
-import org.atmosphere.util.SimpleBroadcaster;
 
-/**
-*
-*/
 class TesterBroadcasterFactory extends DefaultBroadcasterFactory
 {
 	private final TesterBroadcaster singleBroadcaster;
 
 	TesterBroadcasterFactory(AtmosphereConfig c, TesterBroadcaster broadcaster)
 	{
-		super(SimpleBroadcaster.class, BroadcasterLifeCyclePolicy.ATMOSPHERE_RESOURCE_POLICY.NEVER.name(), c);
-
+		configure(broadcaster.getClass(), BroadcasterLifeCyclePolicy.ATMOSPHERE_RESOURCE_POLICY.NEVER.name(), c);
 		this.singleBroadcaster = broadcaster;
+
 	}
 
 	@SuppressWarnings("unchecked")

@@ -16,12 +16,13 @@
  */
 package org.apache.wicket.atmosphere;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
+import java.util.List;
+
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 
-import java.util.List;
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 /**
  * Resource reference for the jquery.atmosphere.js module and the wicket glue.

@@ -16,11 +16,11 @@
  */
 package org.apache.wicket.atmosphere;
 
-import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
 /**
  * Handles invocations of methods annotated with {@link Subscribe} annotation.

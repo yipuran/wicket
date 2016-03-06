@@ -16,8 +16,23 @@
  */
 package org.apache.wicket.atmosphere;
 
-import com.google.common.collect.*;
-import org.apache.wicket.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+
+import org.apache.wicket.Application;
+import org.apache.wicket.Component;
+import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.Page;
+import org.apache.wicket.Session;
+import org.apache.wicket.ThreadContext;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.application.IComponentOnBeforeRenderListener;
 import org.apache.wicket.atmosphere.config.AtmosphereParameters;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -25,20 +40,25 @@ import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.session.ISessionStore.UnboundListener;
-import org.atmosphere.cpr.*;
+import org.atmosphere.cpr.AtmosphereConfig;
+import org.atmosphere.cpr.AtmosphereFramework;
+import org.atmosphere.cpr.AtmosphereResource;
+import org.atmosphere.cpr.AtmosphereResourceFactory;
+import org.atmosphere.cpr.Broadcaster;
+import org.atmosphere.cpr.BroadcasterFactory;
+import org.atmosphere.cpr.BroadcasterLifeCyclePolicy;
+import org.atmosphere.cpr.DefaultAtmosphereResourceFactory;
+import org.atmosphere.cpr.DefaultBroadcasterFactory;
 import org.atmosphere.util.SimpleBroadcaster;
 import org.atmosphere.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.CopyOnWriteArrayList;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 
 /**
  * Broadcasts events to methods on components annotated with {@link Subscribe}.
@@ -109,6 +129,7 @@ public class EventBus implements UnboundListener
 
 	private Broadcaster broadcaster;
 
+	// TODO make final!
 	private AtmosphereFramework framework;
 
 	/**

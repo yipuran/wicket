@@ -16,15 +16,16 @@
  */
 package org.apache.wicket.atmosphere;
 
-import com.google.common.base.Predicate;
-import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.request.cycle.RequestCycle;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.request.cycle.RequestCycle;
+
+import com.google.common.base.Predicate;
 
 /**
  * Subscribes a method on a component to receive events of a certain type. The method should have 2

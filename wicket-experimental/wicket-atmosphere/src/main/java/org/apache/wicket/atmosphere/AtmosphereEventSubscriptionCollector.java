@@ -16,9 +16,10 @@
  */
 package org.apache.wicket.atmosphere;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.ImmutableList;
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
@@ -26,9 +27,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.application.IComponentOnBeforeRenderListener;
 import org.apache.wicket.behavior.Behavior;
 
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Collects {@linkplain Subscribe event subscriptions} on components. Subscriptions are refreshed on
@@ -40,8 +41,8 @@ import java.util.concurrent.ExecutionException;
  */
 public class AtmosphereEventSubscriptionCollector implements IComponentOnBeforeRenderListener
 {
-	private Cache<Class<?>, Iterable<Method>> subscribedMethodsCache;
-	private EventBus eventBus;
+	private final Cache<Class<?>, Iterable<Method>> subscribedMethodsCache;
+	private final EventBus eventBus;
 
 	/**
 	 * Construct.
