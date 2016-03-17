@@ -41,7 +41,7 @@
         </repository>
     </repositories>
 	<properties>
-		<atmosphere.version>2.4.3</atmosphere.version>
+		<atmosphere.version>2.4.4-SNAPSHOT</atmosphere.version>
 		<jquery.atmosphere.version>2.2.7</jquery.atmosphere.version>
 	</properties>
     <dependencyManagement>

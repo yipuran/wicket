@@ -24,8 +24,8 @@ import org.atmosphere.cpr.AtmosphereResourceEvent;
  * events.
  *
  * To be notified add a method like the one below to your components:
- * <pre><code>{@literal
- *      @Subscribe
+ * <pre><code>
+ *     {@literal @}Subscribe
  *      public void anyName(AjaxRequestTarget target, AtmosphereInternalEvent event) {
  *          switch (event.getType()) {
  *              case Resume: ...; break;
@@ -33,7 +33,7 @@ import org.atmosphere.cpr.AtmosphereResourceEvent;
  *              ....
  *          }
  *      }
- * }</code></pre>
+ * </code></pre>
  *
  * @see org.apache.wicket.atmosphere.EventBus#wantAtmosphereNotifications
  * @see org.atmosphere.cpr.AtmosphereResourceEventListener
