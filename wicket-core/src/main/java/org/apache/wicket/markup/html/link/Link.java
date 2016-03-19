@@ -18,6 +18,7 @@ package org.apache.wicket.markup.html.link;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.IGenericComponent;
+import org.apache.wicket.IRequestListener;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.lambda.Lambdas;
@@ -75,7 +76,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * @param <T>
  *            type of model object
  */
-public abstract class Link<T> extends AbstractLink implements ILinkListener, IGenericComponent<T, Link<T>>
+public abstract class Link<T> extends AbstractLink implements IRequestListener, IGenericComponent<T, Link<T>>
 {
 	private static final long serialVersionUID = 1L;
 
@@ -182,6 +183,12 @@ public abstract class Link<T> extends AbstractLink implements ILinkListener, IGe
 		return Lambdas.link(id, onClick);
 	}
 
+	@Override
+	public boolean includeRenderCount()
+	{
+		return true;
+	}
+	
 	/**
 	 * THIS METHOD IS NOT PART OF THE WICKET API. DO NOT ATTEMPT TO OVERRIDE OR CALL IT.
 	 * 
@@ -331,7 +338,7 @@ public abstract class Link<T> extends AbstractLink implements ILinkListener, IGe
 	 */
 	protected CharSequence getURL()
 	{
-		return urlFor(ILinkListener.INTERFACE, new PageParameters());
+		return urlFor(new PageParameters());
 	}
 
 	/**
