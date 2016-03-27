@@ -338,7 +338,7 @@ public abstract class Link<T> extends AbstractLink implements IRequestListener, 
 	 */
 	protected CharSequence getURL()
 	{
-		return urlFor(new PageParameters());
+		return urlForListener(new PageParameters());
 	}
 
 	/**

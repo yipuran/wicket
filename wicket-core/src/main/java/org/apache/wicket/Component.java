@@ -3324,7 +3324,7 @@ public abstract class Component
 	}
 
 	/**
-	 * Gets a URL for the listener interface on a behavior (e.g. IBehaviorListener on
+	 * Gets a URL for the listener interface on a behavior (e.g. IRequestBehaviorListener on
 	 * AjaxPagingNavigationBehavior).
 	 * 
 	 * @param behaviour
@@ -3335,7 +3335,7 @@ public abstract class Component
 	 *            The parameters that should be rendered into the urls
 	 * @return The URL
 	 */
-	public final CharSequence urlFor(final Behavior behaviour, final PageParameters parameters)
+	public final CharSequence urlForListener(final Behavior behaviour, final PageParameters parameters)
 	{
 		int id = getBehaviorId(behaviour);
 		IRequestHandler handler = createRequestHandler(parameters, id);
@@ -3379,15 +3379,15 @@ public abstract class Component
 	}
 
 	/**
-	 * Gets a URL for the listener interface (e.g. ILinkListener).
+	 * Gets a URL for this {@link IRequestListener}.
 	 * 
 	 * @see RequestCycle#urlFor(IRequestHandler)
 	 * 
 	 * @param parameters
-	 *            The parameters that should be rendered into the urls
+	 *            The parameters that should be rendered into the URL
 	 * @return The URL
 	 */
-	public final CharSequence urlFor(final PageParameters parameters)
+	public final CharSequence urlForListener(final PageParameters parameters)
 	{
 		IRequestHandler handler = createRequestHandler(parameters, null);
 		return getRequestCycle().urlFor(handler);

@@ -1086,7 +1086,7 @@ public class BaseWicketTester
 	{
 		Args.notNull(link, "link");
 
-		Url url = Url.parse(link.urlFor(new PageParameters()).toString());
+		Url url = Url.parse(link.urlForListener(new PageParameters()).toString());
 		return transform(url).toString();
 	}
 
@@ -2025,7 +2025,7 @@ public class BaseWicketTester
 		Form<?> form = (Form<?>)getComponentFromLastRenderedPage(path);
 		Url url = Url.parse(
 			form.getRootForm()
-				.urlFor(new PageParameters())
+				.urlForListener(new PageParameters())
 				.toString(), Charset.forName(request.getCharacterEncoding()));
 
 		// make url absolute
