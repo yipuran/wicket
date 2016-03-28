@@ -183,12 +183,6 @@ public abstract class Link<T> extends AbstractLink implements IRequestListener, 
 		return Lambdas.link(id, onClick);
 	}
 
-	@Override
-	public boolean includeRenderCount()
-	{
-		return true;
-	}
-	
 	/**
 	 * THIS METHOD IS NOT PART OF THE WICKET API. DO NOT ATTEMPT TO OVERRIDE OR CALL IT.
 	 * 
