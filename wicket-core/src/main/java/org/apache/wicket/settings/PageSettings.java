@@ -46,8 +46,8 @@ public class PageSettings
 	private boolean recreateBookmarkablePagesAfterExpiry = true;
 
 	/**
-	 * determines whether component's listener interface can be executed
-	 * when its owner page is freshly created after expiration
+	 * determines whether an {@link IRequestListener} can be executed
+	 * when its owning page is freshly created after expiration
 	 */
 	private boolean callListenerInterfaceAfterExpiry = false;
 
