@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Request handler that invokes the listener interface on component and renders page afterwards.
+ * Request handler that invokes an {@link IRequestListener} on component or behavior and renders page afterwards.
  *
  * @author Matej Knopp
  */
@@ -57,7 +57,6 @@ public class ListenerInterfaceRequestHandler
 	 * Construct.
 	 *
 	 * @param pageComponentProvider
-	 * @param listenerInterface
 	 * @param behaviorIndex
 	 */
 	public ListenerInterfaceRequestHandler(IPageAndComponentProvider pageComponentProvider, Integer behaviorIndex)
@@ -72,7 +71,6 @@ public class ListenerInterfaceRequestHandler
 	 * Construct.
 	 *
 	 * @param pageComponentProvider
-	 * @param listenerInterface
 	 */
 	public ListenerInterfaceRequestHandler(PageAndComponentProvider pageComponentProvider)
 	{
@@ -198,7 +196,7 @@ public class ListenerInterfaceRequestHandler
 			if (LOG.isDebugEnabled())
 			{
 				LOG.debug(
-					"A ListenerInterface assigned to '{}' is executed on an expired stateful page. "
+					"An IRequestListener assigned to '{}' is executed on an expired stateful page. "
 						+ "Scheduling re-create of the page and ignoring the listener interface...",
 					getComponentPath());
 			}
