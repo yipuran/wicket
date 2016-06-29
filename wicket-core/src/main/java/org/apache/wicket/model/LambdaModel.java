@@ -16,6 +16,9 @@
  */
 package org.apache.wicket.model;
 
+import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.wicket.lambda.WicketBiConsumer;
@@ -33,7 +36,7 @@ import org.apache.wicket.util.lang.Args;
  *
  * @param <T> The type of the Model Object
  */
-public class LambdaModel<T> implements IModel<T>
+public class LambdaModel<T> implements IObjectClassAwareModel<T>
 {
 	private static final long serialVersionUID = 1L;
 
@@ -63,6 +66,12 @@ public class LambdaModel<T> implements IModel<T>
 	public void setObject(T t)
 	{
 		setter.accept(t);
+	}
+
+	@Override
+	public Class<T> getObjectClass()
+	{
+		return getReturnType(getter);
 	}
 
 	@Override
@@ -151,6 +160,12 @@ public class LambdaModel<T> implements IModel<T>
 			private static final long serialVersionUID = 1L;
 
 			@Override
+			public Class<T> getObjectClass()
+			{
+				return getReturnType(getter);
+			}
+
+			@Override
 			public void detach() {
 				target.detach();
 			}
@@ -202,9 +217,45 @@ public class LambdaModel<T> implements IModel<T>
 			private static final long serialVersionUID = 1L;
 
 			@Override
+			public Class<T> getObjectClass()
+			{
+				return getReturnType(getter);
+			}
+
+			@Override
 			public void detach() {
 				target.detach();
 			}
 		};
+	}
+
+	/**
+	 * Get the return type of a {@link WicketSupplier} or {@link WicketFunction}.
+	 *
+	 * @param lambda
+	 * @return return type or {@code null}
+	 *
+	 * @see http://benjiweber.co.uk/blog/2015/08/04/lambda-type-references/
+	 */
+	@SuppressWarnings("unchecked")
+	static <T> Class<T> getReturnType(Object lambda)
+	{
+		try
+		{
+			Method replaceMethod = lambda.getClass().getDeclaredMethod("writeReplace");
+			replaceMethod.setAccessible(true);
+
+			SerializedLambda serialized = (SerializedLambda)replaceMethod.invoke(lambda);
+
+			Class<?> implClass = Class.forName(serialized.getImplClass().replaceAll("/", "."));
+
+			return (Class<T>)Arrays.asList(implClass.getDeclaredMethods()).stream()
+				.filter(method -> Objects.equals(method.getName(), serialized.getImplMethodName()))
+				.findFirst().get().getReturnType();
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 }

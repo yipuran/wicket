@@ -111,6 +111,8 @@ public class LambdaModelTest
 		personNameModel.setObject(personName);
 		assertThat(personNameModel.getObject(), is(personName));
 
+		assertEquals(String.class, ((IObjectClassAwareModel<?>)personNameModel).getObjectClass());
+
 		serialize(personNameModel, personName);
 	}
 
