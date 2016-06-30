@@ -235,7 +235,7 @@ public class LambdaModel<T> implements IObjectClassAwareModel<T>
 	 * @param lambda
 	 * @return return type or {@code null}
 	 *
-	 * @see http://benjiweber.co.uk/blog/2015/08/04/lambda-type-references/
+	 * @see <a href="http://benjiweber.co.uk/blog/2015/08/04/lambda-type-references/">lambda-type-references</a>
 	 */
 	@SuppressWarnings("unchecked")
 	static <T> Class<T> getReturnType(Object lambda)
@@ -247,7 +247,7 @@ public class LambdaModel<T> implements IObjectClassAwareModel<T>
 
 			SerializedLambda serialized = (SerializedLambda)replaceMethod.invoke(lambda);
 
-			Class<?> implClass = Class.forName(serialized.getImplClass().replaceAll("/", "."));
+			Class<?> implClass = Class.forName(serialized.getImplClass().replace('/', '.'));
 
 			return (Class<T>)Arrays.asList(implClass.getDeclaredMethods()).stream()
 				.filter(method -> Objects.equals(method.getName(), serialized.getImplMethodName()))
