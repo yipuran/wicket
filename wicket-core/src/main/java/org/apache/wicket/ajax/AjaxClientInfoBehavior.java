@@ -68,7 +68,7 @@ public class AjaxClientInfoBehavior extends AbstractAjaxTimerBehavior
 		RequestCycle requestCycle = RequestCycle.get();
 		IRequestParameters requestParameters = requestCycle.getRequest().getRequestParameters();
 
-		WebClientInfo clientInfo = new WebClientInfo(requestCycle);
+		WebClientInfo clientInfo = newWebClientInfo(requestCycle);
 		Session.get().setClientInfo(clientInfo);
 
 		ClientProperties properties = clientInfo.getProperties();
@@ -76,6 +76,11 @@ public class AjaxClientInfoBehavior extends AbstractAjaxTimerBehavior
 		properties.read(requestParameters);
 
 		onClientInfo(target, clientInfo);
+	}
+
+	protected WebClientInfo newWebClientInfo(RequestCycle requestCycle)
+	{
+		return new WebClientInfo(requestCycle);
 	}
 
 	/**

@@ -22,8 +22,11 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 /**
  * This page uses a form post right after the page has loaded in the browser, using JavaScript or
@@ -70,17 +73,26 @@ public class BrowserInfoPage extends WebPage
 		return false;
 	}
 
+	protected WebClientInfo newWebClientInfo(RequestCycle requestCycle)
+	{
+		return new WebClientInfo(requestCycle);
+	}
+
 	/**
 	 * Adds components.
 	 */
 	private void initComps()
 	{
-		IModel<ClientProperties> properties = new IModel<ClientProperties>()
+		IModel<ClientProperties> properties = new LoadableDetachableModel<ClientProperties>()
 		{
 			@Override
-			public ClientProperties getObject()
+			protected ClientProperties load()
 			{
-				return WebSession.get().getClientInfo().getProperties();
+				WebClientInfo clientInfo = newWebClientInfo(getRequestCycle());
+
+				WebSession.get().setClientInfo(clientInfo);
+
+				return clientInfo.getProperties();
 			}
 		};
 
@@ -104,6 +116,11 @@ public class BrowserInfoPage extends WebPage
 		add(browserInfoForm);
 	}
 	
+	protected ClientProperties newClientInfo()
+	{
+		return WebSession.get().getClientInfo().getProperties();
+	}
+
 	private static class ContinueLink extends Link<ClientProperties> {
 
 		public ContinueLink(String id, IModel<ClientProperties> properties)

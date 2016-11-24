@@ -64,8 +64,7 @@ public class BrowserInfoForm extends GenericPanel<ClientProperties>
 	 */
 	protected Form<ClientProperties> createForm(String componentId, IModel<ClientProperties> properties)
 	{
-		Form<ClientProperties> form = new Form<ClientProperties>(componentId,
-				new CompoundPropertyModel<ClientProperties>(properties))
+		Form<ClientProperties> form = new Form<ClientProperties>(componentId, properties)
 		{
 			private static final long serialVersionUID = 1L;
 

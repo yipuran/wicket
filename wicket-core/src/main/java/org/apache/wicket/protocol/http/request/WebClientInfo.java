@@ -52,7 +52,7 @@ public class WebClientInfo extends ClientInfo
 	private final String userAgent;
 
 	/** Client properties object. */
-	private final ClientProperties properties = new ClientProperties();
+	private final ClientProperties properties;
 
 	/**
 	 * Construct.
@@ -79,7 +79,10 @@ public class WebClientInfo extends ClientInfo
 		super();
 
 		this.userAgent = userAgent;
+
+		properties = newClientProperties();
 		properties.setRemoteAddress(getRemoteAddr(requestCycle));
+
 		init();
 	}
 
@@ -91,6 +94,11 @@ public class WebClientInfo extends ClientInfo
 	public final ClientProperties getProperties()
 	{
 		return properties;
+	}
+
+	protected ClientProperties newClientProperties()
+	{
+		return new ClientProperties();
 	}
 
 	/**
@@ -219,8 +227,8 @@ public class WebClientInfo extends ClientInfo
 
 			if (userAgent.contains("version/"))
 			{
-				// e.g.: Mozilla/5.0 (Windows; U; Windows NT 6.1; sv-SE) AppleWebKit/533.19.4
-// (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4
+				// e.g.: Mozilla/5.0 (Windows; U; Windows NT 6.1; sv-SE) AppleWebKit/533.19
+				// (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4
 				setMajorMinorVersionByPattern("version/(\\d+)\\.(\\d+)");
 			}
 		}
@@ -239,7 +247,7 @@ public class WebClientInfo extends ClientInfo
 			if (properties.isBrowserMozillaFirefox())
 			{
 				// e.g.: Mozilla/5.0 (X11; U; Linux i686; pl-PL; rv:1.9.0.2) Gecko/20121223
-// Ubuntu/9.25 (jaunty) Firefox/3.8
+				// Ubuntu/9.25 (jaunty) Firefox/3.8
 				setMajorMinorVersionByPattern("firefox/(\\d+)\\.(\\d+)");
 			}
 		}
