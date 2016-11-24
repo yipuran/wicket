@@ -16,12 +16,9 @@
  */
 package org.apache.wicket.markup.html.pages;
 
-import java.util.Locale;
-
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -75,25 +72,11 @@ public class BrowserInfoForm extends GenericPanel<ClientProperties>
 			@Override
 			protected void onSubmit()
 			{
+				getModelObject().read(getRequest().getPostParameters());
+
 				afterSubmit();
 			}
 		};
-		form.add(new ReadOnlyTextField<String>("navigatorAppName"));
-		form.add(new ReadOnlyTextField<String>("navigatorAppVersion"));
-		form.add(new ReadOnlyTextField<String>("navigatorAppCodeName"));
-		form.add(new ReadOnlyTextField<Boolean>("navigatorCookieEnabled"));
-		form.add(new ReadOnlyTextField<Boolean>("navigatorJavaEnabled"));
-		form.add(new ReadOnlyTextField<String>("navigatorLanguage"));
-		form.add(new ReadOnlyTextField<String>("navigatorPlatform"));
-		form.add(new ReadOnlyTextField<String>("navigatorUserAgent"));
-		form.add(new ReadOnlyTextField<String>("screenWidth"));
-		form.add(new ReadOnlyTextField<String>("screenHeight"));
-		form.add(new ReadOnlyTextField<String>("screenColorDepth"));
-		form.add(new ReadOnlyTextField<String>("utcOffset"));
-		form.add(new ReadOnlyTextField<String>("utcDSTOffset"));
-		form.add(new ReadOnlyTextField<String>("browserWidth"));
-		form.add(new ReadOnlyTextField<String>("browserHeight"));
-		form.add(new ReadOnlyTextField<String>("hostname"));
 		return form;
 	}
 
@@ -115,25 +98,5 @@ public class BrowserInfoForm extends GenericPanel<ClientProperties>
 	public String getFormMarkupId()
 	{
 		return form.getMarkupId();
-	}
-	
-	private static final class ReadOnlyTextField<T> extends TextField<T> {
-
-		public ReadOnlyTextField(String id)
-		{
-			super(id);
-		}
-
-		@Override
-		protected String getModelValue()
-		{
-			return "";
-		}
-		
-		@Override
-		public Locale getLocale()
-		{
-			return Locale.ENGLISH;
-		}
 	}
 }

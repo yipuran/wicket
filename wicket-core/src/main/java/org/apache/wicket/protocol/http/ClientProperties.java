@@ -23,6 +23,7 @@ import java.util.TimeZone;
 import javax.servlet.http.Cookie;
 
 import org.apache.wicket.markup.html.pages.BrowserInfoPage;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.util.io.IClusterable;
@@ -777,4 +778,46 @@ public class ClientProperties implements IClusterable
 		return b.toString();
 	}
 
+	/**
+	 * Read parameters.
+	 * 
+	 * @param parameters
+	 *            parameters sent from browser
+	 */
+	public void read(IRequestParameters parameters)
+	{
+		String navigatorAppName = parameters.getParameterValue("navigatorAppName").toString("N/A");
+		String navigatorAppVersion = parameters.getParameterValue("navigatorAppVersion").toString("N/A");
+		String navigatorAppCodeName = parameters.getParameterValue("navigatorAppCodeName").toString("N/A");
+		boolean navigatorCookieEnabled = parameters.getParameterValue("navigatorCookieEnabled").toBoolean(false);
+		Boolean navigatorJavaEnabled = parameters.getParameterValue("navigatorJavaEnabled").toBoolean(false);
+		String navigatorLanguage = parameters.getParameterValue("navigatorLanguage").toString("N/A");
+		String navigatorPlatform = parameters.getParameterValue("navigatorPlatform").toString("N/A");
+		String navigatorUserAgent = parameters.getParameterValue("navigatorUserAgent").toString("N/A");
+		int screenWidth = parameters.getParameterValue("screenWidth").toInt(-1);
+		int screenHeight = parameters.getParameterValue("screenHeight").toInt(-1);
+		int screenColorDepth = parameters.getParameterValue("screenColorDepth").toInt(-1);
+		String utcOffset = parameters.getParameterValue("utcOffset").toString(null);
+		String utcDSTOffset = parameters.getParameterValue("utcDSTOffset").toString(null);
+		int browserWidth = parameters.getParameterValue("browserWidth").toInt(-1);
+		int browserHeight = parameters.getParameterValue("browserHeight").toInt(-1);
+		String hostname = parameters.getParameterValue("hostname").toString("N/A");
+
+		setNavigatorAppCodeName(navigatorAppCodeName);
+		setNavigatorAppName(navigatorAppName);
+		setNavigatorAppVersion(navigatorAppVersion);
+		setNavigatorCookieEnabled(navigatorCookieEnabled);
+		setNavigatorJavaEnabled(navigatorJavaEnabled);
+		setNavigatorLanguage(navigatorLanguage);
+		setNavigatorPlatform(navigatorPlatform);
+		setNavigatorUserAgent(navigatorUserAgent);
+		setScreenWidth(screenWidth);
+		setScreenHeight(screenHeight);
+		setScreenColorDepth(screenColorDepth);
+		setUtcOffset(utcOffset);
+		setUtcDSTOffset(utcDSTOffset);
+		setBrowserWidth(browserWidth);
+		setBrowserHeight(browserHeight);
+		setHostname(hostname);
+	}
 }

@@ -77,7 +77,11 @@
 				var info = Wicket.BrowserInfo.collect();
 				var i;
 				for (i in info) {
-					postbackForm[i].value = info[i];
+					var input = document.createElement('input');
+					input.type = 'text';
+					input.name = i;
+					input.value = info[i];
+					postbackForm.appendChild(input);
 				}
 
 				return postbackForm;
