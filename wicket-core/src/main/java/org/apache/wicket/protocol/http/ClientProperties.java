@@ -17,6 +17,7 @@
 package org.apache.wicket.protocol.http;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.TimeZone;
 
@@ -78,15 +79,14 @@ public class ClientProperties implements IClusterable
 	private int screenColorDepth = -1;
 	private int screenHeight = -1;
 	private int screenWidth = -1;
-	/** Cached timezone for repeating calls to {@link #getTimeZone()} */
-	private TimeZone timeZone;
 	private String utcDSTOffset;
-
 	private String utcOffset;
-
 	private String hostname;
 
 	private boolean javaScriptEnabled;
+
+	/** Cached timezone for repeating calls to {@link #getTimeZone()} */
+	private transient TimeZone timeZone;
 
 	/**
 	 * @return The browser height at the time it was measured
@@ -731,15 +731,19 @@ public class ClientProperties implements IClusterable
 	{
 		StringBuilder b = new StringBuilder();
 
-		Field[] fields = ClientProperties.class.getDeclaredFields();
+		Class<?> clazz = getClass();
+		while (clazz != Object.class) {
+			Field[] fields = clazz.getDeclaredFields();
 
-		for (Field field : fields)
-		{
-			// Ignore these fields
-			if (field.getName().equals("serialVersionUID") == false &&
-				field.getName().startsWith("class$") == false &&
-				field.getName().startsWith("timeZone") == false)
+			for (Field field : fields)
 			{
+				// Ignore these fields
+				if (Modifier.isStatic(field.getModifiers()) ||
+					Modifier.isTransient(field.getModifiers())  ||
+					field.isSynthetic())
+				{
+					continue;
+				}
 
 				field.setAccessible(true);
 
@@ -773,8 +777,9 @@ public class ClientProperties implements IClusterable
 					b.append('\n');
 				}
 			}
-		}
 
+			clazz = clazz.getSuperclass();
+		}
 		return b.toString();
 	}
 

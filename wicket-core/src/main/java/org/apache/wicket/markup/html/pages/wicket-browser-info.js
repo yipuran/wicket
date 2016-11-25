@@ -63,6 +63,11 @@
 				info.browserWidth =  window.innerWidth || document.body.offsetWidth;
 				info.browserHeight =  window.innerHeight || document.body.offsetHeight;
 				info.hostname =  window.location.hostname;
+
+				if (Wicket.BrowserInfo.collectExtraInfo) {
+					Wicket.BrowserInfo.collectExtraInfo(info);
+				}
+
 				return info;
 			},
 
