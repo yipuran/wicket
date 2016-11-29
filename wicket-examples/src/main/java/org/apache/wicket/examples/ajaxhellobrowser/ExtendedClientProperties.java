@@ -17,45 +17,33 @@
 package org.apache.wicket.examples.ajaxhellobrowser;
 
 import org.apache.wicket.protocol.http.ClientProperties;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.cycle.RequestCycle;
 
-
-public class ExtendedClientInfo extends WebClientInfo
+/**
+ * Showcase for extended properties of a client.
+ */
+public class ExtendedClientProperties extends ClientProperties
 {
-
-	public ExtendedClientInfo(RequestCycle requestCycle)
+	private String extendedProperty;
+	
+	public String getExtendedProperty()
 	{
-		super(requestCycle);
+		return extendedProperty;
 	}
 
+	public void setExtendedProperty(String extendedProperty)
+	{
+		this.extendedProperty = extendedProperty;
+	}
+
+	/**
+	 * Overridden to read additional properties.
+	 */
 	@Override
-	protected ClientProperties newClientProperties()
+	public void read(IRequestParameters parameters)
 	{
-		return new ExtendedClientProperties();
-	}
-
-	public class ExtendedClientProperties extends ClientProperties
-	{
-		private String extendedProperty;
+		super.read(parameters);
 		
-		public String getExtendedProperty()
-		{
-			return extendedProperty;
-		}
-
-		public void setExtendedProperty(String extendedProperty)
-		{
-			this.extendedProperty = extendedProperty;
-		}
-		
-		@Override
-		public void read(IRequestParameters parameters)
-		{
-			super.read(parameters);
-			
-			setExtendedProperty(parameters.getParameterValue("extendedProperty").toString("N/A"));
-		}
+		setExtendedProperty(parameters.getParameterValue("extendedProperty").toString("N/A"));
 	}
 }

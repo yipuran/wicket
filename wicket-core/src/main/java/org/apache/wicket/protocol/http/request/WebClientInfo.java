@@ -62,8 +62,19 @@ public class WebClientInfo extends ClientInfo
 	 */
 	public WebClientInfo(RequestCycle requestCycle)
 	{
+		this(requestCycle, new ClientProperties());
+	}
+
+	/**
+	 * Construct.
+	 * 
+	 * @param requestCycle
+	 *            the request cycle
+	 */
+	public WebClientInfo(RequestCycle requestCycle, ClientProperties properties)
+	{
 		this(requestCycle, ((ServletWebRequest)requestCycle.getRequest()).getContainerRequest()
-			.getHeader("User-Agent"));
+			.getHeader("User-Agent"), properties);
 	}
 
 	/**
@@ -76,11 +87,26 @@ public class WebClientInfo extends ClientInfo
 	 */
 	public WebClientInfo(final RequestCycle requestCycle, final String userAgent)
 	{
+		this(requestCycle, userAgent, new ClientProperties());
+	}
+
+	/**
+	 * Construct.
+	 * 
+	 * @param requestCycle
+	 *            the request cycle
+	 * @param userAgent
+	 *            The User-Agent string
+	 * @param properties
+	 *			  properties of client            
+	 */
+	public WebClientInfo(final RequestCycle requestCycle, final String userAgent, final ClientProperties properties)
+	{
 		super();
 
 		this.userAgent = userAgent;
 
-		properties = newClientProperties();
+		this.properties = properties;
 		properties.setRemoteAddress(getRemoteAddr(requestCycle));
 
 		init();
@@ -94,11 +120,6 @@ public class WebClientInfo extends ClientInfo
 	public final ClientProperties getProperties()
 	{
 		return properties;
-	}
-
-	protected ClientProperties newClientProperties()
-	{
-		return new ClientProperties();
 	}
 
 	/**

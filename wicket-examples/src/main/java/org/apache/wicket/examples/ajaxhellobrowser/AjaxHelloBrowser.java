@@ -97,7 +97,7 @@ public class AjaxHelloBrowser extends WicketExamplePage
 			@Override
 			protected WebClientInfo newWebClientInfo(RequestCycle requestCycle)
 			{
-				return new ExtendedClientInfo(requestCycle);
+				return new WebClientInfo(requestCycle, new ExtendedClientProperties());
 			}
 
 			@Override
