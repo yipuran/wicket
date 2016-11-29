@@ -791,38 +791,21 @@ public class ClientProperties implements IClusterable
 	 */
 	public void read(IRequestParameters parameters)
 	{
-		String navigatorAppName = parameters.getParameterValue("navigatorAppName").toString("N/A");
-		String navigatorAppVersion = parameters.getParameterValue("navigatorAppVersion").toString("N/A");
-		String navigatorAppCodeName = parameters.getParameterValue("navigatorAppCodeName").toString("N/A");
-		boolean navigatorCookieEnabled = parameters.getParameterValue("navigatorCookieEnabled").toBoolean(false);
-		Boolean navigatorJavaEnabled = parameters.getParameterValue("navigatorJavaEnabled").toBoolean(false);
-		String navigatorLanguage = parameters.getParameterValue("navigatorLanguage").toString("N/A");
-		String navigatorPlatform = parameters.getParameterValue("navigatorPlatform").toString("N/A");
-		String navigatorUserAgent = parameters.getParameterValue("navigatorUserAgent").toString("N/A");
-		int screenWidth = parameters.getParameterValue("screenWidth").toInt(-1);
-		int screenHeight = parameters.getParameterValue("screenHeight").toInt(-1);
-		int screenColorDepth = parameters.getParameterValue("screenColorDepth").toInt(-1);
-		String utcOffset = parameters.getParameterValue("utcOffset").toString(null);
-		String utcDSTOffset = parameters.getParameterValue("utcDSTOffset").toString(null);
-		int browserWidth = parameters.getParameterValue("browserWidth").toInt(-1);
-		int browserHeight = parameters.getParameterValue("browserHeight").toInt(-1);
-		String hostname = parameters.getParameterValue("hostname").toString("N/A");
-
-		setNavigatorAppCodeName(navigatorAppCodeName);
-		setNavigatorAppName(navigatorAppName);
-		setNavigatorAppVersion(navigatorAppVersion);
-		setNavigatorCookieEnabled(navigatorCookieEnabled);
-		setNavigatorJavaEnabled(navigatorJavaEnabled);
-		setNavigatorLanguage(navigatorLanguage);
-		setNavigatorPlatform(navigatorPlatform);
-		setNavigatorUserAgent(navigatorUserAgent);
-		setScreenWidth(screenWidth);
-		setScreenHeight(screenHeight);
-		setScreenColorDepth(screenColorDepth);
-		setUtcOffset(utcOffset);
-		setUtcDSTOffset(utcDSTOffset);
-		setBrowserWidth(browserWidth);
-		setBrowserHeight(browserHeight);
-		setHostname(hostname);
+		setNavigatorAppCodeName(parameters.getParameterValue("navigatorAppCodeName").toString("N/A"));
+		setNavigatorAppName(parameters.getParameterValue("navigatorAppName").toString("N/A"));
+		setNavigatorAppVersion(parameters.getParameterValue("navigatorAppVersion").toString("N/A"));
+		setNavigatorCookieEnabled(parameters.getParameterValue("navigatorCookieEnabled").toBoolean(false));
+		setNavigatorJavaEnabled(parameters.getParameterValue("navigatorJavaEnabled").toBoolean(false));
+		setNavigatorLanguage(parameters.getParameterValue("navigatorLanguage").toString("N/A"));
+		setNavigatorPlatform(parameters.getParameterValue("navigatorPlatform").toString("N/A"));
+		setNavigatorUserAgent(parameters.getParameterValue("navigatorUserAgent").toString("N/A"));
+		setScreenWidth(parameters.getParameterValue("screenWidth").toInt(-1));
+		setScreenHeight(parameters.getParameterValue("screenHeight").toInt(-1));
+		setScreenColorDepth(parameters.getParameterValue("screenColorDepth").toInt(-1));
+		setUtcOffset(parameters.getParameterValue("utcOffset").toString(null));
+		setUtcDSTOffset(parameters.getParameterValue("utcDSTOffset").toString(null));
+		setBrowserWidth(parameters.getParameterValue("browserWidth").toInt(-1));
+		setBrowserHeight(parameters.getParameterValue("browserHeight").toInt(-1));
+		setHostname(parameters.getParameterValue("hostname").toString("N/A"));
 	}
 }

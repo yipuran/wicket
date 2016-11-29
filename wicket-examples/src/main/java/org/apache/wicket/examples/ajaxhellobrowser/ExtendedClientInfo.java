@@ -38,11 +38,16 @@ public class ExtendedClientInfo extends WebClientInfo
 
 	public class ExtendedClientProperties extends ClientProperties
 	{
-		private String foo;
+		private String extendedProperty;
 		
-		public String getFoo()
+		public String getExtendedProperty()
 		{
-			return foo;
+			return extendedProperty;
+		}
+
+		public void setExtendedProperty(String extendedProperty)
+		{
+			this.extendedProperty = extendedProperty;
 		}
 		
 		@Override
@@ -50,7 +55,7 @@ public class ExtendedClientInfo extends WebClientInfo
 		{
 			super.read(parameters);
 			
-			foo = parameters.getParameterValue("foo").toString("N/A");
+			setExtendedProperty(parameters.getParameterValue("extendedProperty").toString("N/A"));
 		}
 	}
 }

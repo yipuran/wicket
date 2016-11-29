@@ -22,7 +22,6 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.pages.BrowserInfoForm;
-import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -66,14 +65,11 @@ public class AjaxClientInfoBehavior extends AbstractAjaxTimerBehavior
 		stop(target);
 
 		RequestCycle requestCycle = RequestCycle.get();
+
 		IRequestParameters requestParameters = requestCycle.getRequest().getRequestParameters();
-
 		WebClientInfo clientInfo = newWebClientInfo(requestCycle);
+		clientInfo.getProperties().read(requestParameters);
 		Session.get().setClientInfo(clientInfo);
-
-		ClientProperties properties = clientInfo.getProperties();
-
-		properties.read(requestParameters);
 
 		onClientInfo(target, clientInfo);
 	}

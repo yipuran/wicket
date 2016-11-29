@@ -89,7 +89,7 @@ public class AjaxHelloBrowser extends WicketExamplePage
 			{
 				super.renderHead(component, response);
 
-				String script = "Wicket.BrowserInfo.collectExtraInfo = function(info) { info.foo = 'FOO'; };";
+				String script = "Wicket.BrowserInfo.collectExtraInfo = function(info) { info.extendedProperty = 'This property was read extra.'; };";
 
 				response.render(JavaScriptHeaderItem.forScript(script, "extended-client-info"));
 			}

@@ -49,7 +49,7 @@ public class BrowserInfoPage extends WebPage
 	private static final long serialVersionUID = 1L;
 
 	private BrowserInfoForm browserInfoForm;
-
+	
 	/**
 	 * Bookmarkable constructor.
 	 */
@@ -83,20 +83,24 @@ public class BrowserInfoPage extends WebPage
 	 */
 	private void initComps()
 	{
+		IModel<WebClientInfo> info = new LoadableDetachableModel<WebClientInfo>() {
+			@Override
+			protected WebClientInfo load()
+			{
+				return newWebClientInfo(getRequestCycle());
+			}			
+		};
+
 		IModel<ClientProperties> properties = new LoadableDetachableModel<ClientProperties>()
 		{
 			@Override
 			protected ClientProperties load()
 			{
-				WebClientInfo clientInfo = newWebClientInfo(getRequestCycle());
-
-				WebSession.get().setClientInfo(clientInfo);
-
-				return clientInfo.getProperties();
+				return info.getObject().getProperties();
 			}
 		};
 
-		add(new ContinueLink("link", properties));
+		add(new ContinueLink("link", info));
 
 		browserInfoForm = new BrowserInfoForm("postback", properties)
 		{
@@ -106,6 +110,8 @@ public class BrowserInfoPage extends WebPage
 			protected void afterSubmit()
 			{
 				getModelObject().setJavaScriptEnabled(true);
+
+				WebSession.get().setClientInfo(info.getObject());
 
 				continueToOriginalDestination();
 
@@ -121,11 +127,11 @@ public class BrowserInfoPage extends WebPage
 		return WebSession.get().getClientInfo().getProperties();
 	}
 
-	private static class ContinueLink extends Link<ClientProperties> {
+	private static class ContinueLink extends Link<WebClientInfo> {
 
-		public ContinueLink(String id, IModel<ClientProperties> properties)
+		public ContinueLink(String id, IModel<WebClientInfo> info)
 		{
-			super(id, properties);
+			super(id, info);
 		}
 
 		@Override
@@ -139,7 +145,9 @@ public class BrowserInfoPage extends WebPage
 		@Override
 		public void onClick()
 		{
-			getModelObject().setJavaScriptEnabled(false);
+			getModelObject().getProperties().setJavaScriptEnabled(false);
+
+			WebSession.get().setClientInfo(getModelObject());
 
 			continueToOriginalDestination();
 
