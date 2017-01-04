@@ -29,6 +29,8 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.time.Duration;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Ajax download.
  * 
@@ -62,7 +64,7 @@ public class AjaxDownloadPage extends BasePage
 				// simulate delay
 				try
 				{
-					Thread.sleep(5000);
+					TimeUnit.MILLISECONDS.sleep(5000);
 				}
 				catch (InterruptedException e)
 				{
@@ -71,7 +73,7 @@ public class AjaxDownloadPage extends BasePage
 				return new StringResourceStream("downloaded via ajax");
 			};
 			
-		}.setFileName("file").setContentDisposition(ContentDisposition.ATTACHMENT).setCacheDuration(Duration.NONE);
+		}.setFileName("File-from-IResource.txt").setContentDisposition(ContentDisposition.ATTACHMENT).setCacheDuration(Duration.NONE);
 		
 		final AjaxDownload download = new AjaxDownload(resource) {
 			
@@ -115,7 +117,7 @@ public class AjaxDownloadPage extends BasePage
 				// simulate delay
 				try
 				{
-					Thread.sleep(2000);
+					TimeUnit.MILLISECONDS.sleep(2000);
 				}
 				catch (InterruptedException e)
 				{
@@ -211,7 +213,7 @@ public class AjaxDownloadPage extends BasePage
 	public static class StaticResource extends ResourceStreamResource {
 
 		StaticResource() {
-			setFileName("file");
+			setFileName("File-from-ResourceReference");
 			setContentDisposition(ContentDisposition.ATTACHMENT);
 			setCacheDuration(Duration.NONE);
 		}
@@ -230,13 +232,13 @@ public class AjaxDownloadPage extends BasePage
 			// simulate delay
 			try
 			{
-				Thread.sleep(5000);
+				TimeUnit.MILLISECONDS.sleep(5000);
 			}
 			catch (InterruptedException e)
 			{
 			}
 			
-			return new StringResourceStream("downloaded via ajax with reference");
+			return new StringResourceStream("downloaded via ajax with resource reference");
 		}
 	}
 }

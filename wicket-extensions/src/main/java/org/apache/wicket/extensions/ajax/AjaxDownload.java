@@ -29,6 +29,7 @@ import org.apache.wicket.ajax.json.JsonFunction;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
 import org.apache.wicket.request.http.WebResponse;
@@ -37,6 +38,7 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
+import org.apache.wicket.util.lang.Args;
 
 /**
  * Download resources via Ajax.
@@ -57,18 +59,18 @@ import org.apache.wicket.resource.JQueryPluginResourceReference;
  * });
  * </pre>
  * 
- * @see 
+ * @author svenmeier
  */
 public class AjaxDownload extends AbstractDefaultAjaxBehavior
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Name of parameter used to transfer the download identifier to the resource.
-	 * 
+	 *
 	 * @see #markCompleted(Attributes)
 	 */
 	private static final String RESOURCE_PARAMETER_NAME = "wicket-ajaxdownload";
-
-	private static final long serialVersionUID = 1L;
 
 	private static final ResourceReference JS = new JQueryPluginResourceReference(
 		AjaxDownload.class, "wicket-ajaxdownload.js");
@@ -87,6 +89,7 @@ public class AjaxDownload extends AbstractDefaultAjaxBehavior
 	 */
 	public AjaxDownload(IResource resource)
 	{
+		Args.notNull(resource, "resource");
 		this.resourceBehavior = new ResourceBehavior(resource);
 		this.resourceReference = null;
 	}
@@ -122,7 +125,7 @@ public class AjaxDownload extends AbstractDefaultAjaxBehavior
 	{
 		this.resourceBehavior = null;
 
-		this.resourceReference = reference;
+		this.resourceReference = Args.notNull(reference, "reference");
 		this.resourceParameters = resourceParameters;
 	}
 
@@ -242,20 +245,21 @@ public class AjaxDownload extends AbstractDefaultAjaxBehavior
 	 */
 	private class ResourceBehavior extends Behavior implements IResourceListener
 	{
-		private IResource resource;
+		private final IResource resource;
 
-		public ResourceBehavior(IResource resource)
+		private ResourceBehavior(IResource resource)
 		{
-			this.resource = resource;
+			this.resource = Args.notNull(resource, "resource");
 		}
 
 		@Override
 		public void onResourceRequested()
 		{
-			((WebResponse)RequestCycle.get().getResponse()).addCookie(cookie(getName()));
+			final RequestCycle requestCycle = RequestCycle.get();
+			final Response response = requestCycle.getResponse();
+			((WebResponse) response).addCookie(cookie(getName()));
 
-			Attributes a = new Attributes(RequestCycle.get().getRequest(),
-				RequestCycle.get().getResponse(), null);
+			Attributes a = new Attributes(requestCycle.getRequest(), response, null);
 
 			resource.respond(a);
 		}
