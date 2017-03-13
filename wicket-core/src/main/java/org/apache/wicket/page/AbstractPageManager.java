@@ -87,6 +87,20 @@ public abstract class AbstractPageManager implements IPageManager
 		return page;
 	}
 
+	/**
+	 * Removes a page from the {@link org.apache.wicket.pageStore.IPageStore} and
+	 * {@link org.apache.wicket.pageStore.IDataStore}. Any attempt to access it later
+	 * will lead to {@link org.apache.wicket.protocol.http.PageExpiredException}
+	 *
+	 * @param page The page instance to remove from the stores
+	 */
+	public void removePage(final IManageablePage page) {
+		if (page != null)
+		{
+			getRequestAdapter().removePage(page);
+		}
+	}
+
 	@Override
 	public void newSessionCreated()
 	{
@@ -96,12 +110,18 @@ public abstract class AbstractPageManager implements IPageManager
 	@Override
 	public void touchPage(IManageablePage page)
 	{
-		getRequestAdapter().touch(page);
+		if (page != null)
+		{
+			getRequestAdapter().touch(page);
+		}
 	}
 
 	@Override
 	public void untouchPage(IManageablePage page)
 	{
-		getRequestAdapter().untouch(page);
+		if (page != null)
+		{
+			getRequestAdapter().untouch(page);
+		}
 	}
 }

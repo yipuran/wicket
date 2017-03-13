@@ -50,6 +50,13 @@ public class PageManagerDecorator implements IPageManager
 		return delegate.getPage(id);
 	}
 
+	public void removePage(final IManageablePage page) {
+		if (delegate instanceof AbstractPageManager)
+		{
+			((AbstractPageManager) delegate).removePage(page);
+		}
+	}
+
 	@Override
 	public void touchPage(IManageablePage page)
 	{
