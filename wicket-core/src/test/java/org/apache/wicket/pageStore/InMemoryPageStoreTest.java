@@ -14,12 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.wicket;
+package org.apache.wicket.pageStore;
 
-import java.util.function.Supplier;
+import org.apache.wicket.serialize.ISerializer;
 
-import org.apache.wicket.page.IPageManager;
-
-public interface IPageManagerProvider extends Supplier<IPageManager>
+/**
+ * Tests for {@link InMemoryPageStore}
+ */
+public class InMemoryPageStoreTest extends AbstractPageStoreTest
 {
+	@Override
+	protected IPageStore createPageStore(ISerializer serializer, int maxEntries)
+	{
+		return new InMemoryPageStore("test", maxEntries);
+	}
 }

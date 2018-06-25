@@ -50,8 +50,6 @@ public class StoreSettings
 
 	private static final int DEFAULT_ASYNCHRONOUS_QUEUE_CAPACITY = 100;
 
-	private int inmemoryCacheSize = DEFAULT_CACHE_SIZE;
-
 	private Bytes maxSizePerSession = DEFAULT_MAX_SIZE_PER_SESSION;
 
 	private File fileStoreFolder = null;
@@ -67,30 +65,6 @@ public class StoreSettings
 	 */
 	public StoreSettings(final Application application)
 	{
-	}
-
-	/**
-	 * @return the number of page instances which will be stored in the application scoped cache for
-	 *         faster retrieval
-	 */
-	public int getInmemoryCacheSize()
-	{
-		return inmemoryCacheSize;
-	}
-
-	/**
-	 * Sets the maximum number of page instances which will be stored in the application scoped
-	 * second level cache for faster retrieval
-	 *
-	 * @param inmemoryCacheSize
-	 *            the maximum number of page instances which will be held in the application scoped
-	 *            cache
-	 * @return {@code this} object for chaining
-	 */
-	public StoreSettings setInmemoryCacheSize(int inmemoryCacheSize)
-	{
-		this.inmemoryCacheSize = inmemoryCacheSize;
-		return this;
 	}
 
 	/**

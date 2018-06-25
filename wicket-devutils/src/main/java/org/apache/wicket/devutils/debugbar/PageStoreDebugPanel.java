@@ -18,20 +18,16 @@ package org.apache.wicket.devutils.debugbar;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
-import org.apache.wicket.core.util.lang.WicketObjects;
-import org.apache.wicket.devutils.inspector.InspectorPage;
+import org.apache.wicket.devutils.diskstore.PageStorePage;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.pageStore.IPersistentPageStore;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.util.lang.Bytes;
 
 /**
- * A panel that adds a link to the inspector to the debug bar.
- * 
- * @author Jeremy Thomerson <jthomerson@apache.org>
+ * A panel that adds a link to persisted pages to the debug bar.
  */
-public class InspectorDebugPanel extends StandardDebugPanel
+public class PageStoreDebugPanel extends StandardDebugPanel
 {
 	private static final long serialVersionUID = 1L;
 
@@ -43,9 +39,8 @@ public class InspectorDebugPanel extends StandardDebugPanel
 		@Override
 		public Component createComponent(final String id, final DebugBar debugBar)
 		{
-			return new InspectorDebugPanel(id);
+			return new PageStoreDebugPanel(id);
 		}
-
 	};
 
 	/**
@@ -54,7 +49,7 @@ public class InspectorDebugPanel extends StandardDebugPanel
 	 * @param id
 	 *          The component id
 	 */
-	public InspectorDebugPanel(final String id)
+	public PageStoreDebugPanel(final String id)
 	{
 		super(id);
 	}
@@ -62,13 +57,13 @@ public class InspectorDebugPanel extends StandardDebugPanel
 	@Override
 	protected Class<? extends Page> getLinkPageClass()
 	{
-		return InspectorPage.class;
+		return PageStorePage.class;
 	}
 
 	@Override
 	protected ResourceReference getImageResourceReference()
 	{
-		return new PackageResourceReference(InspectorPage.class, "bug.png");
+		return new PackageResourceReference(PageStoreDebugPanel.class, "harddrive.png");
 	}
 
 	@Override
@@ -81,22 +76,9 @@ public class InspectorDebugPanel extends StandardDebugPanel
 			@Override
 			public String getObject()
 			{
-				Page enclosingPage = getPage();
-				long pageSize = WicketObjects.sizeof(enclosingPage);
-				Bytes pageSizeInBytes = (pageSize > -1 ? Bytes.bytes(pageSize) : null);
-				String pageSizeAsString = pageSizeInBytes != null ? pageSizeInBytes.toString()
-					: "unknown";
-
-				return "Page: " + pageSizeAsString;
+				IPersistentPageStore store = PageStorePage.getPersistentPageStore();
+				return String.format("Persisted: %s", store == null ? "N/A" : store.getTotalSize());
 			}
 		};
-	}
-
-	@Override
-	protected PageParameters getLinkPageParameters()
-	{
-		PageParameters params = new PageParameters();
-		params.add("pageId", getPage().getId());
-		return params;
 	}
 }

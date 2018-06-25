@@ -16,96 +16,79 @@
  */
 package org.apache.wicket.pageStore;
 
-import java.io.Serializable;
-
 import org.apache.wicket.page.IManageablePage;
 
 /**
- * {@link IPageStore} role is to mediate the storing and loading of pages done by {@link IDataStore}
- * s. {@link IPageStore} may pre-process the pages before passing them to
- * {@link IDataStore#storeData(String, int, byte[])} and to post-process them after
- * {@link IDataStore#getData(String, int)}.
- * 
- * @see IDataStore
+ * A store of pages
  */
 public interface IPageStore
 {
 	/**
+	 * This method must be called before any attempt to call
+	 * {@link #addPage(IPageContext, IManageablePage)} asynchronously, as done by
+	 * {@link AsynchronousPageStore}.
+	 * 
+	 * @return whether {@link #addPage(IPageContext, IManageablePage)} may be called asynchronously,
+	 *         default is <code>false</code>
+	 */
+	default boolean canBeAsynchronous(IPageContext context)
+	{
+		return false;
+	}
+
+	/**
+	 * Stores the page-
+	 * 
+	 * @param context
+	 *            the context of the page
+	 * @param id
+	 *            the id of the page.
+	 */
+	void addPage(IPageContext context, IManageablePage page);
+
+	/**
+	 * Removes a page from storage.
+	 * 
+	 * @param context
+	 *            the context of the page
+	 * @param id
+	 *            the id of the page.
+	 */
+	void removePage(IPageContext context, IManageablePage page);
+
+	/**
+	 * All pages should be removed from storage for the given context.
+	 * 
+	 * @param context
+	 *            the context of the pages
+	 */
+	void removeAllPages(IPageContext context);
+
+	/**
+	 * Restores a page from storage.
+	 * 
+	 * @param context
+	 *            the context of the page
+	 * @param id
+	 *            the id of the page.
+	 * @return the page
+	 */
+	IManageablePage getPage(IPageContext context, int id);
+
+	/**
+	 * Detach from the current context.
+	 * 
+	 * @param context
+	 *            the context of the pages
+	 */
+	default void detach(IPageContext context)
+	{
+	}
+
+	/**
 	 * Destroy the store.
 	 */
-	void destroy();
-
-	/**
-	 * Restores a page from the persistent layer.
-	 * 
-	 * @param sessionId
-	 *            The session of the page that must be removed
-	 * @param pageId
-	 *            The id of the page.
-	 * @return The page
-	 */
-	IManageablePage getPage(String sessionId, int pageId);
-
-	/**
-	 * Removes a page from the persistent layer.
-	 * 
-	 * @param sessionId
-	 *            The session of the page that must be removed
-	 * @param pageId
-	 *            The id of the page.
-	 */
-	void removePage(String sessionId, int pageId);
-
-	/**
-	 * Stores the page to a persistent layer. The page should be stored under the id and the version
-	 * number.
-	 * 
-	 * @param sessionId
-	 *            The session of the page that must be removed
-	 * @param page
-	 *            The page to store
-	 */
-	void storePage(String sessionId, IManageablePage page);
-
-	/**
-	 * The page store should cleanup all the pages for that sessionid.
-	 * 
-	 * @param sessionId
-	 *            The session of the page that must be removed
-	 */
-	void unbind(String sessionId);
-
-	/**
-	 * Process the page before the it gets serialized. The page can be either real page instance or
-	 * object returned by {@link #restoreAfterSerialization(Serializable)}.
-	 * 
-	 * @param sessionId
-	 *            The session of the page that must be removed
-	 * @param page
-	 * @return The Page itself or a SerializedContainer for that page
-	 */
-	Serializable prepareForSerialization(String sessionId, Serializable page);
-
-	/**
-	 * This method should restore the serialized page to intermediate object that can be converted
-	 * to real page instance using {@link #convertToPage(Object)}.
-	 * 
-	 * @param serializable
-	 * @return Page
-	 */
-	Object restoreAfterSerialization(Serializable serializable);
-
-	/**
-	 * Converts a page representation to an instance of {@link IManageablePage}
-	 * 
-	 * @param page
-	 *            some kind of page representation
-	 * @return page
-	 */
-	IManageablePage convertToPage(Object page);
-	
-	/**
-	 * @return whether the implementation can be wrapped in {@link AsynchronousPageStore}
-	 */
-	boolean canBeAsynchronous();
+	default void destroy()
+	{
+	}
 }

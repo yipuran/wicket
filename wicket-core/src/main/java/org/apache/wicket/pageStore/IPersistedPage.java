@@ -14,36 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.wicket.jmx;
+package org.apache.wicket.pageStore;
 
-import org.apache.wicket.pageStore.DiskPageStore;
+import java.io.Serializable;
+
+import org.apache.wicket.util.lang.Bytes;
 
 /**
- * JMX MBean for Application's StoreSettings
+ * Information about a persisted page in an {@link IPersistentPageStore}.
+ * 
+ * @see IPersistentPageStore#getPersistentPages(String, int)
  */
-public interface StoreSettingsMBean
+public interface IPersistedPage extends Serializable
 {
+	/**
+	 * Id of page.
+	 */
+	int getPageId();
 
 	/**
-	 * @return maximum page size. After this size is exceeded, the {@link DiskPageStore} will start
-	 *         saving the pages at the beginning of file.
+	 * Size of page.
 	 */
-	long getMaxSizePerSession();
+	Bytes getPageSize();
 
 	/**
-	 * @return the location of the folder where {@link DiskPageStore} will store the files with page
-	 *         instances per session
+	 * Type of page.
 	 */
-	String getFileStoreFolder();
-
-	/**
-	 * @return the capacity of the queue used to store the pages which will be stored asynchronously
-	 */
-	int getAsynchronousQueueCapacity();
-
-	/**
-	 * @return {@code true} when the HTTP worker thread doesn't wait for the storing of the page's
-	 *         bytes in {@link IDataStore}
-	 */
-	boolean isAsynchronous();
+	String getPageType();
 }

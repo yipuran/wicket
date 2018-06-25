@@ -20,15 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.wicket.page.IManageablePage;
-import org.apache.wicket.page.IPageManager;
+import org.apache.wicket.pageStore.IPageContext;
 import org.apache.wicket.pageStore.IPageStore;
 
-/**
- * Simple {@link IPageManager} used for testing.
- * 
- * @author Matej Knopp
- */
-public class MockPageManager implements IPageManager
+public class MockPageStore implements IPageStore
 {
 	private final Map<Integer, IManageablePage> pages = new HashMap<>();
 
@@ -39,36 +34,27 @@ public class MockPageManager implements IPageManager
 	}
 
 	@Override
-	public IManageablePage getPage(int id)
+	public IManageablePage getPage(IPageContext context, int id)
 	{
 		return pages.get(id);
 	}
 
 	@Override
-	public void removePage(final IManageablePage page) {
-		pages.remove(page.getPageId());
+	public void removePage(IPageContext context, final IManageablePage page) {
+		if (page != null) {
+			pages.remove(page.getPageId());
+		}
 	}
 
 	@Override
-	public void addPage(IManageablePage page)
-	{
-		pages.put(page.getPageId(), page);
-	}
-
-	@Override
-	public void removeAllPages()
+	public void removeAllPages(IPageContext context)
 	{
 		pages.clear();
 	}
 
 	@Override
-	public void detach()
+	public void addPage(IPageContext context, IManageablePage page)
 	{
-	}
-
-	@Override
-	public IPageStore getPageStore()
-	{
-		throw new UnsupportedOperationException();
+		pages.put(page.getPageId(), page);
 	}
 }

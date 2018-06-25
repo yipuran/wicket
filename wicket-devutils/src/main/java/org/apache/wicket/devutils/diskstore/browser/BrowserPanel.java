@@ -20,15 +20,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.wicket.PageReference;
+import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.devutils.diskstore.PageStorePage;
+import org.apache.wicket.devutils.inspector.InspectorPage;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.pageStore.DefaultPageContext;
+import org.apache.wicket.pageStore.IPageContext;
+import org.apache.wicket.pageStore.IPersistedPage;
+import org.apache.wicket.pageStore.IPersistentPageStore;
 import org.apache.wicket.util.time.Duration;
 
 /**
@@ -47,10 +65,24 @@ public class BrowserPanel extends Panel
 	{
 		super(id);
 
+		final Label storeLabel = new Label("store", () -> {
+			IPersistentPageStore store = PageStorePage.getPersistentPageStore();
+			
+			if (store == null) {
+				return "N/A";
+			}
+			
+			return String.format("%s - %s", store.getClass().getName(), store.getTotalSize());
+		});
+		storeLabel.setOutputMarkupId(true);
+		add(storeLabel);
+		
 		final DropDownChoice<String> sessionsSelector = createSessionsSelector("sessions");
+		sessionsSelector.setOutputMarkupId(true);
 		add(sessionsSelector);
 
-		final BrowserTable table = createTable("table", sessionsSelector.getModel());
+		final DataTable<IPersistedPage, String> table = createTable("table", sessionsSelector.getModel());
+		table.setOutputMarkupId(true);
 		add(table);
 
 		AjaxFallbackLink<Void> refreshLink = new AjaxFallbackLink<Void>("refresh")
@@ -68,7 +100,7 @@ public class BrowserPanel extends Panel
 			@Override
 			public void onClick(Optional<AjaxRequestTarget> targetOptional)
 			{
-				sessionsSelector.setModelObject(getCurrentSession().getObject());
+				sessionsSelector.setModelObject(getCurrentSessionIdentifier());
 				targetOptional.ifPresent(target -> target.add(sessionsSelector, table));
 			}
 
@@ -86,6 +118,18 @@ public class BrowserPanel extends Panel
 			@Override
 			protected void onUpdate(AjaxRequestTarget target)
 			{
+				target.add(storeLabel);
+				target.add(sessionsSelector);
+				target.add(table);
+			}
+		});
+
+		add(new AbstractAjaxTimerBehavior(Duration.seconds(5)) {
+
+			@Override
+			protected void onTimer(AjaxRequestTarget target)
+			{
+				target.add(storeLabel);
 				target.add(table);
 			}
 		});
@@ -93,39 +137,64 @@ public class BrowserPanel extends Panel
 
 	private DropDownChoice<String> createSessionsSelector(String id)
 	{
-		IModel<String> defaultSession = getCurrentSession();
-
 		DropDownChoice<String> sessionsSelector = new DropDownChoice<String>("sessions",
-			defaultSession, new SessionsProviderModel());
-
+			Model.of(getCurrentSessionIdentifier()), new SessionIdentifiersModel());
 
 		return sessionsSelector;
 	}
 
-	private IModel<String> getCurrentSession()
+	private String getCurrentSessionIdentifier()
 	{
-		return Model.of(getSession().getId());
+		IPersistentPageStore store = PageStorePage.getPersistentPageStore();
+		if (store == null) {
+			return null;
+		}
+
+		IPageContext context = new DefaultPageContext(Session.get());
+		
+		return store.getSessionIdentifier(context);
 	}
 
-	private BrowserTable createTable(String id, IModel<String> sessionId)
+	private DataTable<IPersistedPage, String> createTable(String id, IModel<String> sessionId)
 	{
-		PageWindowProvider provider = new PageWindowProvider(sessionId);
+		PersistedPagesProvider provider = new PersistedPagesProvider(sessionId);
 
-		List<IColumn<PageWindowDescription, String>> columns = new ArrayList<>();
+		List<IColumn<IPersistedPage, String>> columns = new ArrayList<>();
 
-		PageWindowColumn pageIdColumn = new PageWindowColumn(Model.of("Id"), "id");
-		columns.add(pageIdColumn);
+		columns.add(new AbstractColumn<IPersistedPage, String>(Model.of("Id"), "pageId")
+		{
+			@Override
+			public void populateItem(Item<ICellPopulator<IPersistedPage>> cellItem, String componentId, IModel<IPersistedPage> rowModel)
+			{
+				cellItem.add(new Link<IPersistedPage>(componentId, rowModel)
+				{
+					@Override
+					protected void onComponentTag(ComponentTag tag)
+					{
+						tag.setName("a");
+						
+						super.onComponentTag(tag);
+					}
+					
+					@Override
+					public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+					{
+						replaceComponentTagBody(markupStream, openTag, "" + getModelObject().getPageId());
+					}
+					
+					@Override
+					public void onClick()
+					{
+						setResponsePage(new InspectorPage(new PageReference(getModelObject().getPageId())));
+					}
+				});
+			}
+		});
+		columns.add(new PropertyColumn<>(Model.of("Type"), "pageType", "pageType"));
+		columns.add(new PropertyColumn<>(Model.of("Size"), "pageSize", "pageSize"));
 
-		PageWindowColumn pageNameColumn = new PageWindowColumn(Model.of("Name"), "name");
-		columns.add(pageNameColumn);
-
-		PageWindowColumn pageSizeColumn = new PageWindowColumn(Model.of("Size"), "size");
-		columns.add(pageSizeColumn);
-
-		BrowserTable browserTable = new BrowserTable(id, columns, provider);
+		DefaultDataTable<IPersistedPage, String> browserTable = new DefaultDataTable<>(id, columns, provider, 20);
 		browserTable.setOutputMarkupId(true);
-
-		browserTable.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(5)));
 
 		return browserTable;
 	}

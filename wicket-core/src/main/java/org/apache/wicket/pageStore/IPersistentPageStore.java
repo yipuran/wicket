@@ -14,36 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.wicket.jmx;
+package org.apache.wicket.pageStore;
 
-import org.apache.wicket.pageStore.DiskPageStore;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.wicket.util.lang.Bytes;
 
 /**
- * JMX MBean for Application's StoreSettings
+ * A store that can provide information about stored pages.  
  */
-public interface StoreSettingsMBean
+public interface IPersistentPageStore extends IPageStore
 {
 
 	/**
-	 * @return maximum page size. After this size is exceeded, the {@link DiskPageStore} will start
-	 *         saving the pages at the beginning of file.
+	 * Get the identifier for pages stored for the given context.
 	 */
-	long getMaxSizePerSession();
+	String getSessionIdentifier(IPageContext context);
 
 	/**
-	 * @return the location of the folder where {@link DiskPageStore} will store the files with page
-	 *         instances per session
+	 * Get the identifiers for all pages stored in all contexts.
 	 */
-	String getFileStoreFolder();
+	Set<String> getSessionIdentifiers();
 
 	/**
-	 * @return the capacity of the queue used to store the pages which will be stored asynchronously
+	 * Get information about all persisted pages with the given session identifier.
 	 */
-	int getAsynchronousQueueCapacity();
+	List<IPersistedPage> getPersistentPages(String sessionIdentifier);
 
 	/**
-	 * @return {@code true} when the HTTP worker thread doesn't wait for the storing of the page's
-	 *         bytes in {@link IDataStore}
+	 * Get total size of all stored pages.
+	 *  
+	 * @return
 	 */
-	boolean isAsynchronous();
+	Bytes getTotalSize();
 }

@@ -29,17 +29,16 @@ public abstract class AbstractPageStoreTest extends Assert
 	protected final String sessionId = "1234567890";
 	protected final int pageId = 123;
 	protected final ISerializer serializer = new JavaSerializer(getClass().getName());
-	protected final IDataStore dataStore = new NoopDataStore();
 	protected int maxEntries = 1;
 	protected IPageStore pageStore = null;
 
 	@Before
 	public void before()
 	{
-		pageStore = createPageStore(serializer, dataStore, maxEntries);
+		pageStore = createPageStore(serializer, maxEntries);
 	}
 
-	protected abstract IPageStore createPageStore(ISerializer serializer, IDataStore dataStore, int maxEntries);
+	protected abstract IPageStore createPageStore(ISerializer serializer, int maxEntries);
 
 	@After
 	public void after()
@@ -57,9 +56,11 @@ public abstract class AbstractPageStoreTest extends Assert
 	@Test
 	public void storePage()
 	{
-		pageStore.storePage(sessionId, new MockPage(pageId));
+		IPageContext context = new DummyPageContext(sessionId);
+		
+		pageStore.addPage(context, new MockPage(pageId));
 
-		assertNotNull(pageStore.getPage(sessionId, pageId));
+		assertNotNull(pageStore.getPage(context, pageId));
 	}
 
 	/**
@@ -68,46 +69,51 @@ public abstract class AbstractPageStoreTest extends Assert
 	@Test
 	public void storePage2()
 	{
+		IPageContext context = new DummyPageContext(sessionId);
 		int maxEntries = 10;
 
-		pageStore = createPageStore(serializer, dataStore, maxEntries);
+		pageStore = createPageStore(serializer, maxEntries);
 
-		pageStore.storePage(sessionId, new MockPage(pageId));
-		pageStore.storePage(sessionId, new MockPage(pageId));
+		pageStore.addPage(context, new MockPage(pageId));
+		pageStore.addPage(context, new MockPage(pageId));
 
-		assertNotNull(pageStore.getPage(sessionId, pageId));
+		assertNotNull(pageStore.getPage(context, pageId));
 
-		pageStore.removePage(sessionId, pageId);
+		pageStore.removePage(context, new MockPage(pageId));
 
-		assertNull(pageStore.getPage(sessionId, pageId));
+		assertNull(pageStore.getPage(context, pageId));
 	}
 
 	@Test
 	public void removePage()
 	{
-		pageStore.storePage(sessionId, new MockPage(pageId));
+		IPageContext context = new DummyPageContext(sessionId);
+		
+		pageStore.addPage(context, new MockPage(pageId));
 
-		assertNotNull(pageStore.getPage(sessionId, pageId));
+		assertNotNull(pageStore.getPage(context, pageId));
 
-		pageStore.removePage(sessionId, pageId);
+		pageStore.removePage(context, new MockPage(pageId));
 
-		assertNull(pageStore.getPage(sessionId, pageId));
+		assertNull(pageStore.getPage(context, pageId));
 	}
 
 	/**
-	 * Verify that at most {@code maxEntries} per session can be put in the cache
+	 * Verify that at most {@code maxEntries} per session can be put in the store
 	 */
 	@Test
 	public void maxSizeSameSession()
 	{
-		pageStore.storePage(sessionId, new MockPage(pageId));
+		IPageContext context = new DummyPageContext(sessionId);
+		
+		pageStore.addPage(context, new MockPage(pageId));
 
-		assertNotNull(pageStore.getPage(sessionId, pageId));
+		assertNotNull(pageStore.getPage(context, pageId));
 
 		int pageId2 = 234;
-		pageStore.storePage(sessionId, new MockPage(pageId2));
-		assertNull(pageStore.getPage(sessionId, pageId));
-		assertNotNull(pageStore.getPage(sessionId, pageId2));
+		pageStore.addPage(context, new MockPage(pageId2));
+		assertNull(pageStore.getPage(context, pageId));
+		assertNotNull(pageStore.getPage(context, pageId2));
 	}
 
 	/**
@@ -117,15 +123,16 @@ public abstract class AbstractPageStoreTest extends Assert
 	@Test
 	public void maxSizeDifferentSessions()
 	{
-		String sessionId2 = "0987654321";
+		IPageContext context = new DummyPageContext(sessionId);
+		IPageContext context2 = new DummyPageContext("0987654321");
 
-		pageStore.storePage(sessionId, new MockPage(pageId));
+		pageStore.addPage(context, new MockPage(pageId));
 
-		assertNotNull(pageStore.getPage(sessionId, pageId));
+		assertNotNull(pageStore.getPage(context, pageId));
 
-		pageStore.storePage(sessionId2, new MockPage(pageId));
+		pageStore.addPage(context2, new MockPage(pageId));
 
-		assertNull(pageStore.getPage(sessionId, pageId));
-		assertNotNull(pageStore.getPage(sessionId2, pageId));
+		assertNotNull(pageStore.getPage(context, pageId));
+		assertNotNull(pageStore.getPage(context2, pageId));
 	}
 }

@@ -275,7 +275,7 @@ public abstract class Page extends MarkupContainer
 		}
 
 		final IPageManager pageManager = getSession().getPageManager();
-		if (!getFlag(FLAG_IS_DIRTY) && (isVersioned() && pageManager.supportsVersioning() ||
+		if (!getFlag(FLAG_IS_DIRTY) && (isVersioned() ||
 
 		// we need to get pageId for new page instances even when the page doesn't need
 		// versioning, otherwise pages override each other in the page store and back button
@@ -287,7 +287,7 @@ public abstract class Page extends MarkupContainer
 
 			if (isInitialization == false)
 			{
-				pageManager.touchPage(this);
+				pageManager.addPage(this);
 			}
 		}
 	}
@@ -298,7 +298,7 @@ public abstract class Page extends MarkupContainer
 		super.onInitialize();
 
 		final IPageManager pageManager = getSession().getPageManager();
-		pageManager.touchPage(this);
+		pageManager.addPage(this);
 	}
 
 	/**
@@ -825,7 +825,7 @@ public abstract class Page extends MarkupContainer
 			getSession().getSessionStore().getSessionId(RequestCycle.get().getRequest(), true);
 
 			// Add/touch the response page in the session.
-			getSession().getPageManager().touchPage(this);
+			getSession().getPageManager().addPage(this);
 		}
 
 		if (getApplication().getDebugSettings().isOutputMarkupContainerClassName())
@@ -936,7 +936,7 @@ public abstract class Page extends MarkupContainer
 		setStatelessHint(false);
 
 		// make sure the page will be available on following request
-		getSession().getPageManager().touchPage(this);
+		getSession().getPageManager().addPage(this);
 
 		return new PageReference(numericId);
 	}

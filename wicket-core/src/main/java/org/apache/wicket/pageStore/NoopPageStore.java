@@ -14,61 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.wicket.mock;
-
-import java.util.HashMap;
-import java.util.Map;
+package org.apache.wicket.pageStore;
 
 import org.apache.wicket.page.IManageablePage;
-import org.apache.wicket.page.IPageManager;
-import org.apache.wicket.pageStore.IPageStore;
 
 /**
- * Simple {@link IPageManager} used for testing.
- * 
- * @author Matej Knopp
+ * A non-storage of pages.
  */
-public class MockPageManager implements IPageManager
+public class NoopPageStore implements IPageStore
 {
-	private final Map<Integer, IManageablePage> pages = new HashMap<>();
 
 	@Override
-	public void destroy()
+	public boolean canBeAsynchronous(IPageContext context)
 	{
-		pages.clear();
+		return true;
 	}
-
+	
 	@Override
-	public IManageablePage getPage(int id)
-	{
-		return pages.get(id);
-	}
-
-	@Override
-	public void removePage(final IManageablePage page) {
-		pages.remove(page.getPageId());
-	}
-
-	@Override
-	public void addPage(IManageablePage page)
-	{
-		pages.put(page.getPageId(), page);
-	}
-
-	@Override
-	public void removeAllPages()
-	{
-		pages.clear();
-	}
-
-	@Override
-	public void detach()
+	public void addPage(IPageContext context, IManageablePage page)
 	{
 	}
 
 	@Override
-	public IPageStore getPageStore()
+	public void removePage(IPageContext context, IManageablePage page)
 	{
-		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void removeAllPages(IPageContext context)
+	{
+	}
+
+	@Override
+	public IManageablePage getPage(IPageContext context, int id)
+	{
+		return null;
 	}
 }

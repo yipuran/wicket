@@ -55,10 +55,9 @@ import org.apache.wicket.markup.parser.filter.WicketMessageTagHandler;
 import org.apache.wicket.markup.resolver.HtmlHeaderResolver;
 import org.apache.wicket.markup.resolver.WicketContainerResolver;
 import org.apache.wicket.markup.resolver.WicketMessageResolver;
-import org.apache.wicket.page.DefaultPageManagerContext;
 import org.apache.wicket.page.IPageManager;
-import org.apache.wicket.page.IPageManagerContext;
-import org.apache.wicket.pageStore.IDataStore;
+import org.apache.wicket.pageStore.DefaultPageContext;
+import org.apache.wicket.pageStore.IPageContext;
 import org.apache.wicket.pageStore.IPageStore;
 import org.apache.wicket.protocol.http.IRequestLogger;
 import org.apache.wicket.protocol.http.RequestLogger;
@@ -1355,11 +1354,6 @@ public abstract class Application implements UnboundListener, IEventSink
 	}
 
 	/**
-	 * Context for PageManager to interact with rest of Wicket
-	 */
-	private final IPageManagerContext pageManagerContext = new DefaultPageManagerContext();
-
-	/**
 	 * Returns an unsynchronized version of page manager
 	 * 
 	 * @return the page manager
@@ -1372,20 +1366,11 @@ public abstract class Application implements UnboundListener, IEventSink
 			{
 				if (pageManager == null)
 				{
-					pageManager = pageManagerProvider.apply(getPageManagerContext());
+					pageManager = pageManagerProvider.get();
 				}
 			}
 		}
 		return pageManager;
-	}
-
-	/**
-	 * 
-	 * @return the page manager context
-	 */
-	protected IPageManagerContext getPageManagerContext()
-	{
-		return pageManagerContext;
 	}
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1545,7 +1530,7 @@ public abstract class Application implements UnboundListener, IEventSink
 		{
 			session = newSession(requestCycle.getRequest(), requestCycle.getResponse());
 			ThreadContext.setSession(session);
-			internalGetPageManager().newSessionCreated();
+			internalGetPageManager().removeAllPages();
 			sessionListeners.onCreated(session);
 		}
 		else
@@ -1592,10 +1577,15 @@ public abstract class Application implements UnboundListener, IEventSink
 			@Override
 			public void onDetach(final RequestCycle requestCycle)
 			{
+				IPageManager pageManager;
+				
 				if (Session.exists())
 				{
-					Session.get().getPageManager().commitRequest();
+					pageManager = Session.get().getPageManager();
+				} else {
+					pageManager = internalGetPageManager();
 				}
+				pageManager.detach();
 
 				if (Application.exists())
 				{

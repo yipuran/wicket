@@ -14,61 +14,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.wicket.mock;
-
-import java.util.HashMap;
-import java.util.Map;
+package org.apache.wicket.pageStore;
 
 import org.apache.wicket.page.IManageablePage;
-import org.apache.wicket.page.IPageManager;
-import org.apache.wicket.pageStore.IPageStore;
+import org.apache.wicket.util.lang.Args;
 
 /**
- * Simple {@link IPageManager} used for testing.
- * 
- * @author Matej Knopp
+ * An {@link IPageStore} that delegates to another storage.
  */
-public class MockPageManager implements IPageManager
+public abstract class DelegatingPageStore implements IPageStore
 {
-	private final Map<Integer, IManageablePage> pages = new HashMap<>();
+	private IPageStore delegate;
+	
+	protected DelegatingPageStore(IPageStore delegate) {
+		this.delegate = Args.notNull(delegate, "delegate");
+	}
 
-	@Override
-	public void destroy()
+	public IPageStore getDelegate()
 	{
-		pages.clear();
+		return delegate;
+	}
+	
+	@Override
+	public void addPage(IPageContext context, IManageablePage page) {
+		delegate.addPage(context, page);
 	}
 
 	@Override
-	public IManageablePage getPage(int id)
-	{
-		return pages.get(id);
+	public void removePage(IPageContext context, IManageablePage page) {
+		delegate.removePage(context, page);
 	}
 
 	@Override
-	public void removePage(final IManageablePage page) {
-		pages.remove(page.getPageId());
+	public void removeAllPages(IPageContext context) {
+		delegate.removeAllPages(context);
+	}
+	
+	@Override
+	public IManageablePage getPage(IPageContext context, int id) {
+		return delegate.getPage(context, id);
 	}
 
 	@Override
-	public void addPage(IManageablePage page)
-	{
-		pages.put(page.getPageId(), page);
+	public void detach(IPageContext context) {
+		delegate.detach(context);
 	}
 
 	@Override
-	public void removeAllPages()
-	{
-		pages.clear();
-	}
-
-	@Override
-	public void detach()
-	{
-	}
-
-	@Override
-	public IPageStore getPageStore()
-	{
-		throw new UnsupportedOperationException();
+	public void destroy() {
+		delegate.destroy();
 	}
 }

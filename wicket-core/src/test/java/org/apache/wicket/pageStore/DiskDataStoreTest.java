@@ -16,6 +16,7 @@
  */
 package org.apache.wicket.pageStore;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.wicket.page.IManageablePage;
+import org.apache.wicket.serialize.java.JavaSerializer;
 import org.apache.wicket.settings.StoreSettings;
 import org.apache.wicket.util.SlowTests;
 import org.apache.wicket.util.lang.Bytes;
@@ -36,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Test for {@link DiskDataStore}.
  */
 @Category(SlowTests.class)
 public class DiskDataStoreTest extends Assert
@@ -59,20 +63,33 @@ public class DiskDataStoreTest extends Assert
 	private static final int SLEEP_MAX = 10;
 	private static final int THREAD_COUNT = 20;
 	private static final int READ_MODULO = 100;
+	
+	private static final ConcurrentHashMap<String, IPageContext> contexts = new ConcurrentHashMap<>();
+	
+	private static IPageContext getContext(String sessionId) {
+		IPageContext context = new DummyPageContext();
+		
+		IPageContext existing = contexts.putIfAbsent(sessionId, context);
+		return existing != null ? existing : context;
+	}
 
-	private static class File
+	private static class TaskPage implements IManageablePage
 	{
 		private final String sessionId;
-		private final int id;
+		
+		private int id;
 
-		private byte first;
-		private byte last;
-		private int length;
+		private byte[] data;
 
-		public File(String sessionId, int id)
+		public TaskPage(String sessionId, int id)
 		{
 			this.sessionId = sessionId;
+			
 			this.id = id;
+
+			int length = FILE_SIZE_MIN + random.nextInt(FILE_SIZE_MAX - FILE_SIZE_MIN);
+			data = new byte[length];
+			random.nextBytes(data);
 		}
 
 		public String getSessionId()
@@ -80,51 +97,54 @@ public class DiskDataStoreTest extends Assert
 			return sessionId;
 		}
 
-		public int getId()
+		public boolean check(TaskPage other)
 		{
-			return id;
-		}
-
-		public byte[] generateData()
-		{
-			length = FILE_SIZE_MIN + random.nextInt(FILE_SIZE_MAX - FILE_SIZE_MIN);
-			byte data[] = new byte[length];
-			random.nextBytes(data);
-			first = data[0];
-			last = data[data.length - 1];
-			return data;
-		}
-
-		public boolean checkData(byte data[])
-		{
-			if (data == null)
-			{
-				log.error("data[] should never be null");
-				return false;
-			}
-			if (data.length != length)
+			if (other.data.length != other.data.length)
 			{
 				log.error("data.length != length");
 				return false;
 			}
-			if (first != data[0])
+			if (other.id != other.id)
 			{
-				log.error("first != data[0]");
+				log.error("data.id != id");
 				return false;
 			}
-			if (last != data[data.length - 1])
+			if (other.sessionId != other.sessionId)
 			{
-				log.error("last != data[data.length - 1]");
+				log.error("data.sessionId != sessionId");
 				return false;
 			}
 			return true;
 		}
+
+		@Override
+		public boolean isPageStateless()
+		{
+			return false;
+		}
+
+		@Override
+		public int getPageId()
+		{
+			return id;
+		}
+
+		@Override
+		public void detach()
+		{
+		}
+
+		@Override
+		public boolean setFreezePageId(boolean freeze)
+		{
+			return false;
+		}
 	}
 
 	private final Map<String, AtomicInteger> sessionCounter = new ConcurrentHashMap<String, AtomicInteger>();
-	private final ConcurrentLinkedQueue<File> filesToSave = new ConcurrentLinkedQueue<File>();
-	private final ConcurrentLinkedQueue<File> filesToRead1 = new ConcurrentLinkedQueue<File>();
-	private final ConcurrentLinkedQueue<File> filesToRead2 = new ConcurrentLinkedQueue<File>();
+	private final ConcurrentLinkedQueue<TaskPage> pagesToSave = new ConcurrentLinkedQueue<TaskPage>();
+	private final ConcurrentLinkedQueue<TaskPage> filesToRead1 = new ConcurrentLinkedQueue<TaskPage>();
+	private final ConcurrentLinkedQueue<TaskPage> filesToRead2 = new ConcurrentLinkedQueue<TaskPage>();
 
 	private final AtomicInteger read1Count = new AtomicInteger(0);
 	private final AtomicInteger read2Count = new AtomicInteger(0);
@@ -164,15 +184,15 @@ public class DiskDataStoreTest extends Assert
 		for (int i = 0; i < FILES_COUNT; ++i)
 		{
 			String session = randomSessionId();
-			File file = new File(session, nextSessionId(session));
+			TaskPage file = new TaskPage(session, nextSessionId(session));
 			long now = System.nanoTime();
-			filesToSave.add(file);
+			pagesToSave.add(file);
 			long duration = System.nanoTime() - now;
 			saveTime.addAndGet((int)duration);
 		}
 	}
 
-	private IDataStore dataStore;
+	private IPageStore pageStore;
 
 	/**
 	 * Stores RuntimeException into a field.
@@ -205,21 +225,20 @@ public class DiskDataStoreTest extends Assert
 		@Override
 		protected void doRun()
 		{
-			File file;
+			TaskPage page;
 
-			while ((file = filesToSave.poll()) != null || saveCount.get() < FILES_COUNT)
+			while ((page = pagesToSave.poll()) != null || saveCount.get() < FILES_COUNT)
 			{
-				if (file != null)
+				if (page != null)
 				{
-					byte data[] = file.generateData();
-					dataStore.storeData(file.getSessionId(), file.getId(), data);
+					pageStore.addPage(getContext(page.getSessionId()), page);
 
 					if (saveCount.get() % READ_MODULO == 0)
 					{
-						filesToRead1.add(file);
+						filesToRead1.add(page);
 					}
 					saveCount.incrementAndGet();
-					bytesWritten.addAndGet(data.length);
+					bytesWritten.addAndGet(page.data.length);
 				}
 
 				try
@@ -242,20 +261,20 @@ public class DiskDataStoreTest extends Assert
 		@Override
 		protected void doRun()
 		{
-			File file;
-			while ((file = filesToRead1.poll()) != null || !saveDone.get())
+			TaskPage page;
+			while ((page = filesToRead1.poll()) != null || !saveDone.get())
 			{
-				if (file != null)
+				if (page != null)
 				{
-					byte bytes[] = dataStore.getData(file.getSessionId(), file.getId());
-					if (file.checkData(bytes) == false)
+					TaskPage other = (TaskPage)pageStore.getPage(getContext(page.getSessionId()), page.getPageId());
+					if (page.check(other) == false)
 					{
 						failures.incrementAndGet();
 						log.error("Detected error number: " + failures.get());
 					}
-					filesToRead2.add(file);
+					filesToRead2.add(page);
 					read1Count.incrementAndGet();
-					bytesRead.addAndGet(bytes.length);
+					bytesRead.addAndGet(other.data.length);
 				}
 
 				try
@@ -277,19 +296,19 @@ public class DiskDataStoreTest extends Assert
 		@Override
 		protected void doRun()
 		{
-			File file;
-			while ((file = filesToRead2.poll()) != null || !read1Done.get())
+			TaskPage page;
+			while ((page = filesToRead2.poll()) != null || !read1Done.get())
 			{
-				if (file != null)
+				if (page != null)
 				{
-					byte bytes[] = dataStore.getData(file.getSessionId(), file.getId());
-					if (file.checkData(bytes) == false)
+					TaskPage other = (TaskPage)pageStore.getPage(getContext(page.getSessionId()), page.getPageId());
+					if (page.check(other) == false)
 					{
 						failures.incrementAndGet();
 						log.error("Detected error number: " + failures.get());
 					}
 					read2Count.incrementAndGet();
-					bytesRead.addAndGet(bytes.length);
+					bytesRead.addAndGet(other.data.length);
 				}
 
 				try
@@ -356,7 +375,7 @@ public class DiskDataStoreTest extends Assert
 
 		for (String s : sessionCounter.keySet())
 		{
-			dataStore.removeData(s);
+			pageStore.removeAllPages(getContext(s));
 		}
 	}
 
@@ -369,15 +388,15 @@ public class DiskDataStoreTest extends Assert
 		generateFiles();
 
 		StoreSettings storeSettings = new StoreSettings(null);
-		java.io.File fileStoreFolder = storeSettings.getFileStoreFolder();
-
-		dataStore = new DiskDataStore("app1", fileStoreFolder, MAX_SIZE_PER_SESSION);
+		File fileStoreFolder = storeSettings.getFileStoreFolder();
 		int asynchronousQueueCapacity = storeSettings.getAsynchronousQueueCapacity();
-		dataStore = new AsynchronousDataStore(dataStore, asynchronousQueueCapacity);
+
+		pageStore = new DiskPageStore("app1", new JavaSerializer("app1"), fileStoreFolder, MAX_SIZE_PER_SESSION);
+		pageStore = new AsynchronousPageStore(pageStore, asynchronousQueueCapacity);
 
 		doTestDataStore();
 
-		dataStore.destroy();
+		pageStore.destroy();
 	}
 
 	/**
@@ -391,7 +410,7 @@ public class DiskDataStoreTest extends Assert
 	{
 		StoreSettings storeSettings = new StoreSettings(null);
 		java.io.File fileStoreFolder = storeSettings.getFileStoreFolder();
-		DiskDataStore store = new DiskDataStore("sessionFolderName", fileStoreFolder, MAX_SIZE_PER_SESSION);
+		DiskPageStore store = new DiskPageStore("sessionFolderName", new JavaSerializer("sessionFolderName"), fileStoreFolder, MAX_SIZE_PER_SESSION);
 
 		String sessionId = "abcdefg";
 		java.io.File sessionFolder = store.getSessionFolder(sessionId, true);
@@ -401,7 +420,7 @@ public class DiskDataStoreTest extends Assert
 		assertTrue(absolutePath.contains("1279"));
 		assertTrue(absolutePath.contains("abcdefg"));
 
-		DiskDataStore.SessionEntry sessionEntry = new DiskDataStore.SessionEntry(store, sessionId);
+		DiskPageStore.DiskData sessionEntry = new DiskPageStore.DiskData(store, sessionId);
 		sessionEntry.unbind();
 		// assert that the 'sessionId' folder and the parents two levels up are removed
 		assertFalse(sessionFolder.getParentFile().getParentFile().exists());

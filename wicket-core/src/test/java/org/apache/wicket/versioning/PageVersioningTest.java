@@ -22,13 +22,12 @@ import static org.junit.Assert.assertNotNull;
 import org.apache.wicket.IPageManagerProvider;
 import org.apache.wicket.Page;
 import org.apache.wicket.page.IPageManager;
-import org.apache.wicket.page.IPageManagerContext;
-import org.apache.wicket.page.PageStoreManager;
-import org.apache.wicket.pageStore.AsynchronousDataStore;
-import org.apache.wicket.pageStore.DefaultPageStore;
-import org.apache.wicket.pageStore.IDataStore;
+import org.apache.wicket.page.PageManager;
+import org.apache.wicket.pageStore.IPageStore;
+import org.apache.wicket.pageStore.InMemoryPageStore;
+import org.apache.wicket.pageStore.InSessionPageStore;
+import org.apache.wicket.pageStore.NoopPageStore;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.serialize.java.JavaSerializer;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.After;
 import org.junit.Before;
@@ -58,21 +57,10 @@ public class PageVersioningTest
 			@Override
 			protected IPageManagerProvider newTestPageManagerProvider()
 			{
-				return new IPageManagerProvider()
+				return () ->
 				{
-
-					@Override
-					public IPageManager apply(IPageManagerContext pageManagerContext)
-					{
-
-						final IDataStore dataStore = new InMemoryPageStore();
-						final AsynchronousDataStore asyncDS = new AsynchronousDataStore(dataStore,
-							100);
-						final DefaultPageStore pageStore = new DefaultPageStore(new JavaSerializer(
-							application.getApplicationKey()), asyncDS, 40);
-						return new PageStoreManager(application.getName(), pageStore,
-							pageManagerContext);
-					}
+					final IPageStore store = new InSessionPageStore(new NoopPageStore(), Integer.MAX_VALUE);
+					return new PageManager(store);
 				};
 			}
 
