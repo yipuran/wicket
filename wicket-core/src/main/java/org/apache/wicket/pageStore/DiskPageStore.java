@@ -188,6 +188,10 @@ public class DiskPageStore implements IPersistentPageStore
 		}
 	}
 
+	/**
+	 * Supports {@link SerializedPage}s too - for this to work the delegating
+	 * {@link IPageStore} must use the same {@link ISerializer} as this one.
+	 */
 	@Override
 	public void addPage(IPageContext context, IManageablePage page)
 	{
@@ -196,7 +200,12 @@ public class DiskPageStore implements IPersistentPageStore
 		{
 			log.debug("Storing data for page with id '{}' in session with id '{}'", page.getPageId(), context.getSessionId());
 			
-			byte[] data = serializer.serialize(page);
+			byte[] data;
+			if (page instanceof SerializedPage) {
+				data = ((SerializedPage)page).getData();
+			} else {
+				data = serializer.serialize(page);
+			}
 			
 			diskData.savePage(page.getPageId(), page.getClass(), data);
 		}

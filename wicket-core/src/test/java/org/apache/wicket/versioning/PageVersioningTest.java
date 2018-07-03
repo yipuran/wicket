@@ -26,8 +26,9 @@ import org.apache.wicket.page.PageManager;
 import org.apache.wicket.pageStore.IPageStore;
 import org.apache.wicket.pageStore.InMemoryPageStore;
 import org.apache.wicket.pageStore.InSessionPageStore;
-import org.apache.wicket.pageStore.NoopPageStore;
+import org.apache.wicket.pageStore.SerializingPageStore;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.serialize.java.JavaSerializer;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.After;
 import org.junit.Before;
@@ -59,7 +60,9 @@ public class PageVersioningTest
 			{
 				return () ->
 				{
-					final IPageStore store = new InSessionPageStore(new NoopPageStore(), Integer.MAX_VALUE);
+					InMemoryPageStore inMemory = new InMemoryPageStore("test", Integer.MAX_VALUE);
+					SerializingPageStore serializing = new SerializingPageStore(inMemory, new JavaSerializer("test"));
+					final IPageStore store = new InSessionPageStore(serializing, Integer.MAX_VALUE);
 					return new PageManager(store);
 				};
 			}

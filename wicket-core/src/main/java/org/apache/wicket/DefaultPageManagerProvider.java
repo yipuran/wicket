@@ -28,6 +28,7 @@ import org.apache.wicket.pageStore.InMemoryPageStore;
 import org.apache.wicket.pageStore.InSessionPageStore;
 import org.apache.wicket.pageStore.NoopPageStore;
 import org.apache.wicket.pageStore.RequestPageStore;
+import org.apache.wicket.pageStore.SerializingPageStore;
 import org.apache.wicket.serialize.ISerializer;
 import org.apache.wicket.settings.StoreSettings;
 import org.apache.wicket.util.lang.Args;
@@ -45,9 +46,10 @@ import org.apache.wicket.util.lang.Bytes;
  * <ul>
  * <li>{@link RequestPageStore} caching pages until end of the request</li>
  * <li>{@link InSessionPageStore} keeping the last accessed page in the session</li>
+ * <li>{@link SerializingPageStore} serializing all pages (so they are available for back-button </li>
  * <li>{@link InMemoryPageStore} keeping all pages</li>
  * </ul>
- * ... or if all pages should be kept in the session only:
+ * ... or if all pages should be kept in the session only without any serialization (no back-button support)
  * <ul>
  * <li>{@link RequestPageStore} caching pages until end of the request</li>
  * <li>{@link InSessionPageStore} keeping a limited count of pages in the session, e.g. 10</li>
