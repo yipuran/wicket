@@ -22,19 +22,24 @@ import org.apache.wicket.util.lang.Args;
 /**
  * A wrapper around a serialized page.
  * <p>
- * {@link IPageStore} might choose to use this representation of a page internally,
+ * An {@link IPageStore} might choose to use this representation of a page internally,
  * or accept it in {@link IPageStore#addPage(IPageContext, IManageablePage)}.
+ * 
+ * @see SerializingPageStore
  */
 class SerializedPage implements IManageablePage
 {
 
 	private final int pageId;
+	
+	private final String pageType;
 
 	private final byte[] data;
 
-	public SerializedPage(int pageId, byte[] data)
+	public SerializedPage(int pageId, String pageType, byte[] data)
 	{
 		this.pageId = pageId;
+		this.pageType = pageType;
 		this.data = Args.notNull(data, "data");
 	}
 
@@ -50,6 +55,11 @@ class SerializedPage implements IManageablePage
 		return pageId;
 	}
 
+	public String getPageType()
+	{
+		return pageType;
+	}
+	
 	public byte[] getData()
 	{
 		return data;

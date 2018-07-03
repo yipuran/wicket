@@ -56,8 +56,6 @@ import org.apache.wicket.markup.resolver.HtmlHeaderResolver;
 import org.apache.wicket.markup.resolver.WicketContainerResolver;
 import org.apache.wicket.markup.resolver.WicketMessageResolver;
 import org.apache.wicket.page.IPageManager;
-import org.apache.wicket.pageStore.DefaultPageContext;
-import org.apache.wicket.pageStore.IPageContext;
 import org.apache.wicket.pageStore.IPageStore;
 import org.apache.wicket.protocol.http.IRequestLogger;
 import org.apache.wicket.protocol.http.RequestLogger;
@@ -1344,8 +1342,11 @@ public abstract class Application implements UnboundListener, IEventSink
 	}
 
 	/**
+	 * Set the provider of an {@link IPageManager}.
 	 * 
 	 * @param provider
+	 * 
+	 * @see DefaultPageManagerProvider
 	 */
 	public final Application setPageManagerProvider(final IPageManagerProvider provider)
 	{

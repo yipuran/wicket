@@ -247,7 +247,7 @@ public class InSessionPageStore extends DelegatingPageStore
 					{
 						throw new IllegalStateException("SessionData#init() was not called");
 					}
-					pages.set(p,  new SerializedPage(page.getPageId(), serializer.serialize(page)));
+					pages.set(p,  new SerializedPage(page.getPageId(), page.getClass().getName(), serializer.serialize(page)));
 				}
 			}
 

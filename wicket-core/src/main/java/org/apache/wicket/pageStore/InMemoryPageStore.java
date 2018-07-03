@@ -179,7 +179,7 @@ public class InMemoryPageStore implements IPersistentPageStore
 		synchronized (data)
 		{
 			return StreamSupport.stream(data.spliterator(), false)
-				.map(page -> new MermoryPersistedPage(page, getSize(page)))
+				.map(page -> new PersistedPage(page, getSize(page)))
 				.collect(Collectors.toList());
 		}
 	}
@@ -315,7 +315,7 @@ public class InMemoryPageStore implements IPersistentPageStore
 		}
 	}
 	
-	private static class MermoryPersistedPage implements IPersistedPage
+	private static class PersistedPage implements IPersistedPage
 	{
 
 		private final int id;
@@ -324,10 +324,10 @@ public class InMemoryPageStore implements IPersistentPageStore
 
 		private final long size;
 
-		public MermoryPersistedPage(IManageablePage page, long size)
+		public PersistedPage(IManageablePage page, long size)
 		{
 			this.id = page.getPageId();
-			this.type = page.getClass().getName();
+			this.type = page instanceof SerializedPage ? ((SerializedPage)page).getPageType() : page.getClass().getName();
 			this.size = size;
 		}
 

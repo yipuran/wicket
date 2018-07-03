@@ -30,6 +30,7 @@ import org.apache.wicket.pageStore.NoopPageStore;
 import org.apache.wicket.pageStore.RequestPageStore;
 import org.apache.wicket.pageStore.SerializingPageStore;
 import org.apache.wicket.serialize.ISerializer;
+import org.apache.wicket.settings.FrameworkSettings;
 import org.apache.wicket.settings.StoreSettings;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.lang.Bytes;
@@ -47,14 +48,17 @@ import org.apache.wicket.util.lang.Bytes;
  * <li>{@link RequestPageStore} caching pages until end of the request</li>
  * <li>{@link InSessionPageStore} keeping the last accessed page in the session</li>
  * <li>{@link SerializingPageStore} serializing all pages (so they are available for back-button </li>
- * <li>{@link InMemoryPageStore} keeping all pages</li>
+ * <li>{@link InMemoryPageStore} keeping all pages in memory</li>
  * </ul>
- * ... or if all pages should be kept in the session only without any serialization (no back-button support)
+ * ... or if all pages should be kept in the session only, without any serialization (no back-button support though)
  * <ul>
  * <li>{@link RequestPageStore} caching pages until end of the request</li>
  * <li>{@link InSessionPageStore} keeping a limited count of pages in the session, e.g. 10</li>
  * <li>{@link NoopPageStore} discarding all exceeding pages</li>
  * </ul>
+ * For back-button support <em>at least one</em> store in the chain must create copies of added pages (usually through serialization),
+ * otherwise any following request will work on an identical page instance and the previous state of page is no longer accessible.  
+ * <p>
  * Other stores be may inserted ad libitum, e.g.
  * <ul>
  * <li>{@link GroupingPageStore} groups pages with their own maximum page limit</li>
@@ -91,8 +95,12 @@ public class DefaultPageManagerProvider implements IPageManagerProvider
 
 	/**
 	 * Get the {@link ISerializer} to use for serializing of pages.
+	 * <p>
+	 * By default the serializer of the applications {@link FrameworkSettings}.
 	 * 
 	 * @return how to serialize pages if needed for any {@link IPageStore}
+	 * 
+	 * @see FrameworkSettings#getSerializer()
 	 */
 	protected ISerializer getSerializer()
 	{
@@ -100,7 +108,7 @@ public class DefaultPageManagerProvider implements IPageManagerProvider
 	}
 
 	/**
-	 * Keep pages in the request until it is finished.
+	 * Cache pages in the request until it is finished.
 	 * 
 	 * @see RequestPageStore
 	 */
@@ -110,7 +118,7 @@ public class DefaultPageManagerProvider implements IPageManagerProvider
 	}
 
 	/**
-	 * After requests keep pages in the session.
+	 * Cache last page in the session for fast access.
 	 * 
 	 * @see InSessionPageStore
 	 */
@@ -139,7 +147,7 @@ public class DefaultPageManagerProvider implements IPageManagerProvider
 	}
 
 	/**
-	 * Keep pages persistent on disk.
+	 * Keep persistent copies of all pages, by default on disk.
 	 * 
 	 * @see DiskPageStore
 	 * @see StoreSettings#getMaxSizePerSession()
