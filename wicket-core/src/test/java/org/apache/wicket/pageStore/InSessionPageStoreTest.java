@@ -26,7 +26,7 @@ public class InSessionPageStoreTest extends AbstractPageStoreTest
 	@Override
 	protected IPageStore createPageStore(ISerializer serializer, int maxEntries)
 	{
-		return new InSessionPageStore(new NoopPageStore(), serializer, maxEntries);
+		return new InSessionPageStore(new NoopPageStore(), maxEntries, serializer);
 	}
 
 }

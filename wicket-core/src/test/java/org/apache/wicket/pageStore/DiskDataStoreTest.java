@@ -391,7 +391,7 @@ public class DiskDataStoreTest extends Assert
 		File fileStoreFolder = storeSettings.getFileStoreFolder();
 		int asynchronousQueueCapacity = storeSettings.getAsynchronousQueueCapacity();
 
-		pageStore = new DiskPageStore("app1", new JavaSerializer("app1"), fileStoreFolder, MAX_SIZE_PER_SESSION);
+		pageStore = new DiskPageStore("app1", fileStoreFolder, MAX_SIZE_PER_SESSION, new JavaSerializer("app1"));
 		pageStore = new AsynchronousPageStore(pageStore, asynchronousQueueCapacity);
 
 		doTestDataStore();
@@ -410,7 +410,7 @@ public class DiskDataStoreTest extends Assert
 	{
 		StoreSettings storeSettings = new StoreSettings(null);
 		java.io.File fileStoreFolder = storeSettings.getFileStoreFolder();
-		DiskPageStore store = new DiskPageStore("sessionFolderName", new JavaSerializer("sessionFolderName"), fileStoreFolder, MAX_SIZE_PER_SESSION);
+		DiskPageStore store = new DiskPageStore("sessionFolderName", fileStoreFolder, MAX_SIZE_PER_SESSION, new JavaSerializer("sessionFolderName"));
 
 		String sessionId = "abcdefg";
 		java.io.File sessionFolder = store.getSessionFolder(sessionId, true);

@@ -21,6 +21,7 @@ import java.io.File;
 import org.apache.wicket.page.IPageManager;
 import org.apache.wicket.page.PageManager;
 import org.apache.wicket.pageStore.AsynchronousPageStore;
+import org.apache.wicket.pageStore.CryptingPageStore;
 import org.apache.wicket.pageStore.DiskPageStore;
 import org.apache.wicket.pageStore.GroupingPageStore;
 import org.apache.wicket.pageStore.IPageStore;
@@ -40,24 +41,38 @@ import org.apache.wicket.util.lang.Bytes;
  * <ul>
  * <li>{@link RequestPageStore} caching pages until end of the request</li>
  * <li>{@link InSessionPageStore} keeping the last accessed page in the session</li>
- * <li>{@link AsynchronousPageStore} moving storage of pages to a worker thread (if enabled in {@link StoreSettings#isAsynchronous()})</li>
+ * <li>{@link AsynchronousPageStore} moving storage of pages to a worker thread (if enabled in
+ * {@link StoreSettings#isAsynchronous()})</li>
  * <li>{@link DiskPageStore} keeping all pages, configured according to {@link StoreSettings}</li>
  * </ul>
  * An alternative chain with all pages held in-memory could be:
  * <ul>
  * <li>{@link RequestPageStore} caching pages until end of the request</li>
  * <li>{@link InSessionPageStore} keeping the last accessed page in the session</li>
- * <li>{@link SerializingPageStore} serializing all pages (so they are available for back-button </li>
+ * <li>{@link AsynchronousPageStore} moving storage of pages to a worker thread</li>
+ * <li>{@link SerializingPageStore} serializing all pages (so they are available for
+ * back-button)</li>
  * <li>{@link InMemoryPageStore} keeping all pages in memory</li>
  * </ul>
- * ... or if all pages should be kept in the session only, without any serialization (no back-button support though)
+ * ... or if all pages should be kept in the session only, without any serialization (no back-button
+ * support though):
  * <ul>
  * <li>{@link RequestPageStore} caching pages until end of the request</li>
  * <li>{@link InSessionPageStore} keeping a limited count of pages in the session, e.g. 10</li>
  * <li>{@link NoopPageStore} discarding all exceeding pages</li>
  * </ul>
- * For back-button support <em>at least one</em> store in the chain must create copies of added pages (usually through serialization),
- * otherwise any following request will work on an identical page instance and the previous state of page is no longer accessible.  
+ * ... or if pages should be kept encrypted on disk:
+ * <ul>
+ * <li>{@link RequestPageStore} caching pages until end of the request</li>
+ * <li>{@link InSessionPageStore} keeping the last accessed page in the session</li>
+ * <li>{@link AsynchronousPageStore} moving storage of pages to a worker thread</li>
+ * <li>{@link SerializingPageStore} serializing all pages, as required by the following ...</li>
+ * <li>{@link CryptingPageStore} encrypting and decrypting all pages</li>
+ * <li>{@link DiskPageStore} without {@link ISerializer} as required by the previous</li>
+ * </ul>
+ * For back-button support <em>at least one</em> store in the chain must create copies of stored
+ * pages (usually through serialization), otherwise any following request will work on an identical
+ * page instance and the previous state of page is no longer accessible.
  * <p>
  * Other stores be may inserted ad libitum, e.g.
  * <ul>
@@ -89,7 +104,7 @@ public class DefaultPageManagerProvider implements IPageManagerProvider
 		store = newSessionStore(store);
 
 		store = newRequestStore(store);
-		
+
 		return new PageManager(store);
 	}
 
@@ -124,7 +139,7 @@ public class DefaultPageManagerProvider implements IPageManagerProvider
 	 */
 	protected IPageStore newSessionStore(IPageStore pageStore)
 	{
-		return new InSessionPageStore(pageStore, getSerializer(), 1);
+		return new InSessionPageStore(pageStore, 1, getSerializer());
 	}
 
 	/**
@@ -159,6 +174,6 @@ public class DefaultPageManagerProvider implements IPageManagerProvider
 		Bytes maxSizePerSession = storeSettings.getMaxSizePerSession();
 		File fileStoreFolder = storeSettings.getFileStoreFolder();
 
-		return new DiskPageStore(application.getName(), getSerializer(), fileStoreFolder, maxSizePerSession);
+		return new DiskPageStore(application.getName(), fileStoreFolder, maxSizePerSession, getSerializer());
 	}
 }

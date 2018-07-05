@@ -100,4 +100,9 @@ public class DummyPageContext implements IPageContext
 	{
 		requestData = null;
 	}
+	
+	public void clearSession() {
+		sessionAttributes.clear();
+		sessionData = null;
+	}
 }

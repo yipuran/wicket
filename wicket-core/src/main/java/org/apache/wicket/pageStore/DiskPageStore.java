@@ -58,11 +58,11 @@ import org.slf4j.LoggerFactory;
 public class DiskPageStore implements IPersistentPageStore
 {
 	private static final Logger log = LoggerFactory.getLogger(DiskPageStore.class);
-	
+
 	private static final String KEY = "wicket:DiskPageStore";
 
 	private static final String INDEX_FILE_NAME = "DiskDataStoreIndex";
-	
+
 	/**
 	 * A cache that holds all page stores.
 	 */
@@ -71,20 +71,50 @@ public class DiskPageStore implements IPersistentPageStore
 	private final String applicationName;
 
 	private final ISerializer serializer;
-	
+
 	private final Bytes maxSizePerSession;
-	
+
 	private final File fileStoreFolder;
 
 	private final ConcurrentMap<String, DiskData> diskDatas;
 
-	public DiskPageStore(String applicationName, ISerializer serializer, File fileStoreFolder, Bytes maxSizePerSession)
+	/**
+	 * Create a store that supports {@link SerializedPage}s only.
+	 * 
+	 * @param applicationName
+	 *            name of application
+	 * @param fileStoreFolder
+	 *            folder to store to
+	 * @param maxSizePerSession
+	 *            maximum size per session
+	 * 
+	 * @see SerializingPageStore
+	 */
+	public DiskPageStore(String applicationName, File fileStoreFolder, Bytes maxSizePerSession)
+	{
+		this(applicationName, fileStoreFolder, maxSizePerSession, null);
+	}
+
+	/**
+	 * Create a store to disk.
+	 * 
+	 * @param applicationName
+	 *            name of application
+	 * @param fileStoreFolder
+	 *            folder to store to
+	 * @param maxSizePerSession
+	 *            maximum size per session
+	 * @param serializer
+	 *            for serialization of pages
+	 */
+	public DiskPageStore(String applicationName, File fileStoreFolder, Bytes maxSizePerSession,
+		ISerializer serializer)
 	{
 		this.applicationName = Args.notNull(applicationName, "applicationName");
-		this.serializer = Args.notNull(serializer, "serializer");
 		this.maxSizePerSession = Args.notNull(maxSizePerSession, "maxSizePerSession");
 		this.fileStoreFolder = Args.notNull(fileStoreFolder, "fileStoreFolder");
-		
+		this.serializer = serializer; // optional
+
 		this.diskDatas = new ConcurrentHashMap<>();
 
 		try
@@ -105,10 +135,11 @@ public class DiskPageStore implements IPersistentPageStore
 					+ "See org.apache.wicket.Application.setPageManagerProvider(IPageManagerProvider)",
 				e);
 		}
-		
+
 		if (DISK_STORES.containsKey(applicationName))
 		{
-			throw new IllegalStateException("Store for application with key '" + applicationName + "' already exists.");
+			throw new IllegalStateException(
+				"Store for application with key '" + applicationName + "' already exists.");
 		}
 		DISK_STORES.put(applicationName, this);
 	}
@@ -118,39 +149,48 @@ public class DiskPageStore implements IPersistentPageStore
 	{
 		log.debug("Destroying...");
 		saveIndex();
-		
+
 		DISK_STORES.remove(applicationName);
 
 		log.debug("Destroyed.");
 	}
-	
+
 	@Override
 	public boolean canBeAsynchronous(IPageContext context)
 	{
 		// session attribute must be added here *before* any asynchronous calls
 		// when session is no longer available
 		getSessionAttribute(context, true);
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public IManageablePage getPage(IPageContext context, int id)
 	{
 		IManageablePage page = null;
-			
+
 		DiskData diskData = getDiskData(context, false);
 		if (diskData != null)
 		{
 			byte[] data = diskData.loadPage(id);
-			if (data != null) {
-				page = (IManageablePage)serializer.deserialize(data);
+			if (data != null)
+			{
+				if (serializer == null)
+				{
+					page = new SerializedPage(id, "unknown", data);
+				}
+				else
+				{
+					page = (IManageablePage)serializer.deserialize(data);
+				}
 			}
 		}
-		
+
 		if (log.isDebugEnabled())
 		{
-			log.debug("Returning page with id '{}' in session with id '{}'", page != null ? "" : "(null)", id, context.getSessionId());
+			log.debug("Returning page with id '{}' in session with id '{}'",
+				page != null ? "" : "(null)", id, context.getSessionId());
 		}
 
 		return page;
@@ -164,7 +204,8 @@ public class DiskPageStore implements IPersistentPageStore
 		{
 			if (log.isDebugEnabled())
 			{
-				log.debug("Removing page with id '{}' in session with id '{}'", page.getPageId(), context.getSessionId());
+				log.debug("Removing page with id '{}' in session with id '{}'", page.getPageId(),
+					context.getSessionId());
 			}
 			diskData.removeData(page.getPageId());
 		}
@@ -179,8 +220,9 @@ public class DiskPageStore implements IPersistentPageStore
 			removeDiskData(diskData);
 		}
 	}
-	
-	protected void removeDiskData(DiskData diskData) {
+
+	protected void removeDiskData(DiskData diskData)
+	{
 		synchronized (diskDatas)
 		{
 			diskDatas.remove(diskData.sessionIdentifier);
@@ -189,8 +231,8 @@ public class DiskPageStore implements IPersistentPageStore
 	}
 
 	/**
-	 * Supports {@link SerializedPage}s too - for this to work the delegating
-	 * {@link IPageStore} must use the same {@link ISerializer} as this one.
+	 * Supports {@link SerializedPage}s too - for this to work the delegating {@link IPageStore}
+	 * must use the same {@link ISerializer} as this one.
 	 */
 	@Override
 	public void addPage(IPageContext context, IManageablePage page)
@@ -198,16 +240,28 @@ public class DiskPageStore implements IPersistentPageStore
 		DiskData diskData = getDiskData(context, true);
 		if (diskData != null)
 		{
-			log.debug("Storing data for page with id '{}' in session with id '{}'", page.getPageId(), context.getSessionId());
-			
+			log.debug("Storing data for page with id '{}' in session with id '{}'",
+				page.getPageId(), context.getSessionId());
+
 			byte[] data;
-			if (page instanceof SerializedPage) {
+			String type;
+			if (page instanceof SerializedPage)
+			{
 				data = ((SerializedPage)page).getData();
-			} else {
-				data = serializer.serialize(page);
+				type = ((SerializedPage)page).getPageType();
 			}
-			
-			diskData.savePage(page.getPageId(), page.getClass(), data);
+			else
+			{
+				if (serializer == null)
+				{
+					throw new WicketRuntimeException(
+						"DiskPageStore not configured for serialization");
+				}
+				data = serializer.serialize(page);
+				type = page.getClass().getName();
+			}
+
+			diskData.savePage(page.getPageId(), type, data);
 		}
 	}
 
@@ -220,15 +274,17 @@ public class DiskPageStore implements IPersistentPageStore
 	protected DiskData getDiskData(final IPageContext context, final boolean create)
 	{
 		SessionAttribute attribute = getSessionAttribute(context, create);
-		
-		if (!create && attribute == null) {
+
+		if (!create && attribute == null)
+		{
 			return null;
 		}
-		
+
 		return getDiskData(attribute.identifier, create);
 	}
-	
-	protected DiskData getDiskData(String sessionIdentifier, boolean create) {
+
+	protected DiskData getDiskData(String sessionIdentifier, boolean create)
+	{
 		if (!create)
 		{
 			return diskDatas.get(sessionIdentifier);
@@ -242,9 +298,10 @@ public class DiskPageStore implements IPersistentPageStore
 	protected SessionAttribute getSessionAttribute(IPageContext context, boolean create)
 	{
 		context.bind();
-		
+
 		SessionAttribute attribute = context.getSessionAttribute(KEY);
-		if (attribute == null && create) {
+		if (attribute == null && create)
+		{
 			attribute = new SessionAttribute(applicationName, context.getSessionId());
 			context.setSessionAttribute(KEY, attribute);
 		}
@@ -258,7 +315,7 @@ public class DiskPageStore implements IPersistentPageStore
 	private void loadIndex()
 	{
 		File storeFolder = getStoreFolder();
-		
+
 		File index = new File(storeFolder, INDEX_FILE_NAME);
 		if (index.exists() && index.length() > 0)
 		{
@@ -269,12 +326,15 @@ public class DiskPageStore implements IPersistentPageStore
 				try
 				{
 					diskDatas.clear();
-					
-					for (DiskData diskData : (List<DiskData>)ois.readObject()) {
+
+					for (DiskData diskData : (List<DiskData>)ois.readObject())
+					{
 						diskData.pageStore = this;
 						diskDatas.put(diskData.sessionIdentifier, diskData);
 					}
-				} finally {
+				}
+				finally
+				{
 					stream.close();
 					ois.close();
 				}
@@ -312,7 +372,9 @@ public class DiskPageStore implements IPersistentPageStore
 						}
 					}
 					oos.writeObject(list);
-				} finally {
+				}
+				finally
+				{
 					stream.close();
 					oos.close();
 				}
@@ -332,7 +394,8 @@ public class DiskPageStore implements IPersistentPageStore
 
 	/**
 	 * 
-	 * @param session key
+	 * @param session
+	 *            key
 	 * @return a list of the last N page windows
 	 */
 	@Override
@@ -344,7 +407,7 @@ public class DiskPageStore implements IPersistentPageStore
 		if (diskData != null)
 		{
 			PageWindowManager windowManager = diskData.getManager();
-			
+
 			pages.addAll(windowManager.getFileWindows());
 		}
 		return pages;
@@ -354,7 +417,7 @@ public class DiskPageStore implements IPersistentPageStore
 	public String getSessionIdentifier(IPageContext context)
 	{
 		SessionAttribute sessionAttribute = getSessionAttribute(context, true);
-		
+
 		return sessionAttribute.identifier;
 	}
 
@@ -362,36 +425,37 @@ public class DiskPageStore implements IPersistentPageStore
 	public Bytes getTotalSize()
 	{
 		long size = 0;
-		
+
 		synchronized (diskDatas)
 		{
-			for (DiskData diskData : diskDatas.values()) {
+			for (DiskData diskData : diskDatas.values())
+			{
 				size = size + diskData.size();
 			}
 		}
-		
+
 		return Bytes.bytes(size);
 	}
 
 	/**
-	 * Data held on disk. 
+	 * Data held on disk.
 	 */
 	protected static class DiskData implements Serializable
 	{
 		private static final long serialVersionUID = 1L;
 
 		private transient DiskPageStore pageStore;
-		
+
 		private transient String fileName;
-		
+
 		private String sessionIdentifier;
-		
+
 		private PageWindowManager manager;
-		
+
 		protected DiskData(DiskPageStore pageStore, String sessionIdentifier)
 		{
 			this.pageStore = pageStore;
-			
+
 			this.sessionIdentifier = sessionIdentifier;
 		}
 
@@ -430,21 +494,21 @@ public class DiskPageStore implements IPersistentPageStore
 		 * Saves the serialized page to appropriate file.
 		 * 
 		 * @param pageId
-		 * @param clazz 
+		 * @param pageType
 		 * @param data
 		 */
-		public synchronized void savePage(int pageId, Class<? extends IManageablePage> clazz, byte data[])
+		public synchronized void savePage(int pageId, String pageType, byte data[])
 		{
 			if (sessionIdentifier == null)
 			{
 				return;
 			}
-			
+
 			// only save page that has some data
 			if (data != null)
 			{
 				// allocate window for page
-				FileWindow window = getManager().createPageWindow(pageId, clazz, data.length);
+				FileWindow window = getManager().createPageWindow(pageId, pageType, data.length);
 
 				FileChannel channel = getFileChannel(true);
 				if (channel != null)
@@ -483,7 +547,7 @@ public class DiskPageStore implements IPersistentPageStore
 			{
 				return;
 			}
-			
+
 			getManager().removePage(pageId);
 		}
 
@@ -553,7 +617,7 @@ public class DiskPageStore implements IPersistentPageStore
 			{
 				return null;
 			}
-			
+
 			FileWindow window = getManager().getPageWindow(id);
 			if (window == null)
 			{
@@ -574,7 +638,7 @@ public class DiskPageStore implements IPersistentPageStore
 				Files.removeFolder(sessionFolder);
 				cleanup(sessionFolder);
 			}
-			
+
 			sessionIdentifier = null;
 		}
 
@@ -664,13 +728,14 @@ public class DiskPageStore implements IPersistentPageStore
 	 * long.
 	 *
 	 * @param sessionId
-	 *      must not be null
+	 *            must not be null
 	 * @return path in the form 0000/0000/sessionId
 	 */
 	private String createPathFrom(final String sessionId)
 	{
 		int sessionIdHashCode = sessionId.hashCode();
-		if (sessionIdHashCode == Integer.MIN_VALUE) {
+		if (sessionIdHashCode == Integer.MIN_VALUE)
+		{
 			// Math.abs(MIN_VALUE) == MIN_VALUE, so avoid it
 			sessionIdHashCode += 1;
 		}
@@ -686,26 +751,28 @@ public class DiskPageStore implements IPersistentPageStore
 
 		return bs.toString();
 	}
-	
+
 	/**
 	 * Attribute held in session.
 	 */
-	static class SessionAttribute implements Serializable, HttpSessionBindingListener {
+	static class SessionAttribute implements Serializable, HttpSessionBindingListener
+	{
 
 		private final String applicationName;
-		
+
 		/**
 		 * The identifier of the session, must not be equal to {@link Session#getId()}, e.g. when
 		 * the container changes the id after authorization.
 		 */
 		public final String identifier;
-		
-		public SessionAttribute(String applicationName, String sessionIdentifier) {
+
+		public SessionAttribute(String applicationName, String sessionIdentifier)
+		{
 			this.applicationName = Args.notNull(applicationName, "applicationName");
 			this.identifier = Args.notNull(sessionIdentifier, "sessionIdentifier");
 		}
-		
-		
+
+
 		@Override
 		public void valueBound(HttpSessionBindingEvent event)
 		{
@@ -715,11 +782,17 @@ public class DiskPageStore implements IPersistentPageStore
 		public void valueUnbound(HttpSessionBindingEvent event)
 		{
 			DiskPageStore store = DISK_STORES.get(applicationName);
-			if (store == null) {
-				log.warn("Cannot remove data '{}' because disk store for application '{}' is no longer present.", identifier, applicationName);
-			} else {
+			if (store == null)
+			{
+				log.warn(
+					"Cannot remove data '{}' because disk store for application '{}' is no longer present.",
+					identifier, applicationName);
+			}
+			else
+			{
 				DiskData diskData = store.getDiskData(identifier, false);
-				if (diskData != null) {
+				if (diskData != null)
+				{
 					store.removeDiskData(diskData);
 				}
 			}

@@ -49,18 +49,18 @@ public class PageWindowManagerTest extends Assert
 		// Add few pages.
 		// All of them fully occupy the max space in the pageWindowManager.
 		// So adding N+1st page removes the Nth page.
-		manager.createPageWindow(page0id, WebPage.class, maxSize);
+		manager.createPageWindow(page0id, "foo", maxSize);
 		FileWindow page0Window = manager.getPageWindow(page0id);
 		assertWindow(page0Window, page0id, page0Window.getFilePartOffset(), page0Window.getFilePartSize());
 
-		manager.createPageWindow(page1id, WebPage.class, maxSize);
+		manager.createPageWindow(page1id, "foo", maxSize);
 		FileWindow page1Window = manager.getPageWindow(page1id);
 		assertWindow(page1Window, page1id, page1Window.getFilePartOffset(), page1Window.getFilePartSize());
 
 		// Try to get a page which has been lost with the adding of page1
 		assertNull("Page0 must be lost when Page1 has been added.", manager.getPageWindow(page0id));
 
-		manager.createPageWindow(page2id, WebPage.class, maxSize);
+		manager.createPageWindow(page2id, "foo", maxSize);
 		FileWindow page2Window = manager.getPageWindow(page2id);
 		assertWindow(page2Window, page2id, page2Window.getFilePartOffset(), page2Window.getFilePartSize());
 
@@ -77,22 +77,22 @@ public class PageWindowManagerTest extends Assert
 		PageWindowManager manager = new PageWindowManager(300);
 		FileWindow window;
 
-		window = manager.createPageWindow(1, WebPage.class, 50);
+		window = manager.createPageWindow(1, "foo", 50);
 		assertWindow(window, 1, 0, 50);
 
-		window = manager.createPageWindow(2, WebPage.class, 40);
+		window = manager.createPageWindow(2, "foo", 40);
 		assertWindow(window, 2, 50, 40);
 
 		assertEquals(manager.getTotalSize(), 90);
 
-		window = manager.createPageWindow(2, WebPage.class, 30);
+		window = manager.createPageWindow(2, "foo", 30);
 		assertWindow(window, 2, 50, 30);
 		assertEquals(manager.getTotalSize(), 80);
 
 		manager.removePage(2);
 		assertEquals(manager.getTotalSize(), 50);
 
-		window = manager.createPageWindow(3, WebPage.class, 30);
+		window = manager.createPageWindow(3, "foo", 30);
 		assertWindow(window, 3, 50, 30);
 		assertEquals(manager.getTotalSize(), 80);
 	}
@@ -106,21 +106,21 @@ public class PageWindowManagerTest extends Assert
 		PageWindowManager manager = new PageWindowManager(100);
 		FileWindow window;
 
-		window = manager.createPageWindow(1, WebPage.class, 30);
+		window = manager.createPageWindow(1, "foo", 30);
 
-		window = manager.createPageWindow(2, WebPage.class, 30);
+		window = manager.createPageWindow(2, "foo", 30);
 
-		window = manager.createPageWindow(3, WebPage.class, 30);
+		window = manager.createPageWindow(3, "foo", 30);
 
 		assertWindow(window, 3, 60, 30);
 
-		window = manager.createPageWindow(4, WebPage.class, 30);
+		window = manager.createPageWindow(4, "foo", 30);
 
 		assertWindow(window, 4, 90, 30);
 
 		// should start at the beginging
 
-		window = manager.createPageWindow(5, WebPage.class, 20);
+		window = manager.createPageWindow(5, "foo", 20);
 
 		assertWindow(window, 5, 0, 20);
 
@@ -129,44 +129,44 @@ public class PageWindowManagerTest extends Assert
 		window = manager.getPageWindow(2);
 		assertWindow(window, 2, 30, 30);
 
-		window = manager.createPageWindow(6, WebPage.class, 10);
+		window = manager.createPageWindow(6, "foo", 10);
 
 		assertWindow(window, 6, 20, 10);
 
 		window = manager.getPageWindow(2);
 		assertWindow(window, 2, 30, 30);
 
-		window = manager.createPageWindow(6, WebPage.class, 30);
+		window = manager.createPageWindow(6, "foo", 30);
 		assertWindow(window, 6, 20, 30);
 
 		assertNull(manager.getPageWindow(2));
 		assertNotNull(manager.getPageWindow(3));
 
-		window = manager.createPageWindow(6, WebPage.class, 60);
+		window = manager.createPageWindow(6, "foo", 60);
 		assertWindow(window, 6, 20, 60);
 
 		assertNull(manager.getPageWindow(3));
 
-		window = manager.createPageWindow(7, WebPage.class, 20);
+		window = manager.createPageWindow(7, "foo", 20);
 		assertWindow(window, 7, 80, 20);
 
 		assertNotNull(manager.getPageWindow(7));
 
 		// should start at the beginning again
 
-		window = manager.createPageWindow(8, WebPage.class, 10);
+		window = manager.createPageWindow(8, "foo", 10);
 		assertWindow(window, 8, 0, 10);
 
 		assertNull(manager.getPageWindow(5));
 		assertNotNull(manager.getPageWindow(6));
 
-		window = manager.createPageWindow(9, WebPage.class, 20);
+		window = manager.createPageWindow(9, "foo", 20);
 		assertWindow(window, 9, 10, 20);
 
 		assertNull(manager.getPageWindow(6));
 		assertNotNull(manager.getPageWindow(7));
 
-		window = manager.createPageWindow(10, WebPage.class, 20);
+		window = manager.createPageWindow(10, "foo", 20);
 		assertWindow(window, 10, 30, 20);
 
 		assertNull(manager.getPageWindow(6));
@@ -175,7 +175,7 @@ public class PageWindowManagerTest extends Assert
 		// make sure when replacing a page that's not last the old "instance" is
 		// not valid anymore
 
-		manager.createPageWindow(8, WebPage.class, 10);
+		manager.createPageWindow(8, "foo", 10);
 
 		window = manager.getPageWindow(8);
 		assertWindow(window, 8, 50, 10);
@@ -269,7 +269,7 @@ public class PageWindowManagerTest extends Assert
 		@Override
 		public void r()
 		{
-			pageWindowManager.createPageWindow(getPageId(), WebPage.class, 1000);
+			pageWindowManager.createPageWindow(getPageId(), "foo", 1000);
 		}
 	}
 

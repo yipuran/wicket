@@ -41,6 +41,15 @@ public class SerializingPageStore extends DelegatingPageStore
 		this.serializer = Args.notNull(serializer, "serializer");
 	}
 
+	/**
+	 * Supports asynchronous add if the delegate supports it.
+	 */
+	@Override
+	public boolean canBeAsynchronous(IPageContext context)
+	{
+		return getDelegate().canBeAsynchronous(context);
+	}
+	
 	@Override
 	public IManageablePage getPage(IPageContext context, int id)
 	{

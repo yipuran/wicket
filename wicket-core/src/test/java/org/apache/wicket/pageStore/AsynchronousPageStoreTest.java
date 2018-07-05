@@ -358,8 +358,8 @@ public class AsynchronousPageStoreTest
 		// ISerializer serializer = new DummySerializer();
 		ISerializer serializer = new DeflatedJavaSerializer("applicationKey");
 
-		IPageStore pageStore = new DiskPageStore("applicationName", serializer, new File("./target"),
-				Bytes.bytes(10000l)) {
+		IPageStore pageStore = new DiskPageStore("applicationName", new File("./target"),
+				Bytes.bytes(10000l), serializer) {
 			@Override
 			public void addPage(IPageContext context, IManageablePage page)
 			{

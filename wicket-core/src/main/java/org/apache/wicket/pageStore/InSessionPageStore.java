@@ -52,7 +52,7 @@ public class InSessionPageStore extends DelegatingPageStore
 	private int maxPages;
 	
 	/**
-	 * Use this constructor, if sessions are never serialized.
+	 * Use this constructor, if sessions are never persisted by the container.
 	 * 
 	 * @param delegate
 	 *            store to delegate to
@@ -61,7 +61,7 @@ public class InSessionPageStore extends DelegatingPageStore
 	 */
 	public InSessionPageStore(IPageStore delegate, int maxPages)
 	{
-		this(delegate, new ISerializer()
+		this(delegate, maxPages,  new ISerializer()
 		{
 			@Override
 			public byte[] serialize(Object object)
@@ -74,18 +74,18 @@ public class InSessionPageStore extends DelegatingPageStore
 			{
 				throw new WicketRuntimeException("InSessionPageStore not configured for serialization");
 			}
-		},  maxPages);
+		});
 	}
 	
 	/**
 	 * @param delegate
 	 *            store to delegate to
-	 * @param serializer
-	 *            serializer to use if session gets persisted
 	 * @param maxPages
 	 *            maximum pages to keep in session
+	 * @param serializer
+	 *            for serialization of pages if session gets persisted
 	 */
-	public InSessionPageStore(IPageStore delegate, ISerializer serializer, int maxPages)
+	public InSessionPageStore(IPageStore delegate, int maxPages, ISerializer serializer)
 	{
 		super(delegate);
 

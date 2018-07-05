@@ -358,7 +358,7 @@ public class PageWindowManager implements Serializable
 	 * @param size
 	 * @return page window
 	 */
-	public synchronized FileWindow createPageWindow(int pageId, Class<?> type, int size)
+	public synchronized FileWindow createPageWindow(int pageId, String pageType, int size)
 	{
 		int index = getWindowIndex(pageId);
 
@@ -379,7 +379,7 @@ public class PageWindowManager implements Serializable
 
 		FileWindow window = allocatePageWindow(index, size);
 		window.id = pageId;
-		window.type = type.getName();
+		window.type = pageType;
 
 		putWindowIndex(pageId, index);
 		return window;
