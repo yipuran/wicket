@@ -236,13 +236,13 @@ public class AsynchronousPageStore extends DelegatingPageStore
 		 * Prevents access to the session when called asynchronously.
 		 */
 		@Override
-		public <T extends Serializable> void setSessionData(MetaDataKey<T> key, T value)
+		public <T extends Serializable> T setSessionData(MetaDataKey<T> key, T value)
 		{
 			if (asynchronous) {
 				throw new WicketRuntimeException("no session available asynchronuously");
 			}
 			
-			context.setSessionData(key, value);
+			return context.setSessionData(key, value);
 		}
 
 		/**

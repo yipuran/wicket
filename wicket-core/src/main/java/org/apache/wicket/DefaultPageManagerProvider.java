@@ -38,38 +38,29 @@ import org.apache.wicket.util.lang.Bytes;
 
 /**
  * A provider of a {@link PageManager} with a default chain of page {@link IPageStore}s:
- * <ul>
+ * <ol>
  * <li>{@link RequestPageStore} caching pages until end of the request</li>
  * <li>{@link InSessionPageStore} keeping the last accessed page in the session</li>
  * <li>{@link AsynchronousPageStore} moving storage of pages to a worker thread (if enabled in
  * {@link StoreSettings#isAsynchronous()})</li>
  * <li>{@link DiskPageStore} keeping all pages, configured according to {@link StoreSettings}</li>
- * </ul>
+ * </ol>
  * An alternative chain with all pages held in-memory could be:
- * <ul>
+ * <pl>
  * <li>{@link RequestPageStore} caching pages until end of the request</li>
  * <li>{@link InSessionPageStore} keeping the last accessed page in the session</li>
  * <li>{@link AsynchronousPageStore} moving storage of pages to a worker thread</li>
  * <li>{@link SerializingPageStore} serializing all pages (so they are available for
  * back-button)</li>
  * <li>{@link InMemoryPageStore} keeping all pages in memory</li>
- * </ul>
+ * </ol>
  * ... or if all pages should be kept in the session only, without any serialization (no back-button
  * support though):
- * <ul>
+ * <ol>
  * <li>{@link RequestPageStore} caching pages until end of the request</li>
  * <li>{@link InSessionPageStore} keeping a limited count of pages in the session, e.g. 10</li>
  * <li>{@link NoopPageStore} discarding all exceeding pages</li>
- * </ul>
- * ... or if pages should be kept encrypted on disk:
- * <ul>
- * <li>{@link RequestPageStore} caching pages until end of the request</li>
- * <li>{@link InSessionPageStore} keeping the last accessed page in the session</li>
- * <li>{@link AsynchronousPageStore} moving storage of pages to a worker thread</li>
- * <li>{@link SerializingPageStore} serializing all pages, as required by the following ...</li>
- * <li>{@link CryptingPageStore} encrypting and decrypting all pages</li>
- * <li>{@link DiskPageStore} without {@link ISerializer} as required by the previous</li>
- * </ul>
+ * </ol>
  * For back-button support <em>at least one</em> store in the chain must create copies of stored
  * pages (usually through serialization), otherwise any following request will work on an identical
  * page instance and the previous state of page is no longer accessible.
@@ -77,6 +68,7 @@ import org.apache.wicket.util.lang.Bytes;
  * Other stores be may inserted ad libitum, e.g.
  * <ul>
  * <li>{@link GroupingPageStore} groups pages with their own maximum page limit</li>
+ * <li>{@link CryptingPageStore} encrypting all pages - read its documentation on what restrictions it poses on the chain of stores</li>
  * </ul>
  */
 public class DefaultPageManagerProvider implements IPageManagerProvider

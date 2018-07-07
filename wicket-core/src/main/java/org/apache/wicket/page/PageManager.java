@@ -16,7 +16,6 @@
  */
 package org.apache.wicket.page;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.Session;
 import org.apache.wicket.pageStore.DefaultPageContext;
 import org.apache.wicket.pageStore.IPageContext;
@@ -24,7 +23,10 @@ import org.apache.wicket.pageStore.IPageStore;
 import org.apache.wicket.util.lang.Args;
 
 /**
- * A manager of pages, i.e. a mediator between an {@link Application} and an {@link IPageStore}.
+ * Default implementation of a page mmanager.
+ * 
+ * @see IPageStore
+ * @see IPageContext
  */
 public class PageManager implements IPageManager
 {
@@ -67,7 +69,7 @@ public class PageManager implements IPageManager
 	/**
 	 * Factory method for an {@link IPageContext}, returns a {@link DefaultPageContext} by default.
 	 * 
-	 * @return
+	 * @return context of a stored page
 	 */
 	protected IPageContext createPageContext()
 	{

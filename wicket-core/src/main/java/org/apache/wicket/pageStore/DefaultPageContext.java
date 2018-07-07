@@ -74,9 +74,18 @@ public class DefaultPageContext implements IPageContext
 	}
 
 	@Override
-	public <T extends Serializable> void setSessionData(MetaDataKey<T> key, T value)
+	public <T extends Serializable> T setSessionData(MetaDataKey<T> key, T value)
 	{
-		session.setMetaData(key, value);
+		synchronized (session)
+		{
+			T oldValue = session.getMetaData(key);
+			if (oldValue != null) {
+				return oldValue;
+			}
+			
+			session.setMetaData(key, value);
+			return value;
+		}
 	}
 
 	@Override

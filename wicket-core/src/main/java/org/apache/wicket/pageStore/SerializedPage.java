@@ -22,8 +22,12 @@ import org.apache.wicket.util.lang.Args;
 /**
  * A wrapper around a serialized page.
  * <p>
- * An {@link IPageStore} might choose to use this representation of a page internally,
- * or accept it in {@link IPageStore#addPage(IPageContext, IManageablePage)}.
+ * An {@link IPageStore} might use this representation of a page internally,
+ * accept it in {@link IPageStore#addPage(IPageContext, IManageablePage)} or delegate it
+ * to another store.
+ * <p>
+ * Stores might pose restrictions on what type of pages they work with, see {@link CryptingPageStore}
+ * for an example.
  * 
  * @see SerializingPageStore
  */

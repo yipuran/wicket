@@ -47,7 +47,7 @@ public class InSessionPageStore extends DelegatingPageStore
 		private static final long serialVersionUID = 1L;
 	};
 
-	private ISerializer serializer;
+	private final ISerializer serializer;
 
 	private int maxPages;
 	
@@ -138,9 +138,8 @@ public class InSessionPageStore extends DelegatingPageStore
 		if (data == null)
 		{
 			context.bind();
-			data = new SessionData();
 
-			context.setSessionData(KEY, data);
+			data = context.setSessionData(KEY, new SessionData());
 		}
 
 		// data might be deserialized so initialize again

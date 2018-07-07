@@ -20,6 +20,11 @@ import java.util.function.Supplier;
 
 import org.apache.wicket.page.IPageManager;
 
+/**
+ * Provider of an {@link IPageManager}.
+ * 
+ * @author svenmeier
+ */
 public interface IPageManagerProvider extends Supplier<IPageManager>
 {
 }

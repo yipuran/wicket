@@ -74,9 +74,11 @@ public class DummyPageContext implements IPageContext
 	}
 	
 	@Override
-	public <T extends Serializable> void setSessionData(MetaDataKey<T> key, T value)
+	public <T extends Serializable> T setSessionData(MetaDataKey<T> key, T value)
 	{
 		sessionData = key.set(sessionData, value);
+		
+		return value;
 	}
 
 	@Override

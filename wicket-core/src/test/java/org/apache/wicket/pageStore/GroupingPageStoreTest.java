@@ -80,11 +80,11 @@ public class GroupingPageStoreTest
 		
 		DummyPageContext context = new DummyPageContext(sessionId) {
 			@Override
-			public <T extends Serializable> void setSessionData(MetaDataKey<T> key, T value)
+			public <T extends Serializable> T setSessionData(MetaDataKey<T> key, T value)
 			{
 				assertFalse("session not set directly in session", value == VALUE);
 				
-				super.setSessionData(key, value);
+				return super.setSessionData(key, value);
 			}
 			
 			@Override

@@ -39,7 +39,7 @@ import org.apache.wicket.serialize.ISerializer;
  * <ul>
  * <li>a {@link SerializingPageStore} delegating to this store and</li>
  * <li>delegating to a store that does not deserialize its pages, e.g. a {@link DiskPageStore}
- * without {@link ISerializer}</li>.
+ * without an {@link ISerializer}</li>.
  * </ul>
  */
 public class CryptingPageStore extends DelegatingPageStore
@@ -67,7 +67,7 @@ public class CryptingPageStore extends DelegatingPageStore
 	}
 
 	/**
-	 * Supports asynchronous add if the delegate supports it.
+	 * Supports asynchronous {@link #addPage(IPageContext, IManageablePage)} if the delegate supports it.
 	 */
 	@Override
 	public boolean canBeAsynchronous(IPageContext context)
@@ -84,9 +84,9 @@ public class CryptingPageStore extends DelegatingPageStore
 		SessionData data = context.getSessionData(KEY);
 		if (data == null)
 		{
-			data = new SessionData(createCipherKey(context));
+			context.bind();
 
-			context.setSessionData(KEY, data);
+			data = context.setSessionData(KEY, new SessionData(createCipherKey(context)));
 		}
 		return data;
 	}

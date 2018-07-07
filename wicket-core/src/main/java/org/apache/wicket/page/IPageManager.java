@@ -21,6 +21,8 @@ import org.apache.wicket.pageStore.IPageStore;
 
 /**
  * A manager of pages - facade between {@link Page}s and {@link IPageStore}s they are stored in.
+ * 
+ * @see PageManager
  */
 public interface IPageManager
 {

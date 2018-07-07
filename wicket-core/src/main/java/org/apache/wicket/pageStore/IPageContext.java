@@ -70,14 +70,26 @@ public interface IPageContext
 	<T extends Serializable> T getSessionAttribute(String key);
 
 	/**
-	 * Set data into the session.
-	 * 
+	 * Set data into the session - only if it is not set already.
+	 * <p>
+	 * Recommended usage:
+	 * <pre>
+	 * <code>
+	 * SessionData data = context.getSessionData(KEY);
+	 * if (data == null)
+	 * {
+	 *     data = context.setSessionData(KEY, new SessionData());
+	 * }
+	 * </code>
+	 * </pre>
+	 *
 	 * @param key
 	 *            key
 	 * @param value
 	 *            value
+	 * @return the old value if already present, or the new value
 	 */
-	<T extends Serializable> void setSessionData(MetaDataKey<T> key, T value);
+	<T extends Serializable> T setSessionData(MetaDataKey<T> key, T value);
 
 	/**
 	 * Get data from the session.

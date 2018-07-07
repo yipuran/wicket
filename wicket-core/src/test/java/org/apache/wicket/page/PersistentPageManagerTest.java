@@ -116,11 +116,13 @@ public class PersistentPageManagerTest
 			{
 				return new DummyPageContext() {
 					@Override
-					public <T extends Serializable> void setSessionData(MetaDataKey<T> key, T value)
+					public <T extends Serializable> T setSessionData(MetaDataKey<T> key, T value)
 					{
 						super.setSessionData(key, value);
 						
 						sessionData.set(value);
+						
+						return value;
 					}
 					
 					@Override

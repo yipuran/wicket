@@ -135,9 +135,8 @@ public abstract class GroupingPageStore extends DelegatingPageStore
 		if (data == null)
 		{
 			context.bind();
-			data = new SessionData();
 
-			context.setSessionData(KEY, data);
+			data = context.setSessionData(KEY, new SessionData());
 		}
 
 		return data;
@@ -244,9 +243,11 @@ public abstract class GroupingPageStore extends DelegatingPageStore
 		}
 
 		@Override
-		public <T extends Serializable> void setSessionData(MetaDataKey<T> key, T value)
+		public <T extends Serializable> T setSessionData(MetaDataKey<T> key, T value)
 		{
 			sessionData.setMetaData(group, key, value);
+			
+			return value;
 		}
 
 		@Override
