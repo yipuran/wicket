@@ -111,34 +111,35 @@ public class AsynchronousPageStore extends DelegatingPageStore
 	}
 
 	/**
-	 * A pending asynchronous add in the queue.
+	 * An add of a page that is pending its asynchronous execution.
 	 * <p>
-	 * Used as {@link IPageContext} for the call to the delegate {@link IPageStore#addPage(IPageContext, IManageablePage)}.
+	 * Used as an isolating {@link IPageContext} for the delegation to 
+	 * {@link IPageStore#addPage(IPageContext, IManageablePage)}.
 	 */
 	private static class PendingAdd implements IPageContext
 	{
 		private final IPageContext context;
 		
-		private final String sessionId;
-		
 		private final IManageablePage page;
+
+		private final String sessionId;
 
 		/**
 		 * Is this context passed to an asynchronously called {@link IPageStore#addPage(IPageContext, IManageablePage)}.
 		 */
 		private boolean asynchronous = false;
-		
+
 		/**
 		 * Cache of session attributes which may filled in {@link IPageStore#canBeAsynchronous(IPageContext)},
 		 * so these are available asynchronously later on.
 		 */
-		private Map<String, Serializable> attributeCache = new HashMap<>();
+		private final Map<String, Serializable> attributeCache = new HashMap<>();
 
 		public PendingAdd(final IPageContext context, final IManageablePage page)
 		{
 			this.context = Args.notNull(context, "context");
 			this.page = Args.notNull(page, "page");
-
+			
 			context.bind();
 			this.sessionId = context.getSessionId();
 		}
@@ -156,7 +157,7 @@ public class AsynchronousPageStore extends DelegatingPageStore
 		@Override
 		public String toString()
 		{
-			return "Entry [sessionId=" + sessionId + ", pageId=" + page.getPageId() + "]";
+			return "PendingAdd [sessionId=" + sessionId + ", pageId=" + page.getPageId() + "]";
 		}
 
 		/**
@@ -186,7 +187,7 @@ public class AsynchronousPageStore extends DelegatingPageStore
 		}
 
 		/**
-		 * Prevents access to request when called asynchronously.
+		 * Prevents access to the session when called asynchronously.
 		 * <p>
 		 * All values set from {@link IPageStore#canBeAsynchronous(IPageContext)} are kept
 		 * for later retrieval.
@@ -255,27 +256,15 @@ public class AsynchronousPageStore extends DelegatingPageStore
 		}
 
 		/**
-		 * Prevents access to the session when called asynchronously.
-		 * <p>
-		 * Has no effect when session is already bound. 
+		 * Has no effect if already bound.
 		 */
 		@Override
 		public void bind()
 		{
-			if (sessionId != null) {
-				// already bound
-				return;
-			}
-			
-			if (asynchronous) {
-				throw new WicketRuntimeException("no session available asynchronuously");
-			}
-			
-			context.bind();
 		}
 
 		/**
-		 * Get the identifier of the session, maybe <code>null</code> if not bound.
+		 * Returns id of session.
 		 */
 		@Override
 		public String getSessionId()
@@ -323,6 +312,7 @@ public class AsynchronousPageStore extends DelegatingPageStore
 				if (add != null)
 				{
 					log.debug("Saving asynchronously: {}...", add);
+					add.asynchronous = true;					
 					delegate.addPage(add, add.page);
 					addQueue.remove(add.getKey());
 				}
@@ -386,8 +376,6 @@ public class AsynchronousPageStore extends DelegatingPageStore
 	{
 		PendingAdd add = new PendingAdd(context, page);
 		if (getDelegate().canBeAsynchronous(add)) {
-			add.asynchronous = true;
-			
 			String key = add.getKey();
 			queueMap.put(key, add);
 			try
@@ -408,6 +396,8 @@ public class AsynchronousPageStore extends DelegatingPageStore
 				log.error(e.getMessage(), e);
 				queueMap.remove(key);
 			}
+		} else {
+			log.warn("Delegated page store '{}' can not be asynchronous", getDelegate().getClass().getName());
 		}
 		
 		super.addPage(context, page);

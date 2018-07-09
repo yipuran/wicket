@@ -24,7 +24,7 @@ import org.apache.wicket.util.lang.Args;
  */
 public abstract class DelegatingPageStore implements IPageStore
 {
-	private IPageStore delegate;
+	private final IPageStore delegate;
 	
 	protected DelegatingPageStore(IPageStore delegate) {
 		this.delegate = Args.notNull(delegate, "delegate");

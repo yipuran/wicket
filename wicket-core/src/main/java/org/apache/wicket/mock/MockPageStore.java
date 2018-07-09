@@ -53,6 +53,12 @@ public class MockPageStore implements IPageStore
 	}
 
 	@Override
+	public boolean canBeAsynchronous(IPageContext context)
+	{
+		return true;
+	}
+	
+	@Override
 	public void addPage(IPageContext context, IManageablePage page)
 	{
 		pages.put(page.getPageId(), page);

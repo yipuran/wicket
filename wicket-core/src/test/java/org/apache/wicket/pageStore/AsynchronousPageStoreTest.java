@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -29,6 +30,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.MockPage;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.mock.MockPageStore;
 import org.apache.wicket.page.IManageablePage;
 import org.apache.wicket.serialize.ISerializer;
@@ -164,6 +168,7 @@ public class AsynchronousPageStoreTest
 			{
 				try
 				{
+					// wait until the page was get below
 					semaphore.acquire();
 				}
 				catch (InterruptedException e)
@@ -331,6 +336,121 @@ public class AsynchronousPageStoreTest
 		assertTrue(sync > 0);
 	}
 
+	private MetaDataKey<Serializable> KEY1 = new MetaDataKey<Serializable>()
+	{
+	};
+	
+	private MetaDataKey<Serializable> KEY2 = new MetaDataKey<Serializable>()
+	{
+	};
+	
+	/**
+	 * Store does not allow modifications when pages are added asynchronously.
+	 */
+	@Test
+	public void storeAsynchronousContextClosed() throws InterruptedException
+	{
+		IPageStore store = new MockPageStore() {
+			
+			@Override
+			public boolean canBeAsynchronous(IPageContext context)
+			{
+				// can bind and get session id
+				context.bind();
+				context.getSessionId();
+				
+				// can access request data
+				context.getRequestData(KEY1);
+				context.setRequestData(KEY1, "value1");
+
+				// can access session data
+				context.getSessionData(KEY1);
+				context.setSessionData(KEY1, "value1");
+
+				// can access session
+				context.getSessionAttribute("key1");
+				context.setSessionAttribute("key1", "value1");
+
+				return true;
+			}
+			
+			@Override
+			public synchronized void addPage(IPageContext context, IManageablePage page)
+			{
+				// can bind and get session id
+				context.bind();
+				context.getSessionId();
+				
+				// cannot access request
+				try {
+					context.getRequestData(KEY1);
+					fail();
+				} catch (WicketRuntimeException expected) {
+				}
+				try {
+					context.setRequestData(KEY1, "value1");
+					fail();
+				} catch (WicketRuntimeException expected) {
+				}
+				try {
+					context.getRequestData(KEY2);
+					fail();
+				} catch (WicketRuntimeException expected) {
+				}
+				try {
+					context.setRequestData(KEY2, "value2");
+					fail();
+				} catch (WicketRuntimeException expected) {
+				}
+
+				// can read session data 
+				context.getSessionData(KEY1);
+				context.getSessionData(KEY2);
+				// .. but cannot set
+				try {
+					context.setSessionData(KEY1, "value1");
+					fail();
+				} catch (WicketRuntimeException expected) {
+				}
+				try {
+					context.setSessionData(KEY2, "value2");
+					fail();
+				} catch (WicketRuntimeException expected) {
+				}
+				
+				// can read session already read
+				context.getSessionAttribute("key1");
+				// .. but nothing new
+				try {
+					context.getSessionAttribute("key2");
+					fail();
+				} catch (WicketRuntimeException expected) {
+				}
+				// .. but cannot set
+				try {
+					context.setSessionAttribute("key1", "value1");
+					fail();
+				} catch (WicketRuntimeException expected) {
+				}
+				try {
+					context.setSessionAttribute("key2", "value2");
+					fail();
+				} catch (WicketRuntimeException expected) {
+				}
+			}
+		};
+
+		IPageStore asyncPageStore = new AsynchronousPageStore(store, 100);
+
+		MockPage page = new MockPage();
+		
+		IPageContext context = new DummyPageContext();
+		
+		asyncPageStore.addPage(context , page);
+		
+		store.destroy();
+	}
+	
 	// test run
 
 	private class Metrics

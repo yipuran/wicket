@@ -24,9 +24,12 @@ import org.apache.wicket.page.IManageablePage;
 public interface IPageStore
 {
 	/**
-	 * This method must be called before any attempt to call
-	 * {@link #addPage(IPageContext, IManageablePage)} asynchronously, as done by
-	 * {@link AsynchronousPageStore}.
+	 * This method is called by {@link AsynchronousPageStore} before any attempt to call
+	 * {@link #addPage(IPageContext, IManageablePage)} asynchronously.
+	 * <p>
+	 * A page store returning <code>true</code> must immediately access all required values from the context, 
+	 * since no additional values can be accessed when {@link #addPage(IPageContext, IManageablePage)} is called
+	 * asynchronously afterwards.
 	 * 
 	 * @return whether {@link #addPage(IPageContext, IManageablePage)} may be called asynchronously,
 	 *         default is <code>false</code>
