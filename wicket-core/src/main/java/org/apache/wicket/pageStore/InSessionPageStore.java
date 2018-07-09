@@ -219,7 +219,7 @@ public class InSessionPageStore extends DelegatingPageStore
 						}
 						candidate = (IManageablePage)serializer.deserialize(((SerializedPage)candidate).getData());
 		
-						pages.set(id, candidate);
+						pages.set(p, candidate);
 					}
 					
 					page = candidate;

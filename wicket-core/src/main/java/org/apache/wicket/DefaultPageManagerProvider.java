@@ -166,6 +166,10 @@ public class DefaultPageManagerProvider implements IPageManagerProvider
 		Bytes maxSizePerSession = storeSettings.getMaxSizePerSession();
 		File fileStoreFolder = storeSettings.getFileStoreFolder();
 
-		return new DiskPageStore(application.getName(), fileStoreFolder, maxSizePerSession, getSerializer());
+		if (storeSettings.isEncrypted()) {
+			return new SerializingPageStore(new CryptingPageStore(new DiskPageStore(application.getName(), fileStoreFolder, maxSizePerSession)), getSerializer());
+		} else {
+			return new DiskPageStore(application.getName(), fileStoreFolder, maxSizePerSession, getSerializer());
+		}
 	}
 }

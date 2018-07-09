@@ -38,14 +38,6 @@ import org.apache.wicket.util.lang.Bytes;
  */
 public class StoreSettings
 {
-	/**
-	 * By default the second level cache is disabled.
-	 *
-	 * @see <a href="https://issues.apache.org/jira/browse/WICKET-5554">WICKET-5554</a>
-	 * @see <a href="https://cwiki.apache.org/confluence/x/qIaoAQ">Wicket Page storages</a>
-	 */
-	private static final int DEFAULT_CACHE_SIZE = 0;
-
 	private static final Bytes DEFAULT_MAX_SIZE_PER_SESSION = Bytes.megabytes(10);
 
 	private static final int DEFAULT_ASYNCHRONOUS_QUEUE_CAPACITY = 100;
@@ -56,7 +48,9 @@ public class StoreSettings
 
 	private int asynchronousQueueCapacity = DEFAULT_ASYNCHRONOUS_QUEUE_CAPACITY;
 
-	private boolean isAsynchronous = true;
+	private boolean asynchronous = true;
+	
+	private boolean encrypted = false;
 
 	/**
 	 * Construct.
@@ -177,15 +171,28 @@ public class StoreSettings
 	 */
 	public StoreSettings setAsynchronous(boolean async)
 	{
-		isAsynchronous = async;
+		asynchronous = async;
 		return this;
 	}
 
 	/**
-	 * @return {@code true} if the storing of page's bytes is asynchronous
+	 * @return {@code true} if the storing of page is asynchronous
 	 */
 	public boolean isAsynchronous()
 	{
-		return isAsynchronous;
+		return asynchronous;
+	}
+	
+	public void setEncrypted(boolean encrypted)
+	{
+		this.encrypted = encrypted;
+	}
+	
+	/**
+	 * @return {@code true} if the storing of page is encrypted
+	 */
+	public boolean isEncrypted()
+	{
+		return encrypted;
 	}
 }

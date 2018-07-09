@@ -17,18 +17,12 @@
 package org.apache.wicket.pageStore;
 
 import java.io.Serializable;
-import java.security.GeneralSecurityException;
-import java.util.UUID;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.PBEParameterSpec;
 
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.page.IManageablePage;
+import org.apache.wicket.pageStore.crypt.DefaultCrypter;
+import org.apache.wicket.pageStore.crypt.ICrypter;
 import org.apache.wicket.serialize.ISerializer;
 
 /**
@@ -44,13 +38,6 @@ import org.apache.wicket.serialize.ISerializer;
  */
 public class CryptingPageStore extends DelegatingPageStore
 {
-	public static final String DEFAULT_CRYPT_METHOD = "PBEWithMD5AndDES";
-
-	private final static byte[] DEFAULT_SALT = { (byte)0x15, (byte)0x8c, (byte)0xa3, (byte)0x4a,
-			(byte)0x66, (byte)0x51, (byte)0x2a, (byte)0xbc };
-
-	private final static int DEFAULT_ITERATION_COUNT = 17;
-
 	private static final MetaDataKey<SessionData> KEY = new MetaDataKey<SessionData>()
 	{
 	};
@@ -86,53 +73,16 @@ public class CryptingPageStore extends DelegatingPageStore
 		{
 			context.bind();
 
-			data = context.setSessionData(KEY, new SessionData(createCipherKey(context)));
+			data = context.setSessionData(KEY, new SessionData(newCrypter(context)));
 		}
 		return data;
 	}
 
 	/**
-	 * Create a cipher key for the given context.
-	 * 
-	 * @param context
-	 *            context
-	 * @return random UUID by default
+	 * Create a new {@link ICrypter} for the given context.
 	 */
-	protected String createCipherKey(IPageContext context)
-	{
-		return UUID.randomUUID().toString();
-	}
-
-	/**
-	 * Create a secret key.
-	 * 
-	 * @param cipherKey
-	 *            cipher key
-	 * @return secret key
-	 * @throws GeneralSecurityException
-	 */
-	protected SecretKey createSecretKey(String cipherKey) throws GeneralSecurityException
-	{
-		SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DEFAULT_CRYPT_METHOD);
-
-		return keyFactory.generateSecret(new PBEKeySpec(cipherKey.toCharArray()));
-	}
-
-	/**
-	 * Create a cipher
-	 * 
-	 * @param mode
-	 *            mode
-	 * @param secret
-	 *            secret
-	 * @return cipher
-	 * @throws GeneralSecurityException
-	 */
-	protected Cipher createCipher(int mode, SecretKey secret) throws GeneralSecurityException
-	{
-		Cipher cipher = Cipher.getInstance(DEFAULT_CRYPT_METHOD);
-		cipher.init(mode, secret, new PBEParameterSpec(DEFAULT_SALT, DEFAULT_ITERATION_COUNT));
-		return cipher;
+	protected ICrypter newCrypter(IPageContext context) {
+		return new DefaultCrypter();
 	}
 
 	@Override
@@ -149,7 +99,7 @@ public class CryptingPageStore extends DelegatingPageStore
 			SerializedPage serializedPage = (SerializedPage)page;
 
 			byte[] encrypted = serializedPage.getData();
-			byte[] decrypted = getSessionData(context).crypt(this, encrypted, Cipher.DECRYPT_MODE);
+			byte[] decrypted = getSessionData(context).decrypt(encrypted);
 
 			page = new SerializedPage(page.getPageId(), serializedPage.getPageType(), decrypted);
 		}
@@ -168,7 +118,7 @@ public class CryptingPageStore extends DelegatingPageStore
 		SerializedPage serializedPage = (SerializedPage)page;
 
 		byte[] decrypted = serializedPage.getData();
-		byte[] encrypted = getSessionData(context).crypt(this, decrypted, Cipher.ENCRYPT_MODE);
+		byte[] encrypted = getSessionData(context).encrypt(decrypted);
 
 		page = new SerializedPage(page.getPageId(), serializedPage.getPageType(), encrypted);
 
@@ -178,44 +128,21 @@ public class CryptingPageStore extends DelegatingPageStore
 	private static class SessionData implements Serializable
 	{
 
-		private final String cipherKey;
+		private ICrypter cypter;
 
-		private transient SecretKey secretKey;
-
-		public SessionData(String cipherKey)
+		public SessionData(ICrypter crypter)
 		{
-			this.cipherKey = cipherKey;
+			this.cypter= crypter;
 		}
 
-		protected Cipher createCipher(CryptingPageStore store, int mode) throws GeneralSecurityException
+		public byte[] encrypt(byte[] decrypted)
 		{
-			SecretKey secret = getSecretKey(store);
-
-			return store.createCipher(mode, secret);
+			return cypter.encrypt(decrypted);
 		}
 
-		protected synchronized SecretKey getSecretKey(CryptingPageStore store) throws GeneralSecurityException
+		public byte[] decrypt(byte[] encrypted)
 		{
-			if (secretKey == null)
-			{
-				secretKey = store.createSecretKey(cipherKey);
-			}
-
-			return secretKey;
-		}
-
-		public byte[] crypt(CryptingPageStore store, byte[] bytes, int mode)
-		{
-			try
-			{
-				Cipher cipher = createCipher(store, mode);
-
-				return cipher.doFinal(bytes);
-			}
-			catch (GeneralSecurityException ex)
-			{
-				throw new WicketRuntimeException(ex);
-			}
+			return cypter.decrypt(encrypted);
 		}
 	}
 }
