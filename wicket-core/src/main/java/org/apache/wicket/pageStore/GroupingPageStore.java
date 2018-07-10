@@ -18,10 +18,8 @@ package org.apache.wicket.pageStore;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.wicket.MetaDataEntry;
 import org.apache.wicket.MetaDataKey;
@@ -147,7 +145,7 @@ public abstract class GroupingPageStore extends DelegatingPageStore
 	 */
 	static class SessionData implements Serializable
 	{
-		Set<String> groups = new LinkedHashSet<>();
+		private LinkedList<String> groups = new LinkedList<>();
 
 		private Map<String, MetaDataEntry<?>[]> metaData = new HashMap<>();
 
@@ -172,18 +170,18 @@ public abstract class GroupingPageStore extends DelegatingPageStore
 				}
 			}
 
-			groups.add(group);
+			// add as last
+			groups.remove(group);
+			groups.addLast(group);
+			
+			// delegate
 			delegate.addPage(new GroupContext(context, this, group), page);
 
-			Iterator<String> iterator = groups.iterator();
-			int size = groups.size();
-			while (size > maxGroups)
+			while (groups.size() > maxGroups)
 			{
-				String other = iterator.next();
-				iterator.remove();
-				size--;
+				String first = groups.removeFirst();
 				
-				delegate.removeAllPages(new GroupContext(context, this, other));
+				delegate.removeAllPages(new GroupContext(context, this, first));
 			}
 		}
 		

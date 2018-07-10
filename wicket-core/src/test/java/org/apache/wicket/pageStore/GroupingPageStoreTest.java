@@ -64,7 +64,7 @@ public class GroupingPageStoreTest
 			@Override
 			public void removeAllPages(IPageContext context)
 			{
-				assertEquals(sessionId + "_group0", context.getSessionId());
+				assertEquals(sessionId + "_group1", context.getSessionId());
 				
 				super.removeAllPages(context);
 			}
@@ -82,7 +82,7 @@ public class GroupingPageStoreTest
 			@Override
 			public <T extends Serializable> T setSessionData(MetaDataKey<T> key, T value)
 			{
-				assertFalse("session not set directly in session", value == VALUE);
+				assertFalse("group session data not set directly in session", value == VALUE);
 				
 				return super.setSessionData(key, value);
 			}
@@ -90,18 +90,18 @@ public class GroupingPageStoreTest
 			@Override
 			public <T extends Serializable> void setSessionAttribute(String key, T value)
 			{
-				assertTrue("key starts with group", key.startsWith("attribute_group"));
+				assertTrue("group session attribute starts with group", key.startsWith("attribute_group"));
 				
 				super.setSessionAttribute(key, value);
 			}
 		};
 		
-		groupingStore.addPage(context, new MockPage(0));
-		groupingStore.addPage(context, new MockPage(1));
-		groupingStore.addPage(context, new MockPage(10));
-		groupingStore.addPage(context, new MockPage(11));
-		groupingStore.addPage(context, new MockPage(2));
-		groupingStore.addPage(context, new MockPage(21));
+		groupingStore.addPage(context, new MockPage(0)); // group 0
+		groupingStore.addPage(context, new MockPage(1)); // group 0
+		groupingStore.addPage(context, new MockPage(10)); // group 1
+		groupingStore.addPage(context, new MockPage(11)); // group 1
+		groupingStore.addPage(context, new MockPage(2)); // group 0 
+		groupingStore.addPage(context, new MockPage(21)); // group 2, expels oldest group 1
 		
 	}
 
