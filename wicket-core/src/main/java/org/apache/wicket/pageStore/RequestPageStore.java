@@ -16,8 +16,7 @@
  */
 package org.apache.wicket.pageStore;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
 
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.page.IManageablePage;
@@ -122,33 +121,32 @@ public class RequestPageStore extends DelegatingPageStore
 	 */
 	static class RequestData
 	{
-		private Map<Integer, IManageablePage> pages = new LinkedHashMap<>();
+		private LinkedList<IManageablePage> pages = new LinkedList<>();
 		
 		public void add(IManageablePage page)
 		{
-			pages.remove(page.getPageId());
-			
-			pages.put(page.getPageId(), page);
+			// add as last
+			pages.remove(page);
+			pages.addLast(page);
 		}
 
 		public Iterable<IManageablePage> pages()
 		{
-			return pages.values();
+			return pages;
 		}
 
 		public IManageablePage get(int id) {
-			IManageablePage page = pages.get(id);
-			
-			if (page != null) {
-				pages.put(id, page);
+			for (IManageablePage page : pages) {
+				if (page.getPageId() == id) {
+					return page;
+				}
 			}
-			
-			return page;
+			return null;
 		}
 
 		public void remove(IManageablePage page)
 		{
-			pages.remove(page.getPageId());
+			pages.remove(page);
 		}
 
 		public void removeAll()
