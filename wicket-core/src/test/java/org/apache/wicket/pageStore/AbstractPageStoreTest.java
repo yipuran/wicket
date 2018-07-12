@@ -98,6 +98,20 @@ public abstract class AbstractPageStoreTest extends Assert
 		assertNull(pageStore.getPage(context, pageId));
 	}
 
+	@Test
+	public void removeAllPages()
+	{
+		IPageContext context = new DummyPageContext(sessionId);
+		
+		pageStore.addPage(context, new MockPage(pageId));
+
+		assertNotNull(pageStore.getPage(context, pageId));
+
+		pageStore.removeAllPages(context);
+
+		assertNull(pageStore.getPage(context, pageId));
+	}
+
 	/**
 	 * Verify that at most {@code maxEntries} per session can be put in the store
 	 */

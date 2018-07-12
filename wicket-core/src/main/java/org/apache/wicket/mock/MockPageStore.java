@@ -16,8 +16,8 @@
  */
 package org.apache.wicket.mock;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.wicket.page.IManageablePage;
 import org.apache.wicket.pageStore.IPageContext;
@@ -25,7 +25,7 @@ import org.apache.wicket.pageStore.IPageStore;
 
 public class MockPageStore implements IPageStore
 {
-	private final Map<Integer, IManageablePage> pages = new HashMap<>();
+	private final LinkedList<IManageablePage> pages = new LinkedList<>();
 
 	@Override
 	public void destroy()
@@ -33,17 +33,26 @@ public class MockPageStore implements IPageStore
 		pages.clear();
 	}
 
-	@Override
-	public IManageablePage getPage(IPageContext context, int id)
+	public List<IManageablePage> getPages()
 	{
-		return pages.get(id);
+		return pages;
 	}
 
 	@Override
-	public void removePage(IPageContext context, final IManageablePage page) {
-		if (page != null) {
-			pages.remove(page.getPageId());
+	public IManageablePage getPage(IPageContext context, int id)
+	{
+		for (IManageablePage page : pages) {
+			if (page .getPageId() == id) {
+				return page;
+			}
 		}
+		return null;
+	}
+
+	@Override
+	public void removePage(IPageContext context, final IManageablePage page)
+	{
+		pages.remove(page);
 	}
 
 	@Override
@@ -57,10 +66,10 @@ public class MockPageStore implements IPageStore
 	{
 		return true;
 	}
-	
+
 	@Override
 	public void addPage(IPageContext context, IManageablePage page)
 	{
-		pages.put(page.getPageId(), page);
+		pages.addLast(page);
 	}
 }
