@@ -203,9 +203,16 @@ public class InMemoryPageStore implements IPersistentPageStore
 		return Bytes.bytes(size);
 	}
 
+	/**
+	 * Get the size of the given page.
+	 */
 	protected long getSize(IManageablePage page)
 	{
-		return WicketObjects.sizeof(page);
+		if (page instanceof SerializedPage) {
+			return ((SerializedPage)page).getData().length;
+		} else {
+			return WicketObjects.sizeof(page);
+		}
 	}
 
 	private MemoryData getMemoryData(IPageContext context, boolean create)

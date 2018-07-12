@@ -77,7 +77,7 @@ public class PageStoreDebugPanel extends StandardDebugPanel
 			public String getObject()
 			{
 				IPersistentPageStore store = PageStorePage.getPersistentPageStore();
-				return String.format("Persisted: %s", store == null ? "N/A" : store.getTotalSize());
+				return String.format("Persisted pages: %s", store == null ? "N/A" : store.getTotalSize());
 			}
 		};
 	}

@@ -26,7 +26,6 @@ import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.devutils.diskstore.PageStorePage;
 import org.apache.wicket.devutils.inspector.InspectorPage;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
@@ -39,7 +38,7 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -50,9 +49,9 @@ import org.apache.wicket.pageStore.IPersistentPageStore;
 import org.apache.wicket.util.time.Duration;
 
 /**
- * A panel that shows the data about pages in the data store
+ * A panel that shows data about {@link IPersistedPage}s in an {@link IPersistentPageStore}.
  */
-public class BrowserPanel extends Panel
+public class PersistedPanel extends GenericPanel<IPersistentPageStore>
 {
 
 	/**
@@ -61,18 +60,18 @@ public class BrowserPanel extends Panel
 	 * @param id
 	 *            the component id
 	 */
-	public BrowserPanel(String id)
+	public PersistedPanel(String id, IModel<IPersistentPageStore> store)
 	{
-		super(id);
+		super(id, store);
 
 		final Label storeLabel = new Label("store", () -> {
-			IPersistentPageStore store = PageStorePage.getPersistentPageStore();
+			IPersistentPageStore s = getModelObject();
 			
-			if (store == null) {
+			if (s == null) {
 				return "N/A";
 			}
 			
-			return String.format("%s - %s", store.getClass().getName(), store.getTotalSize());
+			return String.format("%s - %s", s.getClass().getName(), s.getTotalSize());
 		});
 		storeLabel.setOutputMarkupId(true);
 		add(storeLabel);
@@ -107,7 +106,7 @@ public class BrowserPanel extends Panel
 			@Override
 			public boolean isVisible()
 			{
-				return BrowserPanel.this.getSession().isTemporary() == false;
+				return PersistedPanel.this.getSession().isTemporary() == false;
 			}
 		};
 		currentSessionLink.setOutputMarkupPlaceholderTag(true);
@@ -138,14 +137,14 @@ public class BrowserPanel extends Panel
 	private DropDownChoice<String> createSessionsSelector(String id)
 	{
 		DropDownChoice<String> sessionsSelector = new DropDownChoice<String>("sessions",
-			Model.of(getCurrentSessionIdentifier()), new SessionIdentifiersModel());
+			Model.of(getCurrentSessionIdentifier()), new SessionIdentifiersModel(getModel()));
 
 		return sessionsSelector;
 	}
 
 	private String getCurrentSessionIdentifier()
 	{
-		IPersistentPageStore store = PageStorePage.getPersistentPageStore();
+		IPersistentPageStore store = getModelObject();
 		if (store == null) {
 			return null;
 		}
@@ -157,7 +156,7 @@ public class BrowserPanel extends Panel
 
 	private DataTable<IPersistedPage, String> createTable(String id, IModel<String> sessionId)
 	{
-		PersistedPagesProvider provider = new PersistedPagesProvider(sessionId);
+		PersistedPagesProvider provider = new PersistedPagesProvider(sessionId, getModel());
 
 		List<IColumn<IPersistedPage, String>> columns = new ArrayList<>();
 

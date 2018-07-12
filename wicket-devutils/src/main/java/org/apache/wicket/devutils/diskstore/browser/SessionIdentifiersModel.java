@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Session;
-import org.apache.wicket.devutils.diskstore.PageStorePage;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.pageStore.DefaultPageContext;
 import org.apache.wicket.pageStore.DiskPageStore;
@@ -33,11 +33,17 @@ import org.apache.wicket.pageStore.IPersistentPageStore;
  */
 public class SessionIdentifiersModel extends LoadableDetachableModel<List<String>>
 {
-
+	private final IModel<IPersistentPageStore> store;
+	
+	public SessionIdentifiersModel(IModel<IPersistentPageStore> store)
+	{
+		this.store = store;
+	}
+	
 	@Override
 	protected List<String> load()
 	{
-		IPersistentPageStore store = PageStorePage.getPersistentPageStore();
+		IPersistentPageStore store = this.store.getObject();
 		if (store == null)
 		{
 			return Collections.emptyList();
@@ -55,5 +61,13 @@ public class SessionIdentifiersModel extends LoadableDetachableModel<List<String
 		}
 
 		return identifiers;
+	}
+	
+	@Override
+	public void detach()
+	{
+		super.detach();
+		
+		store.detach();
 	}
 }

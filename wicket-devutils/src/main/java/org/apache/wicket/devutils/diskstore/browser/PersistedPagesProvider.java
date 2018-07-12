@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.core.util.lang.PropertyResolver;
-import org.apache.wicket.devutils.diskstore.PageStorePage;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
@@ -42,11 +41,14 @@ class PersistedPagesProvider extends SortableDataProvider<IPersistedPage, String
 	 */
 	private final IModel<String> sessionId;
 
+	private final IModel<IPersistentPageStore> store;
+
 	private List<IPersistedPage> pages;
 
-	PersistedPagesProvider(final IModel<String> sessionId)
+	PersistedPagesProvider(final IModel<String> sessionId, IModel<IPersistentPageStore> store)
 	{
 		this.sessionId = sessionId;
+		this.store = store;
 	}
 
 	@Override
@@ -71,7 +73,7 @@ class PersistedPagesProvider extends SortableDataProvider<IPersistedPage, String
 			{
 				String sessId = sessionId.getObject();
 
-				IPersistentPageStore dataStore = PageStorePage.getPersistentPageStore();
+				IPersistentPageStore dataStore = store.getObject();
 
 				if (dataStore != null)
 				{
@@ -104,6 +106,7 @@ class PersistedPagesProvider extends SortableDataProvider<IPersistedPage, String
 	public void detach()
 	{
 		sessionId.detach();
+		store.detach();
 
 		pages = null;
 	}

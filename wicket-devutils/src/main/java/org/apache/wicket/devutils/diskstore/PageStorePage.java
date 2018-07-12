@@ -17,7 +17,7 @@
 package org.apache.wicket.devutils.diskstore;
 
 import org.apache.wicket.Session;
-import org.apache.wicket.devutils.diskstore.browser.BrowserPanel;
+import org.apache.wicket.devutils.diskstore.browser.PersistedPanel;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.DelegatingPageStore;
 import org.apache.wicket.pageStore.IPageStore;
@@ -40,7 +40,7 @@ public class PageStorePage extends WebPage
 	{
 		super(parameters);
 
-		add(new BrowserPanel("tree"));
+		add(new PersistedPanel("persisted", PageStorePage::getPersistentPageStore));
 	}
 
 	@Override
