@@ -1024,7 +1024,7 @@ public abstract class Application implements UnboundListener, IEventSink
 	/** The Security Settings */
 	private SecuritySettings securitySettings;
 
-	/** The settings for {@link IPageStore}, {@link IDataStore} and {@link IPageManager} */
+	/** The settings for {@link IPageStore} and {@link IPageManager} */
 	private StoreSettings storeSettings;
 
 	/** can the settings object be set/used. */

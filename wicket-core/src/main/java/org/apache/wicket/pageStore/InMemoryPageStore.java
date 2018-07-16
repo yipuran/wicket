@@ -156,13 +156,13 @@ public class InMemoryPageStore implements IPersistentPageStore
 	}
 
 	@Override
-	public String getSessionIdentifier(IPageContext context)
+	public String getContextIdentifier(IPageContext context)
 	{
 		return context.getSessionId();
 	}
 
 	@Override
-	public Set<String> getSessionIdentifiers()
+	public Set<String> getContextIdentifiers()
 	{
 		return datas.keySet();
 	}

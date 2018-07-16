@@ -26,7 +26,7 @@ import org.apache.wicket.page.IManageablePage;
 import org.junit.Test;
 
 /**
- * Tests for {@link AsynchronousDataStore}
+ * Tests for {@link AsynchronousPageStore}
  */
 public class AsynchronousDataStoreTest
 {
@@ -54,7 +54,7 @@ public class AsynchronousDataStoreTest
 	private static final SecureRandom RND = new SecureRandom();
 
 	/**
-	 * Executes random mutator and accessor operations on {@link AsynchronousDataStore} validating
+	 * Executes random mutator and accessor operations on {@link AsynchronousPageStore} validating
 	 * that the used data structures can be used simultaneously.
 	 * 
 	 * @throws Exception

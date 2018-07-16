@@ -43,7 +43,7 @@ public interface StoreSettingsMBean
 
 	/**
 	 * @return {@code true} when the HTTP worker thread doesn't wait for the storing of the page's
-	 *         bytes in {@link IDataStore}
+	 *         bytes in {@link IPageStore}
 	 */
 	boolean isAsynchronous();
 }

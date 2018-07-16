@@ -39,18 +39,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Test for {@link DiskDataStore}.
+ * Test for {@link DiskPageStore}.
  */
 @Category(SlowTests.class)
-public class DiskDataStoreTest extends Assert
+public class DiskPageStoreTest extends Assert
 {
 	/** Log for reporting. */
-	private static final Logger log = LoggerFactory.getLogger(DiskDataStoreTest.class);
+	private static final Logger log = LoggerFactory.getLogger(DiskPageStoreTest.class);
 
 	/**
 	 * Construct.
 	 */
-	public DiskDataStoreTest()
+	public DiskPageStoreTest()
 	{
 	}
 
@@ -219,7 +219,7 @@ public class DiskDataStoreTest extends Assert
 		protected abstract void doRun();
 	}
 
-	// Store/Save data in DataStore
+	// Store/Save data in store
 	private class SaveRunnable extends ExceptionCapturingRunnable
 	{
 		@Override
@@ -255,7 +255,7 @@ public class DiskDataStoreTest extends Assert
 		}
 	};
 
-	// Read data from DataStore
+	// Read data from store
 	private class Read1Runnable extends ExceptionCapturingRunnable
 	{
 		@Override
@@ -325,7 +325,7 @@ public class DiskDataStoreTest extends Assert
 		}
 	}
 
-	private void doTestDataStore()
+	private void doTestStore()
 	{
 		log.info("Starting...");
 		long start = System.currentTimeMillis();
@@ -394,7 +394,7 @@ public class DiskDataStoreTest extends Assert
 		pageStore = new DiskPageStore("app1", fileStoreFolder, MAX_SIZE_PER_SESSION, new JavaSerializer("app1"));
 		pageStore = new AsynchronousPageStore(pageStore, asynchronousQueueCapacity);
 
-		doTestDataStore();
+		doTestStore();
 
 		pageStore.destroy();
 	}

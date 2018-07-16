@@ -26,9 +26,8 @@ import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.lang.Bytes;
 
 /**
- * A class for settings related to the the storages where page instances are persisted -
- * {@link org.apache.wicket.pageStore.IPageStore},
- * {@link org.apache.wicket.pageStore.IDataStore} and {@link org.apache.wicket.page.IPageManager}.
+ * A class for settings related to the the storages where page instances are persisted, used by
+ * {@link org.apache.wicket.pageStore.IPageStore} {@link org.apache.wicket.page.IPageManager}.
  * <p>
  * For more information about page storages read <a
  * href="https://cwiki.apache.org/confluence/x/qIaoAQ">Page Storage - Wiki page</a>
@@ -63,7 +62,7 @@ public class StoreSettings
 
 	/**
 	 * @return maximum page size. After this size is exceeded,
-	 * the {@link org.apache.wicket.pageStore.DiskDataStore} will start saving the
+	 * the {@link org.apache.wicket.pageStore.DiskPageStore} will start saving the
 	 * pages at the beginning of file.
 	 */
 	public Bytes getMaxSizePerSession()
@@ -73,7 +72,7 @@ public class StoreSettings
 
 	/**
 	 * Sets the maximum size of the {@link File} where page instances per session are stored. After
-	 * reaching this size the {@link org.apache.wicket.pageStore.DiskDataStore} will start overriding the
+	 * reaching this size the {@link org.apache.wicket.pageStore.DiskPageStore} will start overriding the
 	 * oldest pages at the beginning of the file.
 	 *
 	 * @param maxSizePerSession
@@ -88,7 +87,7 @@ public class StoreSettings
 	}
 
 	/**
-	 * @return the location of the folder where {@link org.apache.wicket.pageStore.DiskDataStore} will store the files with page
+	 * @return the location of the folder where {@link org.apache.wicket.pageStore.DiskPageStore} will store the files with page
 	 *         instances per session
 	 */
 	public File getFileStoreFolder()
@@ -119,7 +118,7 @@ public class StoreSettings
 	}
 
 	/**
-	 * Sets the folder where {@link org.apache.wicket.pageStore.DiskDataStore} will store the files with page instances per
+	 * Sets the folder where {@link org.apache.wicket.pageStore.DiskPageStore} will store the files with page instances per
 	 * session
 	 *
 	 * @param fileStoreFolder
@@ -134,7 +133,7 @@ public class StoreSettings
 
 	/**
 	 * @return the capacity of the queue used to store the pages which will be stored asynchronously
-	 * @see org.apache.wicket.pageStore.AsynchronousDataStore
+	 * @see org.apache.wicket.pageStore.AsynchronousPageStore
 	 */
 	public int getAsynchronousQueueCapacity()
 	{
@@ -146,7 +145,7 @@ public class StoreSettings
 	 *
 	 * @param queueCapacity
 	 *            the capacity of the queue
-	 * @see org.apache.wicket.pageStore.AsynchronousDataStore
+	 * @see org.apache.wicket.pageStore.AsynchronousPageStore
 	 * @return {@code this} object for chaining
 	 */
 	public StoreSettings setAsynchronousQueueCapacity(int queueCapacity)
@@ -161,9 +160,9 @@ public class StoreSettings
 	}
 
 	/**
-	 * Sets a flag whether to wrap the configured {@link org.apache.wicket.pageStore.IDataStore} with
-	 * {@link org.apache.wicket.pageStore.AsynchronousDataStore}. By doing this the HTTP worker thread will not wait for the
-	 * actual write of the page's bytes into the wrapped {@link org.apache.wicket.pageStore.IDataStore}.
+	 * Sets a flag whether to wrap the configured {@link org.apache.wicket.pageStore.IPageStore} with
+	 * {@link org.apache.wicket.pageStore.AsynchronousPageStore}. By doing this the HTTP worker thread will not wait for the
+	 * actual write of the page's bytes into the wrapped {@link org.apache.wicket.pageStore.IPageStore}.
 	 *
 	 * @param async
 	 *            {@code true} to make it asynchronous, {@code false} - otherwise

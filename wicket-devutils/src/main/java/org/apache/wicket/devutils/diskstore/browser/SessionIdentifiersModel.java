@@ -49,10 +49,10 @@ public class SessionIdentifiersModel extends LoadableDetachableModel<List<String
 			return Collections.emptyList();
 		}
 
-		ArrayList<String> identifiers = new ArrayList<>(store.getSessionIdentifiers());
+		ArrayList<String> identifiers = new ArrayList<>(store.getContextIdentifiers());
 
 		IPageContext context = new DefaultPageContext(Session.get());
-		String current = store.getSessionIdentifier(context);
+		String current = store.getContextIdentifier(context);
 		if (identifiers.contains(current) == false)
 		{
 			// identifiers of the store seem no to match their sessions ids,

@@ -207,7 +207,7 @@ public class PageWindowManagerTest extends Assert
 	private static final SecureRandom RND = new SecureRandom();
 
 	/**
-	 * Executes random mutator and accessor operations on {@link org.apache.wicket.pageStore.AsynchronousDataStore} validating
+	 * Executes random mutator and accessor operations on {@link org.apache.wicket.pageStore.AsynchronousPageStore} validating
 	 * that the used data structures can be used simultaneously.
 	 *
 	 * @throws Exception

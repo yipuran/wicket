@@ -61,7 +61,7 @@ public class DiskPageStore implements IPersistentPageStore
 
 	private static final String KEY = "wicket:DiskPageStore";
 
-	private static final String INDEX_FILE_NAME = "DiskDataStoreIndex";
+	private static final String INDEX_FILE_NAME = "DiskPageStoreIndex";
 
 	/**
 	 * A cache that holds all page stores.
@@ -131,7 +131,7 @@ public class DiskPageStore implements IPersistentPageStore
 		catch (SecurityException e)
 		{
 			throw new WicketRuntimeException(
-				"SecurityException occurred while creating DiskDataStore. Consider using a non-disk based IDataStore implementation. "
+				"SecurityException occurred while creating DiskPageStore. Consider using a non-disk based IPageStore implementation. "
 					+ "See org.apache.wicket.Application.setPageManagerProvider(IPageManagerProvider)",
 				e);
 		}
@@ -341,7 +341,7 @@ public class DiskPageStore implements IPersistentPageStore
 			}
 			catch (Exception e)
 			{
-				log.error("Couldn't load DiskDataStore index from file " + index + ".", e);
+				log.error("Couldn't load DiskPageStore index from file " + index + ".", e);
 			}
 		}
 		Files.remove(index);
@@ -381,13 +381,13 @@ public class DiskPageStore implements IPersistentPageStore
 			}
 			catch (Exception e)
 			{
-				log.error("Couldn't write DiskDataStore index to file " + index + ".", e);
+				log.error("Couldn't write DiskPageStore index to file " + index + ".", e);
 			}
 		}
 	}
 
 	@Override
-	public Set<String> getSessionIdentifiers()
+	public Set<String> getContextIdentifiers()
 	{
 		return Collections.unmodifiableSet(diskDatas.keySet());
 	}
@@ -414,7 +414,7 @@ public class DiskPageStore implements IPersistentPageStore
 	}
 
 	@Override
-	public String getSessionIdentifier(IPageContext context)
+	public String getContextIdentifier(IPageContext context)
 	{
 		SessionAttribute sessionAttribute = getSessionAttribute(context, true);
 
